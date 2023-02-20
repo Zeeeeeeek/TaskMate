@@ -3,7 +3,8 @@ package me.zeeeeeeek.backend.models.task;
 import lombok.*;
 
 import java.util.*;
-
+@ToString
+@EqualsAndHashCode
 public abstract class AbstractTask implements Task {
     @Getter
     private String name;

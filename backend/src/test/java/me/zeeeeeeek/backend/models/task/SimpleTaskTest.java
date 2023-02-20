@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -73,5 +74,19 @@ class SimpleTaskTest {
     @Test
     void taskDescriptionShouldThrowIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () -> task.setDescription(""));
+    }
+
+    @Test
+    void taskShouldBeEqual() {
+        SimpleTask task1 = new SimpleTask("name", "description");
+        SimpleTask task2 = new SimpleTask("name", "description");
+        assertEquals(task1, task2);
+    }
+
+    @Test
+    void taskShouldNotBeEqual() {
+        SimpleTask task1 = new SimpleTask("name", "description");
+        SimpleTask task2 = new SimpleTask("name", "description2");
+        assertNotEquals(task1, task2);
     }
 }
