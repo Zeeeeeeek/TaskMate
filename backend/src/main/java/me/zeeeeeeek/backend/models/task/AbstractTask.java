@@ -1,10 +1,19 @@
 package me.zeeeeeeek.backend.models.task;
 
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
-import java.util.*;
+import java.util.Objects;
+
+
+/**
+ * This is an abstract implementation of a task in order to avoid code duplication.
+ */
 @ToString
 @EqualsAndHashCode
+@Slf4j
 public abstract class AbstractTask implements Task {
     @Getter
     private String name;
@@ -16,12 +25,16 @@ public abstract class AbstractTask implements Task {
         this.name = isValidStringParameter(name);
         this.description = isValidStringParameter(description);
         this.completed = false;
+        log.info("Created task {}", this);
     }
 
 
     private String isValidStringParameter(String parameter) {
-        if (Objects.requireNonNull(parameter).isEmpty())
-            throw new IllegalArgumentException("name cannot be empty");
+        if (Objects.requireNonNull(parameter).isEmpty()) {
+            log.error("Used an empty string as a parameter");
+            throw new IllegalArgumentException("Parameter cannot be empty");
+        }
+
         return parameter;
     }
 
