@@ -89,4 +89,18 @@ class SimpleTaskTest {
         SimpleTask task2 = new SimpleTask("name", "description2");
         assertNotEquals(task1, task2);
     }
+
+    @Test
+    void taskShouldHaveSameHashCode() {
+        SimpleTask task1 = new SimpleTask("name", "description");
+        SimpleTask task2 = new SimpleTask("name", "description");
+        assertEquals(task1.hashCode(), task2.hashCode());
+    }
+
+    @Test
+    void taskShouldNotHaveSameHashCode() {
+        SimpleTask task1 = new SimpleTask("name", "description");
+        SimpleTask task2 = new SimpleTask("name", "description2");
+        assertNotEquals(task1.hashCode(), task2.hashCode());
+    }
 }
