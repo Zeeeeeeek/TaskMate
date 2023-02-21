@@ -1,4 +1,4 @@
-package me.zeeeeeeek.backend.models.task;
+package me.zeeeeeeek.backend.models.tasks;
 
 import org.junit.jupiter.api.Test;
 

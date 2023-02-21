@@ -1,4 +1,4 @@
-package me.zeeeeeeek.backend.models.task;
+package me.zeeeeeeek.backend.models.tasks;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

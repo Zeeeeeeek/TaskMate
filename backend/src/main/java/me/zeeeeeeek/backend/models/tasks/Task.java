@@ -1,4 +1,4 @@
-package me.zeeeeeeek.backend.models.task;
+package me.zeeeeeeek.backend.models.tasks;
 
 
 /**
@@ -53,5 +53,4 @@ public interface Task {
      * @param description task's new description
      */
     void setDescription(String description);
-
 }
