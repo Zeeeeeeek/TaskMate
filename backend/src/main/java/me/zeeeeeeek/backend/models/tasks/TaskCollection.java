@@ -1,55 +1,12 @@
 package me.zeeeeeeek.backend.models.tasks;
 
 
-import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 /**
  * A task collection represents a group of tasks.
  */
 public interface TaskCollection {
-
-    /**
-     * Returns the number of tasks in this collection.
-     *
-     * @return the number of tasks in this collection
-     */
-    int size();
-
-    /**
-     * Adds a new task to the collection
-     *
-     * @param task the task to be added
-     * @return true, if the element has been added, false otherwise
-     * @throws NullPointerException if the specified element is null
-     */
-    boolean add(Task task);
-
-    /**
-     * Adds all the task in the specified taskCollection to this collection.
-     *
-     * @param collection the collection containing all the tasks to be added
-     * @return true, if all the elements have been added, false otherwise
-     * @throws NullPointerException if the collection is null
-     */
-    boolean addAll(TaskCollection collection);
-
-    /**
-     * Checks if the collection contains the specified element
-     *
-     * @param task task whose presence is to be tested
-     * @return true, if the collection contains the element, false otherwise
-     * @throws NullPointerException if the specified element is null
-     */
-    boolean contains(Task task);
-
-    /**
-     * Checks if the collection contains all the elements of the specified collection
-     *
-     * @param collection collection of elements whose presence is to be tested
-     * @return true, if this collection contains all the elements of the specified collection, false otherwise
-     * @throws NullPointerException if the collection is null
-     */
-    boolean containsAll(TaskCollection collection);
 
     /**
      * Controls if all the contained tasks are completed or not
@@ -59,54 +16,71 @@ public interface TaskCollection {
     boolean isCompleted();
 
     /**
-     * Removes all the tasks from this collection.
+     * Set the given task as completed.
+     * If the task is already completed, nothing happens.
+     * If the task is not contained in the collection, nothing happens.
+     *
+     * @param task the task to set as completed
+     * @throws NullPointerException if the task is null
      */
-    void clear();
+    void setCompleted(Task task);
 
     /**
-     * Removes a single instance of the specified tasks, if its present. More formally
-     * removes an element such that is equal to the given task.
+     * Set the given task as uncompleted.
+     * If the task is already uncompleted, nothing happens.
+     * If the task is not contained in the collection, nothing happens.
      *
-     * @return true, if an element was removed, false otherwise
+     * @param task the task to set as uncompleted
+     * @throws NullPointerException if the task is null
      */
-    boolean remove();
+    void setUncompleted(Task task);
 
     /**
-     * Removes all of this collection's task that are contained in the specified collection.
+     * Controls if the given task is contained in the collection.
      *
-     * @param collection collection of tasks to be removed from this collection
-     * @return true, if this collection changed as a result of the call
-     * @throws NullPointerException if collection is null
+     * @param task the task to check
+     * @return true if the task is contained in the collection, false otherwise
+     * @throws NullPointerException if the task is null
      */
-    boolean removeAll(TaskCollection collection);
+    boolean contains(Task task);
 
     /**
-     * Removes all the elements of the collection that satisfy the given predicate.
+     * Add a task to the collection.
      *
-     * @param filter a predicate witch returns true if a task has to be removed
-     * @return true, if any element was removed
-     * @throws NullPointerException if the filter is null
+     * @param task the task to add
+     * @return true if the task was added, false otherwise
+     * @throws NullPointerException if the task is null
      */
-    boolean removeIf(Predicate<? super Task> filter);
-
-    //Comparison and hashing
+    boolean addTask(Task task);
 
     /**
-     * Compares the specified object with this collection for equality
+     * Remove a task from the collection.
      *
-     * @param obj the object to be compared for equality with this collection
-     * @return true, if the specified object is equal to this collection, false otherwise
+     * @param task the task to remove
+     * @return true if the task was removed, false otherwise
+     * @throws NullPointerException if the task is null
      */
-    boolean equals(Object obj);
-
+    boolean removeTask(Task task);
 
     /**
-     * Returns the hash code value for this collection.
+     * Get a stream of the tasks in the collection.
      *
-     * @return this hashcode value
+     * @return a stream of the tasks in the collection
      */
-    int hashCode();
+    Stream<Task> stream();
 
+    /**
+     * Get the number of tasks in the collection.
+     *
+     * @return the number of tasks in the collection
+     */
+    int size();
 
+    /**
+     * Return true if it contains no tasks.
+     *
+     * @return true if it contains no tasks, false otherwise
+     */
+    boolean isEmpty();
 }
 
