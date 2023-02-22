@@ -1,6 +1,7 @@
 package me.zeeeeeeek.backend.models.tasks;
 
 
+import java.util.UUID;
 import java.util.stream.Stream;
 
 /**
@@ -82,5 +83,18 @@ public interface TaskCollection {
      * @return true if it contains no tasks, false otherwise
      */
     boolean isEmpty();
+
+
+    /**
+     * Return the collection uuid.
+     * @return the collection uuid
+     */
+    UUID getUuid();
+
+    /**
+     * Return the collection owner uuid.
+     * @return the collection owner uuid
+     */
+    UUID getOwnerUUID();
 }
 

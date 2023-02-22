@@ -1,8 +1,13 @@
 package me.zeeeeeeek.backend.models.tasks;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import org.springframework.data.annotation.Id;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.stream.Stream;
 
 /**
@@ -11,7 +16,11 @@ import java.util.stream.Stream;
  */
 public class TaskList implements TaskCollection {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
     private final List<Task> tasks;
+    private final UUID ownerUUID;
 
     /**
      * Create a new task list from a list of tasks.
@@ -19,16 +28,18 @@ public class TaskList implements TaskCollection {
      * @param tasks the list of tasks
      * @throws NullPointerException if the list of tasks is null
      */
-    public TaskList(List<Task> tasks) {
+    public TaskList(List<Task> tasks, UUID ownerUUID) {
         Objects.requireNonNull(tasks);
         tasks.forEach(Objects::requireNonNull);
+        this.ownerUUID = Objects.requireNonNull(ownerUUID);
         this.tasks = new ArrayList<>(tasks);
     }
 
     /**
      * Create a new task list with an empty list of tasks.
      */
-    public TaskList() {
+    public TaskList(UUID ownerUUID) {
+        this.ownerUUID = Objects.requireNonNull(ownerUUID);
         this.tasks = new ArrayList<>();
     }
     /**
@@ -138,6 +149,26 @@ public class TaskList implements TaskCollection {
     @Override
     public boolean isEmpty() {
         return this.tasks.isEmpty();
+    }
+
+    /**
+     * Return the collection uuid.
+     *
+     * @return the collection uuid
+     */
+    @Override
+    public UUID getUuid() {
+        return this.id;
+    }
+
+    /**
+     * Return the collection owner uuid.
+     *
+     * @return the collection owner uuid
+     */
+    @Override
+    public UUID getOwnerUUID() {
+        return this.ownerUUID;
     }
 
 }
