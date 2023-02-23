@@ -173,4 +173,9 @@ public class TaskList implements TaskCollection {
         return this.owner;
     }
 
+    @Override
+    public List<Task> getTasks() {
+        return this.tasks;
+    }
+
 }

@@ -1,5 +1,9 @@
 package me.zeeeeeeek.backend.models.tasks.elements;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,7 +14,8 @@ import java.util.Objects;
  * TimeConstrainedTask is a task that has a due date.
  */
 public class TimeConstrainedTask extends AbstractTask{
-
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     @Getter @Setter
     private LocalDateTime dueDate;
     public TimeConstrainedTask(String name, String description, LocalDateTime dueDate) {

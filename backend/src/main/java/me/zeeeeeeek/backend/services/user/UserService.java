@@ -3,7 +3,6 @@ package me.zeeeeeeek.backend.services.user;
 import me.zeeeeeeek.backend.models.user.User;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -21,7 +20,6 @@ public class UserService {
      * @throws NullPointerException     if the UUID is null
      */
     public User getById(UUID uuid) {
-        Objects.requireNonNull(uuid, "The UUID cannot be null");
         //Todo implement a user retrieval from the database using the UUID
         return new User("aaa", "bbb", "css@ca", "ddd", "eee");
     }

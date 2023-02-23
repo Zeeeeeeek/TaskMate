@@ -4,6 +4,7 @@ package me.zeeeeeeek.backend.models.tasks.collections;
 import me.zeeeeeeek.backend.models.tasks.elements.Task;
 import me.zeeeeeeek.backend.models.user.User;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -99,5 +100,7 @@ public interface TaskCollection {
      * @return the collection owner uuid
      */
     User getOwner();
+
+    List<Task> getTasks();
 }
 
