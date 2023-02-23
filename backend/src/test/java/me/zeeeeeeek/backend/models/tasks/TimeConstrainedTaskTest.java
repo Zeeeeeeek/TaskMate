@@ -1,5 +1,6 @@
 package me.zeeeeeeek.backend.models.tasks;
 
+import me.zeeeeeeek.backend.models.tasks.elements.TimeConstrainedTask;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;

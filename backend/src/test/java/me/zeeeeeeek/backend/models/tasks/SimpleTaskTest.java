@@ -1,5 +1,6 @@
 package me.zeeeeeeek.backend.models.tasks;
 
+import me.zeeeeeeek.backend.models.tasks.elements.SimpleTask;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

@@ -1,4 +1,4 @@
-package me.zeeeeeeek.backend.models.tasks;
+package me.zeeeeeeek.backend.models.tasks.elements;
 
 
 /**
