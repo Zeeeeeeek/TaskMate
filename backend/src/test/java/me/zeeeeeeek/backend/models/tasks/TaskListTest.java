@@ -141,6 +141,11 @@ class TaskListTest {
         assertTrue(task.isCompleted());
     }
 
+    @Test
+    void userShouldBeOwner() {
+        TaskList taskList = new TaskList(OWNER);
+        assertEquals(OWNER, taskList.getOwner());
+    }
 
 
 }
