@@ -1,11 +1,17 @@
 package me.zeeeeeeek.backend.models.tasks.elements;
 
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+
 /**
  * A task is a specific activity or assignment that needs to be completed within a certain timeframe or deadline.
  * It can be part of a larger project or goal, or it can be a standalone activity.
  * Tasks can have different levels of complexity and can be assigned to one or more individuals or teams to complete.
  */
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = SimpleTask.class, name = "simpleTask"),
+        @JsonSubTypes.Type(value = TimeConstrainedTask.class, name = "timeConstrainedTask"),
+})
 public interface Task {
 
     /**
