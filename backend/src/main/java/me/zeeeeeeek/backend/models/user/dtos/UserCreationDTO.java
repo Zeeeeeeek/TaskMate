@@ -9,4 +9,4 @@ package me.zeeeeeeek.backend.models.user.dtos;
  * @param firstName the first name of the user to create
  * @param lastName  the last name of the user to create
  */
-public record UserCreationDto(String username, String password, String email, String firstName, String lastName) {}
+public record UserCreationDTO(String username, String password, String email, String firstName, String lastName) {}

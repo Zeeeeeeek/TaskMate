@@ -1,11 +1,13 @@
 package me.zeeeeeeek.backend.models.user;
 
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,10 +19,12 @@ import java.util.UUID;
  * This class represents a user identified by a unique id, a username,
  * a password, an email, a first name and a last name.
  */
+@NoArgsConstructor
 @Getter
 @EqualsAndHashCode
 @ToString
 @Slf4j
+@Entity
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
