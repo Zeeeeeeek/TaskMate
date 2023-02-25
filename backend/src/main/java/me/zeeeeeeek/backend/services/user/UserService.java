@@ -1,68 +1,28 @@
 package me.zeeeeeeek.backend.services.user;
 
-import lombok.extern.slf4j.Slf4j;
-import me.zeeeeeeek.backend.models.user.User;
-import me.zeeeeeeek.backend.models.user.dtos.UserCreationDTO;
-import me.zeeeeeeek.backend.repositories.UserRepository;
-import org.springframework.stereotype.Service;
+import lombok.extern.slf4j.*;
+import me.zeeeeeeek.backend.models.user.*;
+import me.zeeeeeeek.backend.models.user.dtos.*;
+import me.zeeeeeeek.backend.repositories.*;
+import org.springframework.stereotype.*;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Spring service that handles the business logic for the user.
  */
 @Service
 @Slf4j
-public class UserService {
+public class UserService implements UserManager{
 
     private final UserRepository userRepository;
+    private final UserDtoMapper userDtoMapper;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, UserDtoMapper userDtoMapper) {
         this.userRepository = userRepository;
+        this.userDtoMapper = userDtoMapper;
     }
 
-    /**
-     * Gets a user by its UUID.
-     *
-     * @param uuid the UUID of the user
-     * @return the user
-     * @throws IllegalArgumentException if the user is not found
-     * @throws NullPointerException     if the UUID is null
-     */
-    public User getById(UUID uuid) {
-        return this.userRepository
-                .findById(uuid)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
-    }
-
-    /**
-     * Creates a new user from the given data transfer object. This operation does not save the user in the database.
-     *
-     * @param userCreationDTO the data transfer object for the user creation
-     * @return the created user
-     */
-    public User create(UserCreationDTO userCreationDTO) {
-        return new User(userCreationDTO.username(),
-                userCreationDTO.password(),
-                userCreationDTO.email(),
-                userCreationDTO.firstName(),
-                userCreationDTO.lastName());
-    }
-
-
-    /**
-     * Saves a user in the database.
-     *
-     * @param user the user to save
-     * @throws NullPointerException if the user is null
-     */
-    public void save(User user) {
-        Objects.requireNonNull(user);
-        this.userRepository.save(user);
-    }
 
     /**
      * Creates and saves a new user from the given data transfer object.
@@ -87,5 +47,62 @@ public class UserService {
         List<User> users = new LinkedList<>();
         this.userRepository.findAll().forEach(users::add);
         return users;
+    }
+
+    /**
+     * Gets a user by its UUID.
+     *
+     * @param uuid the UUID of the user
+     * @return the user
+     * @throws IllegalArgumentException if the user does not exist
+     * @throws NullPointerException     if the UUID is null
+     */
+    @Override
+    public User getById(UUID uuid) {
+        return this.userRepository
+                .findById(Objects.requireNonNull(uuid))
+                .orElseThrow(() -> new IllegalArgumentException("User with UUID " + uuid + " does not exist"));
+    }
+
+    /**
+     * Saves a user in the storage system.
+     *
+     * @param user the user to save
+     * @return the saved user as a data transfer object.
+     * @throws NullPointerException if the user is null
+     */
+    @Override
+    public UserDto save(User user) {
+        this.userRepository.save(Objects.requireNonNull(user));
+        return this.userToUserDto(user);
+    }
+
+    /**
+     * Creates a new user from the given data transfer object.
+     *
+     * @param userCreationDTO the data transfer object for the user creation
+     * @return the created user
+     * @throws NullPointerException if the data transfer object is null
+     */
+    @Override
+    public User create(UserCreationDTO userCreationDTO) {
+        Objects.requireNonNull(userCreationDTO);
+        return new User(userCreationDTO.username(),
+                userCreationDTO.password(),
+                userCreationDTO.email(),
+                userCreationDTO.firstName(),
+                userCreationDTO.lastName());
+    }
+
+    /**
+     * Gets a UserDto from a User instance.
+     *
+     * @param user the user
+     * @return the user as a data transfer object
+     * @throws NullPointerException if the user is null
+     */
+    @Override
+    public UserDto userToUserDto(User user) {
+        return this.userDtoMapper.apply(Objects.requireNonNull(user));
     }
 }
