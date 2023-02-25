@@ -1,6 +1,7 @@
 package me.zeeeeeeek.backend.models.user;
 
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -8,11 +9,12 @@ import jakarta.persistence.Id;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.Setter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
-import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -21,6 +23,7 @@ import java.util.UUID;
  */
 @NoArgsConstructor
 @Getter
+@Setter
 @EqualsAndHashCode
 @ToString
 @Slf4j
@@ -29,14 +32,15 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+    @Column(unique = true) @NonNull
     private String username;
-
+    @Column @NonNull
     private String password;
-
+    @Column(unique = true) @NonNull
     private String email;
-
+    @Column @NonNull
     private String firstName;
-
+    @Column @NonNull
     private String lastName;
 
     /**
@@ -52,7 +56,6 @@ public class User {
      * @throws IllegalArgumentException if the email is invalid
      */
     public User(String username, String password, String email, String firstName, String lastName) {
-        requireNonNull(username, password, email, firstName, lastName);
         requireNonEmpty(username, password, email, firstName, lastName);
         this.email = validateEmail(email);
         this.firstName = firstName;
@@ -61,13 +64,6 @@ public class User {
         this.password = password;
         log.info("Created user {}", this);
     }
-
-    @SafeVarargs
-    private <T> void requireNonNull(T... args) {
-        Arrays.stream(args)
-                .forEach(Objects::requireNonNull);
-    }
-
     private void requireNonEmpty(String... args) {
         Arrays.stream(args)
                 .forEach(arg -> {
