@@ -5,9 +5,9 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 /**
- * A task is a specific activity or assignment that needs to be completed within a certain timeframe or deadline.
- * It can be part of a larger project or goal, or it can be a standalone activity.
- * Tasks can have different levels of complexity and can be assigned to one or more individuals or teams to complete.
+ * A task is a specific activity that can be completed or not.
+ * This interface is used to represent a task, and defines the contract for all subclasses.
+ *
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "@type")
 @JsonSubTypes({
@@ -38,7 +38,7 @@ public interface Task {
     boolean isCompleted();
 
     /**
-     * The deadline of the task.
+     * Set the task as completed.
      *
      */
     void setCompleted();

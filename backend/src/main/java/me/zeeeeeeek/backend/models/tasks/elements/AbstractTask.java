@@ -29,6 +29,15 @@ public abstract class AbstractTask implements Task {
     }
 
 
+    /**
+     * Check if the given parameter is a valid string.
+     * A valid string is a non-null string that is not empty.
+     *
+     * @param parameter the parameter to check
+     * @return the parameter if it is valid
+     * @throws NullPointerException     if the parameter is null
+     * @throws IllegalArgumentException if the parameter is empty
+     */
     private String isValidStringParameter(String parameter) {
         if (Objects.requireNonNull(parameter).isEmpty()) {
             log.error("Used an empty string as a parameter");
@@ -39,16 +48,16 @@ public abstract class AbstractTask implements Task {
     }
 
     /**
-     * The status of the task.
+     * Check if the task is completed.
      *
-     * @return the status of the task
+     * @return true if the task is completed, false otherwise
      */
     public boolean isCompleted() {
         return this.completed;
     }
 
     /**
-     * The deadline of the task.
+     * Set the task as completed.
      */
     @Override
     public void setCompleted() {

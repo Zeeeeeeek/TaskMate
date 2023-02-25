@@ -101,6 +101,11 @@ public interface TaskCollection {
      */
     User getOwner();
 
+    /**
+     * Gets the list of tasks in the collection.
+     *
+     * @return the list of tasks in the collection
+     */
     List<Task> getTasks();
 }
 

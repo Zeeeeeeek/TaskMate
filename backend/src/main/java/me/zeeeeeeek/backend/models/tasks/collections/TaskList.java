@@ -173,6 +173,11 @@ public class TaskList implements TaskCollection {
         return this.owner;
     }
 
+    /**
+     * Return the collection tasks list.
+     *
+     * @return the collection tasks list
+     */
     @Override
     public List<Task> getTasks() {
         return this.tasks;

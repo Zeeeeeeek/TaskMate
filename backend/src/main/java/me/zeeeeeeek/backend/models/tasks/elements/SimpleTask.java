@@ -5,6 +5,7 @@ import lombok.ToString;
 
 /**
  * A simple task is a specific activity that can be completed or not.
+ * It is the most basic task. It has a name and a description.
  */
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
