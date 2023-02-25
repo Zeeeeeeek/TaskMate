@@ -4,8 +4,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -13,6 +12,7 @@ import java.util.Objects;
 /**
  * TimeConstrainedTask is a task that has a due date.
  */
+@ToString
 public class TimeConstrainedTask extends AbstractTask{
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
@@ -34,14 +34,31 @@ public class TimeConstrainedTask extends AbstractTask{
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof TimeConstrainedTask that)) return false;
         if (!super.equals(o)) return false;
-        TimeConstrainedTask that = (TimeConstrainedTask) o;
-        return dueDate.equals(that.dueDate);
+        return isLocalDateTimeEqual(this.dueDate, that.dueDate) &&
+                Objects.equals(getName(), that.getName()) &&
+                Objects.equals(getDescription(), that.getDescription());
+    }
+
+    /**
+     * Utility method to check if two LocalDateTime are equal.
+     * We consider two LocalDateTime equal if they are within 1 second.
+     * @param firstDate the first LocalDateTime
+     * @param secondDate the second LocalDateTime
+     */
+    private boolean isLocalDateTimeEqual(LocalDateTime firstDate, LocalDateTime secondDate) {
+        return  Objects.equals(firstDate.getYear(), secondDate.getYear()) &&
+                Objects.equals(firstDate.getMonth(), secondDate.getMonth()) &&
+                Objects.equals(firstDate.getDayOfMonth(), secondDate.getDayOfMonth()) &&
+                Objects.equals(firstDate.getHour(), secondDate.getHour()) &&
+                Objects.equals(firstDate.getMinute(), secondDate.getMinute()) &&
+                Math.abs(firstDate.getSecond() - secondDate.getSecond()) <= 1;
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), dueDate);
     }
+
 }

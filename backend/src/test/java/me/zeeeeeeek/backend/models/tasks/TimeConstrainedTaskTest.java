@@ -106,8 +106,9 @@ class TimeConstrainedTaskTest {
 
     @Test
     void taskShouldHaveSameHashCode() {
-        TimeConstrainedTask task1 = new TimeConstrainedTask("name", "description", LocalDateTime.now().plusDays(1));
-        TimeConstrainedTask task2 = new TimeConstrainedTask("name", "description", LocalDateTime.now().plusDays(1));
+        LocalDateTime now = LocalDateTime.now();
+        TimeConstrainedTask task1 = new TimeConstrainedTask("name", "description", now);
+        TimeConstrainedTask task2 = new TimeConstrainedTask("name", "description", now);
         assertEquals(task1.hashCode(), task2.hashCode());
     }
 
