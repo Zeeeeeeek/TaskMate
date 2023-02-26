@@ -1,8 +1,11 @@
 package me.zeeeeeeek.backend;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import lombok.extern.slf4j.*;
+import me.zeeeeeeek.backend.models.user.dtos.*;
+import me.zeeeeeeek.backend.services.user.*;
+import org.springframework.boot.*;
+import org.springframework.boot.autoconfigure.*;
+import org.springframework.context.annotation.*;
 
 @SpringBootApplication
 @Slf4j
@@ -12,5 +15,16 @@ public class BackendApplication {
         SpringApplication.run(BackendApplication.class, args);
         log.info("Application is running on http://localhost:8080");
     }
-
+    @Bean
+    CommandLineRunner init(UserService userService) {
+        return args -> {
+            userService.createAndSave(new UserCreationDTO(
+                    "Enrico",
+                    "pass",
+                    "a@a",
+                    "Enrico",
+                    "Fermi"
+            ));
+        };
+    }
 }

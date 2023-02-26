@@ -34,12 +34,10 @@ public class UserService implements UserManager{
      * @param userCreationDTO the data transfer object for the user creation
      * @return the created user
      */
-    public User createAndSave(UserCreationDTO userCreationDTO) {
+    public UserDto createAndSave(UserCreationDTO userCreationDTO) {
         User user = this.create(userCreationDTO);
         log.info("Created user {}", user);
-        this.save(user);
-        log.info("Saved user {}", user);
-        return user;
+        return this.save(user);
     }
 
 
