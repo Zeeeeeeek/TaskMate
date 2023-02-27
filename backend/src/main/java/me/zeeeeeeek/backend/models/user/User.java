@@ -27,7 +27,7 @@ import java.util.UUID;
 @EqualsAndHashCode
 @ToString
 @Slf4j
-@Entity
+@Entity(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
