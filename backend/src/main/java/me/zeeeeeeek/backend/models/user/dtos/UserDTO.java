@@ -7,4 +7,4 @@ package me.zeeeeeeek.backend.models.user.dtos;
  * @param firstName the first name of the user
  * @param lastName the last name of the user
  */
-public record UserDto(String username, String email, String firstName, String lastName) {}
+public record UserDTO(String username, String email, String firstName, String lastName) {}

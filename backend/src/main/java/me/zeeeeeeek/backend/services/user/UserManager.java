@@ -27,7 +27,7 @@ public interface UserManager {
      * @throws NullPointerException if the user is null
      * @return the saved user as a data transfer object.
      */
-    UserDto save(User user);
+    UserDTO save(User user);
 
     /**
      * Creates a new user from the given data transfer object.
@@ -39,11 +39,11 @@ public interface UserManager {
     User create(UserCreationDTO userCreationDTO);
 
     /**
-     * Gets a UserDto from a User instance.
+     * Gets a UserDTO from a User instance.
      *
      * @param user the user
      * @return the user as a data transfer object
      * @throws NullPointerException if the user is null
      */
-    UserDto userToUserDto(User user);
+    UserDTO userToUserDto(User user);
 }

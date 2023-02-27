@@ -9,7 +9,7 @@ import java.util.function.Function;
  * Mapper for the user. Used to map a user into a user dto.
  */
 @Component
-public class UserDtoMapper implements Function<User, UserDto> {
+public class UserDTOMapper implements Function<User, UserDTO> {
     /**
      * Map a user to a user dto.
      *
@@ -17,8 +17,8 @@ public class UserDtoMapper implements Function<User, UserDto> {
      * @return the user dto
      */
     @Override
-    public UserDto apply(User user) {
-        return new UserDto(user.getUsername(),
+    public UserDTO apply(User user) {
+        return new UserDTO(user.getUsername(),
                 user.getEmail(),
                 user.getFirstName(),
                 user.getLastName());

@@ -16,9 +16,9 @@ import java.util.*;
 public class UserService implements UserManager{
 
     private final UserRepository userRepository;
-    private final UserDtoMapper userDtoMapper;
+    private final UserDTOMapper userDtoMapper;
 
-    public UserService(UserRepository userRepository, UserDtoMapper userDtoMapper) {
+    public UserService(UserRepository userRepository, UserDTOMapper userDtoMapper) {
         this.userRepository = userRepository;
         this.userDtoMapper = userDtoMapper;
     }
@@ -34,7 +34,7 @@ public class UserService implements UserManager{
      * @param userCreationDTO the data transfer object for the user creation
      * @return the created user
      */
-    public UserDto createAndSave(UserCreationDTO userCreationDTO) {
+    public UserDTO createAndSave(UserCreationDTO userCreationDTO) {
         User user = this.create(userCreationDTO);
         log.info("Created user {}", user);
         return this.save(user);
@@ -70,7 +70,7 @@ public class UserService implements UserManager{
      * @throws NullPointerException if the user is null
      */
     @Override
-    public UserDto save(User user) {
+    public UserDTO save(User user) {
         this.userRepository.save(Objects.requireNonNull(user));
         return this.userToUserDto(user);
     }
@@ -93,14 +93,15 @@ public class UserService implements UserManager{
     }
 
     /**
-     * Gets a UserDto from a User instance.
+     * Gets a UserDTO from a User instance.
      *
      * @param user the user
      * @return the user as a data transfer object
      * @throws NullPointerException if the user is null
      */
     @Override
-    public UserDto userToUserDto(User user) {
-        return this.userDtoMapper.apply(Objects.requireNonNull(user));
+    public UserDTO userToUserDto(User user) {
+        return this.userDtoMapper
+                .apply(Objects.requireNonNull(user));
     }
 }

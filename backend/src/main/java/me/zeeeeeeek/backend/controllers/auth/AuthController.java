@@ -1,6 +1,5 @@
 package me.zeeeeeeek.backend.controllers.auth;
 
-import me.zeeeeeeek.backend.models.user.User;
 import me.zeeeeeeek.backend.models.user.dtos.*;
 
 /**
@@ -14,5 +13,5 @@ public interface AuthController {
      * @param userCreationDTO the data transfer object for the user registration
      * @return the created user
      */
-    UserDto register(UserCreationDTO userCreationDTO);
+    UserDTO register(UserCreationDTO userCreationDTO);
 }

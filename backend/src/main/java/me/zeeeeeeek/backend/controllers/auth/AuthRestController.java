@@ -1,7 +1,7 @@
 package me.zeeeeeeek.backend.controllers.auth;
 
 import me.zeeeeeeek.backend.models.user.dtos.UserCreationDTO;
-import me.zeeeeeeek.backend.models.user.dtos.UserDto;
+import me.zeeeeeeek.backend.models.user.dtos.UserDTO;
 import me.zeeeeeeek.backend.services.user.UserService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,7 +26,7 @@ public class AuthRestController implements AuthController{
      */
     @Override
     @PostMapping
-    public UserDto register(@RequestBody UserCreationDTO userCreationDTO) {
+    public UserDTO register(@RequestBody UserCreationDTO userCreationDTO) {
         System.out.println(userCreationDTO);
         return this.userService.createAndSave(userCreationDTO);
     }
