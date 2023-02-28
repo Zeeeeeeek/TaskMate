@@ -1,20 +1,15 @@
 package me.zeeeeeeek.backend.models.user;
 
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import jakarta.persistence.*;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import lombok.Setter;
-import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
+import me.zeeeeeeek.backend.models.tasks.collections.TaskList;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -22,10 +17,7 @@ import java.util.UUID;
  * a password, an email, a first name and a last name.
  */
 @NoArgsConstructor
-@Getter
-@Setter
-@EqualsAndHashCode
-@ToString
+@Data
 @Slf4j
 @Entity(name = "users")
 public class User {
@@ -42,6 +34,9 @@ public class User {
     private String firstName;
     @Column @NonNull
     private String lastName;
+
+    @OneToMany(mappedBy = "owner")
+    private List<TaskList> taskLists;
 
     /**
      * Create a new user.
@@ -81,4 +76,8 @@ public class User {
         }
         return email;
     }
+
+    /**
+     * Add a task list to the user.
+     */
 }

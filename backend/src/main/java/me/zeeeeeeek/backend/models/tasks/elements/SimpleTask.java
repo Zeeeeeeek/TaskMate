@@ -1,6 +1,7 @@
 package me.zeeeeeeek.backend.models.tasks.elements;
 
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
@@ -9,6 +10,7 @@ import lombok.ToString;
  */
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
 public class SimpleTask extends AbstractTask {
 
     /**

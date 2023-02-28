@@ -1,11 +1,12 @@
 package me.zeeeeeeek.backend.models.tasks.elements;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
+import me.zeeeeeeek.backend.models.tasks.collections.TaskList;
 
-import java.util.Objects;
+import java.util.UUID;
 
 
 /**
@@ -14,12 +15,25 @@ import java.util.Objects;
 @ToString
 @EqualsAndHashCode
 @Slf4j
+@NoArgsConstructor
+@Entity
 public abstract class AbstractTask implements Task {
-    @Getter
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
+    @Getter @NonNull
     private String name;
-    @Getter
+    @Getter @NonNull
     private String description;
+    @Transient
     private boolean completed;
+    @Getter
+    @Setter
+    @ManyToOne
+    @JoinColumn(name = "taskList_id")
+    @JsonIgnoreProperties
+    private TaskList taskList;
 
     protected AbstractTask(String name, String description) {
         this.name = isValidStringParameter(name);
@@ -39,7 +53,7 @@ public abstract class AbstractTask implements Task {
      * @throws IllegalArgumentException if the parameter is empty
      */
     private String isValidStringParameter(String parameter) {
-        if (Objects.requireNonNull(parameter).isEmpty()) {
+        if (parameter.isEmpty()) {
             log.error("Used an empty string as a parameter");
             throw new IllegalArgumentException("Parameter cannot be empty");
         }
@@ -52,6 +66,7 @@ public abstract class AbstractTask implements Task {
      *
      * @return true if the task is completed, false otherwise
      */
+
     public boolean isCompleted() {
         return this.completed;
     }

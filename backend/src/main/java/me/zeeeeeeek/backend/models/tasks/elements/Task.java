@@ -3,6 +3,10 @@ package me.zeeeeeeek.backend.models.tasks.elements;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.Transient;
+import me.zeeeeeeek.backend.models.tasks.collections.TaskList;
 
 /**
  * A task is a specific activity that can be completed or not.
@@ -14,6 +18,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = SimpleTask.class, name = "simpleTask"),
         @JsonSubTypes.Type(value = TimeConstrainedTask.class, name = "timeConstrainedTask"),
 })
+
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public interface Task {
 
     /**
@@ -35,6 +41,7 @@ public interface Task {
      *
      * @return the status of the task
      */
+    @Transient
     boolean isCompleted();
 
     /**
@@ -61,4 +68,14 @@ public interface Task {
      * @param description task's new description
      */
     void setDescription(String description);
+
+    /**todo temp
+     * Set the taskList of the task.
+     */
+    void setTaskList(TaskList taskList);
+
+    /**
+     * Get the taskList of the task.
+     */
+    TaskList getTaskList();
 }

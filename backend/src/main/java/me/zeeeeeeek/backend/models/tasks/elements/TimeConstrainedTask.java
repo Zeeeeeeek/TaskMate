@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import jakarta.persistence.Transient;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -13,20 +14,22 @@ import java.util.Objects;
  * TimeConstrainedTask is a task that has a due date.
  */
 @ToString
+@NoArgsConstructor
 public class TimeConstrainedTask extends AbstractTask{
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @Getter @Setter
+    @Getter @Setter @NonNull
     private LocalDateTime dueDate;
     public TimeConstrainedTask(String name, String description, LocalDateTime dueDate) {
         super(name, description);
-        this.dueDate = Objects.requireNonNull(dueDate);
+        this.dueDate = dueDate;
     }
 
     /**
      * This method checks if the task is expired. Meaning that the due date is before the current date.
      * @return true, if the task is expired, false otherwise
      */
+    @Transient
     public boolean isExpired() {
         return this.dueDate.isBefore(LocalDateTime.now());
     }

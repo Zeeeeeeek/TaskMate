@@ -1,17 +1,14 @@
 package me.zeeeeeeek.backend.models.tasks;
 
 import me.zeeeeeeek.backend.models.tasks.collections.TaskList;
+import me.zeeeeeeek.backend.models.tasks.elements.AbstractTask;
 import me.zeeeeeeek.backend.models.tasks.elements.SimpleTask;
-import me.zeeeeeeek.backend.models.tasks.elements.Task;
 import me.zeeeeeeek.backend.models.user.User;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class TaskListTest {
 
@@ -25,7 +22,7 @@ class TaskListTest {
 
     @Test
     void taskListShouldBeCreatedWithList() {
-        List<Task> tasks = List.of(
+        List<AbstractTask> tasks = List.of(
                 new SimpleTask("Task 1", "Description 1"),
                 new SimpleTask("Task 2", "Description 2")
         );
@@ -62,14 +59,14 @@ class TaskListTest {
 
     @Test
     void shouldContainTask() {
-        Task task = new SimpleTask("Task 1", "Description 1");
+        AbstractTask task = new SimpleTask("Task 1", "Description 1");
         TaskList taskList = new TaskList(List.of(task), OWNER);
         assertTrue(taskList.contains(task));
     }
 
     @Test
     void shouldNotContainTask() {
-        Task task = new SimpleTask("Task 1", "Description 1");
+        AbstractTask task = new SimpleTask("Task 1", "Description 1");
         TaskList taskList = new TaskList(List.of(task), OWNER);
         assertFalse(taskList.contains(new SimpleTask("Task 2", "Description 2")));
     }
@@ -96,7 +93,7 @@ class TaskListTest {
 
     @Test
     void taskShouldBeRemoved() {
-        Task task = new SimpleTask("Task 1", "Description 1");
+        AbstractTask task = new SimpleTask("Task 1", "Description 1");
         TaskList taskList = new TaskList(List.of(task), OWNER);
         taskList.removeTask(task);
         assertEquals(0, taskList.size());
@@ -118,7 +115,7 @@ class TaskListTest {
 
     @Test
     void taskListShouldBeCompleted(){
-        Task task1 = new SimpleTask("Task 1", "Description 1");
+        AbstractTask task1 = new SimpleTask("Task 1", "Description 1");
         task1.setCompleted();
         TaskList taskList = new TaskList(List.of(task1), OWNER);
         assertTrue(taskList.isCompleted());
@@ -126,8 +123,8 @@ class TaskListTest {
 
     @Test
     void taskShouldNotBeCompletedWithOneTaskUncompleted() {
-        Task task1 = new SimpleTask("Task 1", "Description 1");
-        Task task2 = new SimpleTask("Task 2", "Description 2");
+        AbstractTask task1 = new SimpleTask("Task 1", "Description 1");
+        AbstractTask task2 = new SimpleTask("Task 2", "Description 2");
         task1.setCompleted();
         TaskList taskList = new TaskList(List.of(task1, task2), OWNER);
         assertFalse(taskList.isCompleted());
@@ -135,7 +132,7 @@ class TaskListTest {
 
     @Test
     void shouldSetCompletedTask() {
-        Task task = new SimpleTask("Task 1", "Description 1");
+        AbstractTask task = new SimpleTask("Task 1", "Description 1");
         TaskList taskList = new TaskList(List.of(task), OWNER);
         taskList.setCompleted(task);
         assertTrue(task.isCompleted());

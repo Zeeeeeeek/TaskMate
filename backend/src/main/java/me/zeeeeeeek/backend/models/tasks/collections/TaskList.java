@@ -1,28 +1,35 @@
 package me.zeeeeeeek.backend.models.tasks.collections;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import me.zeeeeeeek.backend.models.tasks.elements.AbstractTask;
 import me.zeeeeeeek.backend.models.tasks.elements.Task;
 import me.zeeeeeeek.backend.models.user.User;
-import org.springframework.data.annotation.Id;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Stream;
 
 /**
  * A list of tasks.
  * A task list is considered completed when all its tasks are completed.
  */
+@Entity(name = "taskLists")
+@NoArgsConstructor
+@Data
 public class TaskList implements TaskCollection {
-
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    private final List<Task> tasks;
-    private final User owner;
+
+    @OneToMany(mappedBy = "taskList", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("taskList")
+    private List<AbstractTask> tasks;
+
+    @ManyToOne
+    @JsonIgnoreProperties("taskLists")
+    private User owner;
 
     /**
      * Create a new task list from a list of tasks.
@@ -30,7 +37,7 @@ public class TaskList implements TaskCollection {
      * @param tasks the list of tasks
      * @throws NullPointerException if the list of tasks is null
      */
-    public TaskList(List<Task> tasks, User owner) {
+    public TaskList(List<AbstractTask> tasks, User owner) {
         Objects.requireNonNull(tasks);
         tasks.forEach(Objects::requireNonNull);
         this.owner = Objects.requireNonNull(owner);
@@ -47,12 +54,12 @@ public class TaskList implements TaskCollection {
     /**
      * Controls if all the contained tasks are completed or not
      *
-     * @return true, if all {@link Task#isCompleted()} calls in each contained task returns true, false otherwise
+     * @return true, if all {@link AbstractTask#isCompleted()} calls in each contained task returns true, false otherwise
      */
     @Override
     public boolean isCompleted() {
         return this.tasks.stream()
-                .allMatch(Task::isCompleted);
+                .allMatch(AbstractTask::isCompleted);
     }
 
     /**
@@ -65,7 +72,7 @@ public class TaskList implements TaskCollection {
      * @throws NullPointerException if the task is null
      */
     @Override
-    public void setCompleted(Task task) {
+    public void setCompleted(AbstractTask task) {
         this.tasks.stream()
                 .filter(t -> t.equals(task))
                 .forEach(Task::setCompleted);
@@ -81,7 +88,7 @@ public class TaskList implements TaskCollection {
      * @throws NullPointerException if the task is null
      */
     @Override
-    public void setUncompleted(Task task) {
+    public void setUncompleted(AbstractTask task) {
         this.tasks.stream()
                 .filter(t -> t.equals(task))
                 .forEach(Task::setUncompleted);
@@ -95,7 +102,7 @@ public class TaskList implements TaskCollection {
      * @throws NullPointerException if the task is null
      */
     @Override
-    public boolean contains(Task task) {
+    public boolean contains(AbstractTask task) {
             return this.tasks.contains(Objects.requireNonNull(task));
     }
 
@@ -107,7 +114,7 @@ public class TaskList implements TaskCollection {
      * @throws NullPointerException if the task is null
      */
     @Override
-    public boolean addTask(Task task) {
+    public boolean addTask(AbstractTask task) {
         return this.tasks.add(Objects.requireNonNull(task));
     }
 
@@ -119,7 +126,7 @@ public class TaskList implements TaskCollection {
      * @throws NullPointerException if the task is null
      */
     @Override
-    public boolean removeTask(Task task) {
+    public boolean removeTask(AbstractTask task) {
         return this.tasks.remove(Objects.requireNonNull(task));
     }
 
@@ -129,7 +136,7 @@ public class TaskList implements TaskCollection {
      * @return a stream of the tasks in the collection
      */
     @Override
-    public Stream<Task> stream() {
+    public Stream<AbstractTask> stream() {
         return this.tasks.stream();
     }
 
@@ -179,7 +186,7 @@ public class TaskList implements TaskCollection {
      * @return the collection tasks list
      */
     @Override
-    public List<Task> getTasks() {
+    public List<AbstractTask> getTasks() {
         return this.tasks;
     }
 
