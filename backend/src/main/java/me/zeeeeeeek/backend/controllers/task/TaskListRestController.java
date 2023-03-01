@@ -1,25 +1,29 @@
 package me.zeeeeeeek.backend.controllers.task;
 
 import lombok.extern.slf4j.Slf4j;
-import me.zeeeeeeek.backend.controllers.dtos.CreateTaskListDTO;
+import me.zeeeeeeek.backend.models.tasks.collections.dtos.CreateTasksDTO;
 import me.zeeeeeeek.backend.models.tasks.collections.TaskCollection;
+import me.zeeeeeeek.backend.models.tasks.collections.TaskList;
+import me.zeeeeeeek.backend.models.tasks.elements.AbstractTask;
 import me.zeeeeeeek.backend.models.user.User;
 import me.zeeeeeeek.backend.services.task.TaskListService;
 import me.zeeeeeeek.backend.services.user.UserService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
  * Controller used to manage a list of tasks using a REST API.
  */
 @RestController
-@RequestMapping("/api/tasks")
+@RequestMapping("/api/taskLists/")
 @Slf4j
 public class TaskListRestController implements TaskCollectionController {
 
     private final UserService userService;
     private final TaskListService taskListService;
+
 
     public TaskListRestController(UserService userService, TaskListService taskListService) {
         this.userService = userService;
@@ -29,24 +33,55 @@ public class TaskListRestController implements TaskCollectionController {
     /**
      * Creates a new task collection, with the given owner and tasks.
      *
-     * @param createTaskListDTO the data transfer object for the task list
+     * @param createTasksDTO the data transfer object for the task list
      * @return the created collection
      */
     @Override
-    @PostMapping("/")
-    public TaskCollection create(@RequestBody CreateTaskListDTO createTaskListDTO, @RequestParam UUID ownerUUID) {
-        System.out.println(ownerUUID);
+    @PostMapping("{ownerUUID}")
+    public TaskCollection create(@RequestBody CreateTasksDTO createTasksDTO, @PathVariable UUID ownerUUID) {
         User owner = this.userService.getById(ownerUUID);
         return this.taskListService
-                .createAndSave(createTaskListDTO.getTasksAsList(), owner);
+                .createAndSave(createTasksDTO.getTasksAsList(), owner);
     }
 
 
-    @GetMapping("/")
-    public TaskCollection get(@RequestParam UUID ownerUUID) {
+    @GetMapping("{ownerUUID}")
+    public List<TaskList> getTaskListsByOwnerId(@PathVariable UUID ownerUUID) {
         User owner = this.userService.getById(ownerUUID);
-        TaskCollection taskCollection = this.taskListService.getByOwner(owner);
-        System.out.println(taskCollection);
-        return taskCollection;
+        return this.taskListService
+                .getAllOwnedBy(owner);
+    }
+
+    //Todo: remove temporary getAllTasks method
+    @GetMapping("tasks")
+    public List<AbstractTask> getAllTasks() {
+        return this.taskListService
+                .getAllTasks();
+    }
+
+    @GetMapping("")
+    public List<AbstractTask> getTaskList(@RequestParam UUID taskListId) {
+        return this.taskListService
+                .getAllTasksOfList(taskListId);
+    }
+
+    //end of temporary methods
+
+    @PutMapping("tasks")
+    public void setTaskIsCompleted(@RequestParam UUID taskId, @RequestParam boolean completed) {
+        this.taskListService
+                .setIsCompleted(taskId, completed);
+    }
+
+    @DeleteMapping("tasks")
+    public void deleteTask(@RequestParam UUID taskId) {
+        this.taskListService
+                .deleteTask(taskId);
+    }
+
+    @PostMapping("tasks")
+    public void addTasksToTaskList(@RequestParam UUID taskListId, @RequestBody CreateTasksDTO createTasksDTO) {
+        this.taskListService
+                .addTasksToTaskList(taskListId, createTasksDTO);
     }
 }

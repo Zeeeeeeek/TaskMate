@@ -1,5 +1,6 @@
 package me.zeeeeeeek.backend.models.tasks.elements;
 
+import jakarta.persistence.Entity;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -11,6 +12,7 @@ import lombok.ToString;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
+@Entity
 public class SimpleTask extends AbstractTask {
 
     /**

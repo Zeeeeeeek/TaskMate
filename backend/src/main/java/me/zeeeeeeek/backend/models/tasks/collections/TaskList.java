@@ -23,7 +23,7 @@ public class TaskList implements TaskCollection {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @OneToMany(mappedBy = "taskList", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "taskList", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnoreProperties("taskList")
     private List<AbstractTask> tasks;
 
@@ -40,6 +40,7 @@ public class TaskList implements TaskCollection {
     public TaskList(List<AbstractTask> tasks, User owner) {
         Objects.requireNonNull(tasks);
         tasks.forEach(Objects::requireNonNull);
+        tasks.forEach(task -> task.setTaskList(this));
         this.owner = Objects.requireNonNull(owner);
         this.tasks = new ArrayList<>(tasks);
     }
@@ -71,7 +72,7 @@ public class TaskList implements TaskCollection {
      * @param task the task to set as completed
      * @throws NullPointerException if the task is null
      */
-    @Override
+    @Override//todo: remove
     public void setCompleted(AbstractTask task) {
         this.tasks.stream()
                 .filter(t -> t.equals(task))
@@ -87,7 +88,7 @@ public class TaskList implements TaskCollection {
      * @param task the task to set as uncompleted
      * @throws NullPointerException if the task is null
      */
-    @Override
+    @Override//todo: remove
     public void setUncompleted(AbstractTask task) {
         this.tasks.stream()
                 .filter(t -> t.equals(task))
@@ -160,15 +161,6 @@ public class TaskList implements TaskCollection {
         return this.tasks.isEmpty();
     }
 
-    /**
-     * Return the collection uuid.
-     *
-     * @return the collection uuid
-     */
-    @Override
-    public UUID getUuid() {
-        return this.id;
-    }
 
     /**
      * Return the collection owner uuid.
@@ -188,6 +180,12 @@ public class TaskList implements TaskCollection {
     @Override
     public List<AbstractTask> getTasks() {
         return this.tasks;
+    }
+
+    public void addTasks(List<AbstractTask> tasks) {
+        //tasks.forEach(task -> task.setTaskList(this));
+        this.tasks
+                .addAll(tasks);
     }
 
 }

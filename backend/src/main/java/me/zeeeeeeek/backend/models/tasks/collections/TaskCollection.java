@@ -5,7 +5,6 @@ import me.zeeeeeeek.backend.models.tasks.elements.AbstractTask;
 import me.zeeeeeeek.backend.models.user.User;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Stream;
 
 /**
@@ -89,11 +88,7 @@ public interface TaskCollection {
     boolean isEmpty();
 
 
-    /**
-     * Return the collection uuid.
-     * @return the collection uuid
-     */
-    UUID getUuid();
+
 
     /**
      * Return the collection owner uuid.

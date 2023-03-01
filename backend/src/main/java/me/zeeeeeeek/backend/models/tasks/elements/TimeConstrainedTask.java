@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import jakarta.persistence.Entity;
 import jakarta.persistence.Transient;
 import lombok.*;
 
@@ -15,6 +16,7 @@ import java.util.Objects;
  */
 @ToString
 @NoArgsConstructor
+@Entity
 public class TimeConstrainedTask extends AbstractTask{
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)

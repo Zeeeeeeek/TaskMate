@@ -1,6 +1,6 @@
 package me.zeeeeeeek.backend.models.tasks.elements;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
@@ -18,21 +18,18 @@ import java.util.UUID;
 @NoArgsConstructor
 @Entity
 public abstract class AbstractTask implements Task {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @Getter @Setter
+    @Id @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     @Getter @NonNull
     private String name;
     @Getter @NonNull
     private String description;
-    @Transient
+
     private boolean completed;
-    @Getter
-    @Setter
-    @ManyToOne
-    @JoinColumn(name = "taskList_id")
-    @JsonIgnoreProperties
+    @Getter @Setter
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL) @JoinColumn(name = "taskList_id")
+    @JsonIgnore
     private TaskList taskList;
 
     protected AbstractTask(String name, String description) {
@@ -76,7 +73,7 @@ public abstract class AbstractTask implements Task {
      */
     @Override
     public void setCompleted() {
-        this.modifyCompleted(true);
+        this.setIsCompleted(true);
     }
 
     /**
@@ -84,10 +81,10 @@ public abstract class AbstractTask implements Task {
      */
     @Override
     public void setUncompleted() {
-        this.modifyCompleted(false);
+        this.setIsCompleted(false);
     }
 
-    private void modifyCompleted(boolean newValue) {
+    public void setIsCompleted(boolean newValue) {
         this.completed = newValue;
     }
 
