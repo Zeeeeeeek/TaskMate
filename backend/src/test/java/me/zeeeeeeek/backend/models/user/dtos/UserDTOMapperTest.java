@@ -16,7 +16,7 @@ class UserDTOMapperTest {
                         "email@sss",
                         "firstName",
                         "lastName");
-        UserDTO userDto = userDtoMapper.apply(user);
+        UserDTO userDto = userDtoMapper.mapToDTO(user);
         assertEquals(user.getUsername(), userDto.username());
         assertEquals(user.getEmail(), userDto.email());
         assertEquals(user.getFirstName(), userDto.firstName());
