@@ -27,7 +27,7 @@ public class AuthRestController implements AuthController{
     @Override
     @PostMapping
     public UserDTO register(@RequestBody UserCreationDTO userCreationDTO) {
-        System.out.println(userCreationDTO);
-        return this.userService.createAndSave(userCreationDTO);
+        return this.userService
+                .createAndSave(userCreationDTO);
     }
 }

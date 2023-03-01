@@ -20,6 +20,7 @@ public class UserDTOMapper implements DTOMapper<User, UserDTO> {
     @Override
     public UserDTO mapToDTO(@NonNull User user) {
         return new UserDTO(user.getUsername(),
+                user.getId(),
                 user.getEmail(),
                 user.getFirstName(),
                 user.getLastName());
