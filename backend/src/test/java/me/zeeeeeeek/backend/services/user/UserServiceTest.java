@@ -95,6 +95,6 @@ class UserServiceTest {
         User user = testUser();
         this.userService
                 .userToUserDto(user);
-        verify(userDtoMapper).apply(user);
+        verify(userDtoMapper).mapToDTO(user);
     }
 }

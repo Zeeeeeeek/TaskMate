@@ -1,5 +1,7 @@
 package me.zeeeeeeek.backend.models.user.dtos;
 
+import lombok.NonNull;
+
 /**
  * Data Transfer Object representing the information required to create a new user.
  *
@@ -9,4 +11,9 @@ package me.zeeeeeeek.backend.models.user.dtos;
  * @param firstName the first name of the user to create
  * @param lastName  the last name of the user to create
  */
-public record UserCreationDTO(String username, String password, String email, String firstName, String lastName) {}
+public record UserCreationDTO(@NonNull String username,
+                              @NonNull String password,
+                              @NonNull String email,
+                              @NonNull String firstName,
+                              @NonNull String lastName) {
+}

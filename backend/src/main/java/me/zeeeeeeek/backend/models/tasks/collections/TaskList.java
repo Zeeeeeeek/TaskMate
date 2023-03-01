@@ -4,11 +4,15 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import me.zeeeeeeek.backend.models.tasks.elements.AbstractTask;
 import me.zeeeeeeek.backend.models.tasks.elements.Task;
 import me.zeeeeeeek.backend.models.user.User;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 import java.util.stream.Stream;
 
 /**
@@ -37,19 +41,20 @@ public class TaskList implements TaskCollection {
      * @param tasks the list of tasks
      * @throws NullPointerException if the list of tasks is null
      */
-    public TaskList(List<AbstractTask> tasks, User owner) {
-        Objects.requireNonNull(tasks);
-        tasks.forEach(Objects::requireNonNull);
-        tasks.forEach(task -> task.setTaskList(this));
-        this.owner = Objects.requireNonNull(owner);
+    public TaskList(@NonNull List<AbstractTask> tasks, @NonNull User owner) {
+        tasks.forEach(task -> {
+            Objects.requireNonNull(task);
+            task.setTaskList(this);
+        });
+        this.owner = owner;
         this.tasks = new ArrayList<>(tasks);
     }
 
     /**
      * Create a new task list with an empty list of tasks.
      */
-    public TaskList(User owner) {
-        this.owner = Objects.requireNonNull(owner);
+    public TaskList(@NonNull User owner) {
+        this.owner = owner;
         this.tasks = new ArrayList<>();
     }
     /**
@@ -103,8 +108,9 @@ public class TaskList implements TaskCollection {
      * @throws NullPointerException if the task is null
      */
     @Override
-    public boolean contains(AbstractTask task) {
-            return this.tasks.contains(Objects.requireNonNull(task));
+    public boolean contains(@NonNull AbstractTask task) {
+            return this.tasks
+                    .contains(task);
     }
 
     /**
@@ -115,8 +121,8 @@ public class TaskList implements TaskCollection {
      * @throws NullPointerException if the task is null
      */
     @Override
-    public boolean addTask(AbstractTask task) {
-        return this.tasks.add(Objects.requireNonNull(task));
+    public boolean addTask(@NonNull AbstractTask task) {
+        return this.tasks.add(task);
     }
 
     /**
@@ -127,8 +133,9 @@ public class TaskList implements TaskCollection {
      * @throws NullPointerException if the task is null
      */
     @Override
-    public boolean removeTask(AbstractTask task) {
-        return this.tasks.remove(Objects.requireNonNull(task));
+    public boolean removeTask(@NonNull AbstractTask task) {
+        return this.tasks
+                .remove(task);
     }
 
     /**
@@ -182,7 +189,7 @@ public class TaskList implements TaskCollection {
         return this.tasks;
     }
 
-    public void addTasks(List<AbstractTask> tasks) {
+    public void addTasks(@NonNull List<AbstractTask> tasks) {
         //tasks.forEach(task -> task.setTaskList(this));
         this.tasks
                 .addAll(tasks);

@@ -102,6 +102,6 @@ public class UserService implements UserManager{
     @Override
     public UserDTO userToUserDto(User user) {
         return this.userDtoMapper
-                .apply(Objects.requireNonNull(user));
+                .mapToDTO(Objects.requireNonNull(user));
     }
 }

@@ -36,7 +36,6 @@ public abstract class AbstractTask implements Task {
         this.name = isValidStringParameter(name);
         this.description = isValidStringParameter(description);
         this.completed = false;
-        log.info("Created task {}", this);
     }
 
 
@@ -49,12 +48,11 @@ public abstract class AbstractTask implements Task {
      * @throws NullPointerException     if the parameter is null
      * @throws IllegalArgumentException if the parameter is empty
      */
-    private String isValidStringParameter(String parameter) {
+    private String isValidStringParameter(@NonNull String parameter) {
         if (parameter.isEmpty()) {
             log.error("Used an empty string as a parameter");
             throw new IllegalArgumentException("Parameter cannot be empty");
         }
-
         return parameter;
     }
 
