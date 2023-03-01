@@ -8,7 +8,15 @@ import me.zeeeeeeek.backend.models.tasks.elements.AbstractTask;
 import me.zeeeeeeek.backend.models.user.User;
 import me.zeeeeeeek.backend.services.task.TaskListService;
 import me.zeeeeeeek.backend.services.user.UserService;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.UUID;
@@ -37,16 +45,16 @@ public class TaskListRestController implements TaskCollectionController {
      * @return the created collection
      */
     @Override
-    @PostMapping("{ownerUUID}")
-    public TaskCollection create(@RequestBody CreateTasksDTO createTasksDTO, @PathVariable UUID ownerUUID) {
+    @PostMapping
+    public TaskCollection create(@RequestBody CreateTasksDTO createTasksDTO, @RequestParam UUID ownerUUID) {
         User owner = this.userService.getById(ownerUUID);
         return this.taskListService
                 .createAndSave(createTasksDTO.getTasksAsList(), owner);
     }
 
 
-    @GetMapping("{ownerUUID}")
-    public List<TaskList> getTaskListsByOwnerId(@PathVariable UUID ownerUUID) {
+    @GetMapping
+    public List<TaskList> getTaskListsByOwnerId(@RequestParam UUID ownerUUID) {
         User owner = this.userService.getById(ownerUUID);
         return this.taskListService
                 .getAllOwnedBy(owner);
@@ -59,7 +67,7 @@ public class TaskListRestController implements TaskCollectionController {
                 .getAllTasks();
     }
 
-    @GetMapping("")
+    @GetMapping("all")
     public List<AbstractTask> getTaskList(@RequestParam UUID taskListId) {
         return this.taskListService
                 .getAllTasksOfList(taskListId);
@@ -67,20 +75,20 @@ public class TaskListRestController implements TaskCollectionController {
 
     //end of temporary methods
 
-    @PutMapping("tasks")
-    public void setTaskIsCompleted(@RequestParam UUID taskId, @RequestParam boolean completed) {
+    @PutMapping("tasks/{taskId}")
+    public void setTaskIsCompleted(@PathVariable UUID taskId, @RequestParam boolean completed) {
         this.taskListService
                 .setIsCompleted(taskId, completed);
     }
 
-    @DeleteMapping("tasks")
-    public void deleteTask(@RequestParam UUID taskId) {
+    @DeleteMapping("tasks/{taskId}")
+    public void deleteTask(@PathVariable UUID taskId) {
         this.taskListService
                 .deleteTask(taskId);
     }
 
-    @PostMapping("tasks")
-    public void addTasksToTaskList(@RequestParam UUID taskListId, @RequestBody CreateTasksDTO createTasksDTO) {
+    @PostMapping("{taskListId}/tasks")
+    public void addTasksToTaskList(@PathVariable UUID taskListId, @RequestBody CreateTasksDTO createTasksDTO) {
         this.taskListService
                 .addTasksToTaskList(taskListId, createTasksDTO);
     }

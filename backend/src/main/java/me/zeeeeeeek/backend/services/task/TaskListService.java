@@ -75,7 +75,8 @@ public class TaskListService {
     }
 
     public void deleteTask(@NonNull UUID taskId) {
-        abstractTaskRepository.deleteById(taskId);
+        abstractTaskRepository
+                .deleteById(taskId);
     }
 
     public void addTasksToTaskList(UUID taskListId, CreateTasksDTO createTasksDTO) {

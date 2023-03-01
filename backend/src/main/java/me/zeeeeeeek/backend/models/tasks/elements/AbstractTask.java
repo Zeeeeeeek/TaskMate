@@ -28,7 +28,7 @@ public abstract class AbstractTask implements Task {
 
     private boolean completed;
     @Getter @Setter
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL) @JoinColumn(name = "taskList_id")
+    @ManyToOne/*(fetch = FetchType.EAGER, cascade = CascadeType.ALL)*/ @JoinColumn(name = "taskList_id")
     @JsonIgnore
     private TaskList taskList;
 

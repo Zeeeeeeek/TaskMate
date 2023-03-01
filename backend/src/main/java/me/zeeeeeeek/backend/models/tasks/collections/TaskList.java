@@ -27,7 +27,11 @@ public class TaskList implements TaskCollection {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @OneToMany(mappedBy = "taskList", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "taskList",
+                cascade = CascadeType.ALL,
+                orphanRemoval = true
+                //fetch = FetchType.EAGER
+                )
     @JsonIgnoreProperties("taskList")
     private List<AbstractTask> tasks;
 

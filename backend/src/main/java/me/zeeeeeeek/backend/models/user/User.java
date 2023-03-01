@@ -77,7 +77,4 @@ public class User {
         return email;
     }
 
-    /**
-     * Add a task list to the user.
-     */
 }
