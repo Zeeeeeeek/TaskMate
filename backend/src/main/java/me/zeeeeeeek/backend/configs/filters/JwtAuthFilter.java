@@ -1,4 +1,4 @@
-package me.zeeeeeeek.backend.configs;
+package me.zeeeeeeek.backend.configs.filters;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -44,11 +44,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
-        final String authHeader = request.getHeader("Authorization");
-        final String jwtToken;
-        final String username;
+        String authHeader = request.getHeader("Authorization");
+        String jwtToken;
+        String username;
         if(authHeader == null || !authHeader.startsWith("Bearer ")) {
-            filterChain.doFilter(request, response);
+            filterChain.doFilter(request, response);// continue the filter chain
             return;
         }
         jwtToken = authHeader.substring(7);// 7 is the length of "Bearer "

@@ -4,16 +4,17 @@ import lombok.RequiredArgsConstructor;
 import me.zeeeeeeek.backend.models.user.dtos.UserCreationDTO;
 import me.zeeeeeeek.backend.models.user.dtos.UserLoginDto;
 import me.zeeeeeeek.backend.services.auth.AuthService;
-import me.zeeeeeeek.backend.services.user.UserService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthRestController{
 
-    private final UserService userService;
     private final AuthService authService;
 
 
@@ -33,11 +34,6 @@ public class AuthRestController{
     public ResponseEntity<AuthenticationResponse> login(
             @RequestBody UserLoginDto userLoginDTO) {
         return ResponseEntity.ok(authService.login(userLoginDTO));
-    }
-
-    @GetMapping("/register")
-    public ResponseEntity<String> test() {
-        return ResponseEntity.ok("Endpoint allowed");
     }
 
 }

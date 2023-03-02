@@ -18,7 +18,7 @@ import java.util.function.Function;
 @Service
 public class JwtService {
     @NonNull
-    private static String SECRET_KEY = System.getenv("SECRET");
+    private static final String SECRETKEY = System.getenv("SECRET");
 
     public String extractUsername(String jwtToken) {
         return extractClaim(
@@ -72,9 +72,9 @@ public class JwtService {
      * Check if the token is valid.
      * If the token is valid, then the user is authenticated.
      * If the user is authenticated, will not be authenticated again.
-     * @param jwtToken
-     * @param userDetails
-     * @return
+     * @param jwtToken the token to be checked
+     * @param userDetails the user details
+     * @return true if the token is valid, false otherwise
      */
     public boolean isTokenValid(String jwtToken, UserDetails userDetails) {
         final String username = extractUsername(jwtToken);
@@ -89,8 +89,7 @@ public class JwtService {
     }
 
     private Key getSigningKey() {
-        System.out.println(SECRET_KEY);
-        byte[] secretKeyBytes = Decoders.BASE64.decode(SECRET_KEY);
+        byte[] secretKeyBytes = Decoders.BASE64.decode(SECRETKEY);
         return Keys.hmacShaKeyFor(secretKeyBytes);
     }
 }
