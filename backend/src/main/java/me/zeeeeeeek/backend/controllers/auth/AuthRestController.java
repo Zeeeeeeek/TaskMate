@@ -1,22 +1,21 @@
 package me.zeeeeeeek.backend.controllers.auth;
 
+import lombok.RequiredArgsConstructor;
 import me.zeeeeeeek.backend.models.user.dtos.UserCreationDTO;
-import me.zeeeeeeek.backend.models.user.dtos.UserDTO;
+import me.zeeeeeeek.backend.models.user.dtos.UserLoginDto;
+import me.zeeeeeeek.backend.services.auth.AuthService;
 import me.zeeeeeeek.backend.services.user.UserService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/auth/")
-public class AuthRestController implements AuthController{
+@RequestMapping("/api/auth")
+@RequiredArgsConstructor
+public class AuthRestController{
 
     private final UserService userService;
+    private final AuthService authService;
 
-    public AuthRestController(UserService userService) {
-        this.userService = userService;
-    }
 
     /**
      * Registers a new user from the given data transfer object.
@@ -24,10 +23,21 @@ public class AuthRestController implements AuthController{
      * @param userCreationDTO the data transfer object for the user registration
      * @return the created user
      */
-    @Override
-    @PostMapping
-    public UserDTO register(@RequestBody UserCreationDTO userCreationDTO) {
-        return this.userService
-                .createAndSave(userCreationDTO);
+    @PostMapping("/register")
+    public ResponseEntity<AuthenticationResponse> register(
+            @RequestBody UserCreationDTO userCreationDTO) {
+        return ResponseEntity.ok(authService.register(userCreationDTO));
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<AuthenticationResponse> login(
+            @RequestBody UserLoginDto userLoginDTO) {
+        return ResponseEntity.ok(authService.login(userLoginDTO));
+    }
+
+    @GetMapping("/register")
+    public ResponseEntity<String> test() {
+        return ResponseEntity.ok("Endpoint allowed");
+    }
+
 }
