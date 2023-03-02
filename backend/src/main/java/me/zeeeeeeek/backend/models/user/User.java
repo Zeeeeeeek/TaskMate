@@ -53,17 +53,19 @@ public class User implements UserDetails {
      * @param email     the email of the user
      * @param firstName the first name of the user
      * @param lastName  the last name of the user
+     * @param role      the role of the user
      * @throws NullPointerException     if any of the parameters is null
      * @throws IllegalArgumentException if any of the parameters is empty
      * @throws IllegalArgumentException if the email is invalid
      */
-    public User(String username, String password, String email, String firstName, String lastName) {
+    public User(String username, String password, String email, String firstName, String lastName, Role role) {
         requireNonEmpty(username, password, email, firstName, lastName);
         this.email = validateEmail(email);
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
         this.password = password;
+        this.role = role;
         log.info("Created user {}", this);
     }
     private void requireNonEmpty(String... args) {

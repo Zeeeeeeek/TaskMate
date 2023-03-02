@@ -13,7 +13,7 @@ import java.util.*;
  */
 @Service
 @Slf4j
-public class UserService implements UserManager{
+public class UserService {
 
     private final UserRepository userRepository;
     private final UserDTOMapper userDtoMapper;
@@ -55,7 +55,6 @@ public class UserService implements UserManager{
      * @throws IllegalArgumentException if the user does not exist
      * @throws NullPointerException     if the UUID is null
      */
-    @Override
     public User getById(UUID uuid) {
         return this.userRepository
                 .findById(Objects.requireNonNull(uuid))
@@ -69,7 +68,6 @@ public class UserService implements UserManager{
      * @return the saved user as a data transfer object.
      * @throws NullPointerException if the user is null
      */
-    @Override
     public UserDTO save(User user) {
         this.userRepository.save(Objects.requireNonNull(user));
         return this.userToUserDto(user);
@@ -82,14 +80,15 @@ public class UserService implements UserManager{
      * @return the created user
      * @throws NullPointerException if the data transfer object is null
      */
-    @Override
+
     public User create(UserCreationDTO userCreationDTO) {
         Objects.requireNonNull(userCreationDTO);
         return new User(userCreationDTO.username(),
                 userCreationDTO.password(),
                 userCreationDTO.email(),
                 userCreationDTO.firstName(),
-                userCreationDTO.lastName());
+                userCreationDTO.lastName(),
+                Role.USER);
     }
 
     /**
@@ -99,7 +98,6 @@ public class UserService implements UserManager{
      * @return the user as a data transfer object
      * @throws NullPointerException if the user is null
      */
-    @Override
     public UserDTO userToUserDto(User user) {
         return this.userDtoMapper
                 .mapToDTO(Objects.requireNonNull(user));
