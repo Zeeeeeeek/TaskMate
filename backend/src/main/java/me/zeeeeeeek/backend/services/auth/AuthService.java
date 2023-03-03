@@ -7,7 +7,7 @@ import me.zeeeeeeek.backend.models.user.User;
 import me.zeeeeeeek.backend.models.user.dtos.UserCreationDTO;
 import me.zeeeeeeek.backend.models.user.dtos.UserLoginDto;
 import me.zeeeeeeek.backend.repositories.UserRepository;
-import me.zeeeeeeek.backend.services.JwtService;
+import me.zeeeeeeek.backend.services.jwt.JwtService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -41,6 +41,7 @@ public class AuthService {
         userRepository.save(user);
         String jwtToken = jwtService.generateJwtTokenWithoutExtraClaims(user);
         return new AuthenticationResponse(jwtToken);
+
     }
 
     /**

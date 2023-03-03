@@ -1,6 +1,7 @@
 package me.zeeeeeeek.backend.models.user;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,10 +12,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * This class represents a user identified by a unique id, a username,
@@ -30,7 +28,7 @@ public class User implements UserDetails {
     private UUID id;
     @Column(unique = true) @NonNull
     private String username;
-    @Column @NonNull
+    @Column @NonNull @JsonIgnore
     private String password;
     @Column(unique = true) @NonNull
     private String email;
@@ -42,7 +40,7 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "owner")
     private List<TaskList> taskLists;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING) @JsonIgnore @NonNull
     private Role role;
 
     /**
@@ -91,7 +89,7 @@ public class User implements UserDetails {
      *
      * @return the authorities, sorted by natural key (never <code>null</code>)
      */
-    @Override
+    @Override @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(
                 new SimpleGrantedAuthority(role.name())
@@ -105,7 +103,7 @@ public class User implements UserDetails {
      * @return <code>true</code> if the user's account is valid (ie non-expired),
      * <code>false</code> if no longer valid (ie expired)
      */
-    @Override
+    @Override @JsonIgnore
     public boolean isAccountNonExpired() {
         return true;
     }
@@ -116,7 +114,7 @@ public class User implements UserDetails {
      *
      * @return <code>true</code> if the user is not locked, <code>false</code> otherwise
      */
-    @Override
+    @Override @JsonIgnore
     public boolean isAccountNonLocked() {
         return true;
     }
@@ -128,7 +126,7 @@ public class User implements UserDetails {
      * @return <code>true</code> if the user's credentials are valid (ie non-expired),
      * <code>false</code> if no longer valid (ie expired)
      */
-    @Override
+    @Override @JsonIgnore
     public boolean isCredentialsNonExpired() {
         return true;
     }
@@ -139,8 +137,36 @@ public class User implements UserDetails {
      *
      * @return <code>true</code> if the user is enabled, <code>false</code> otherwise
      */
-    @Override
+    @Override @JsonIgnore
     public boolean isEnabled() {
         return true;
+    }
+
+
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", role=" + role +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return getId().equals(user.getId()) && getUsername().equals(user.getUsername()) && getEmail().equals(user.getEmail());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getUsername(), getEmail());
     }
 }

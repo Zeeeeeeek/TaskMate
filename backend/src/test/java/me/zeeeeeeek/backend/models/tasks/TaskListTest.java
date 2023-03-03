@@ -3,6 +3,7 @@ package me.zeeeeeeek.backend.models.tasks;
 import me.zeeeeeeek.backend.models.tasks.collections.TaskList;
 import me.zeeeeeeek.backend.models.tasks.elements.AbstractTask;
 import me.zeeeeeeek.backend.models.tasks.elements.SimpleTask;
+import me.zeeeeeeek.backend.models.user.Role;
 import me.zeeeeeeek.backend.models.user.User;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TaskListTest {
 
-    private static final User OWNER = new User("user", "password", "email@mm", "firstName", "lastName");
+    private static final User OWNER = new User("user", "password", "email@mm", "firstName", "lastName", Role.USER);
 
     @Test
     void taskListShouldBeCreated() {

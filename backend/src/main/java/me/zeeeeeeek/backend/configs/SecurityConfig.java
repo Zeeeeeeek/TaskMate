@@ -22,9 +22,18 @@ import me.zeeeeeeek.backend.configs.filters.JwtAuthFilter;
 @RequiredArgsConstructor
 public class SecurityConfig  {
 
-    private final JwtAuthFilter JwtAuthFilter;
+    private final JwtAuthFilter jwtAuthFilter;
     private final UserDetailsService userDetailsService;
 
+    /**
+     * Configures the security filter chain for the application. It disables CSRF protection, allows requests to the
+     * '/api/auth/**' path, and requires authentication for any other request. It also sets the session management to
+     * stateless and adds an authentication provider and a JWT authentication filter.
+     *
+     * @param http an instance of HttpSecurity used to configure security settings
+     * @return a SecurityFilterChain instance
+     * @throws Exception if there is an error while configuring the security settings
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
@@ -36,7 +45,7 @@ public class SecurityConfig  {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authenticationProvider(authenticationProvider())
-                .addFilterBefore(JwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
     @Bean
@@ -45,9 +54,10 @@ public class SecurityConfig  {
     }
 
     /**
-     * Data acces object that will fetch user details
-     * and encode password.
-     * @return
+     * Returns an instance of DaoAuthenticationProvider used to authenticate users.
+     * It sets the user details service and the password encoder.
+     *
+     * @return an instance of DaoAuthenticationProvider
      */
     @Bean
     public AuthenticationProvider authenticationProvider() {
@@ -57,6 +67,14 @@ public class SecurityConfig  {
         return provider;
     }
 
+    /**
+     * Returns an instance of AuthenticationManager used to authenticate users.
+     * It takes an instance of AuthenticationConfiguration as a parameter, which is used to configure the authentication manager.
+     *
+     * @param config an instance of AuthenticationConfiguration used to configure the authentication manager
+     * @return an instance of AuthenticationManager
+     * @throws Exception if there is an error while configuring the authentication manager
+     */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();

@@ -69,7 +69,7 @@ public interface Task {
      */
     void setDescription(String description);
 
-    /**todo temp
+    /**
      * Set the taskList of the task.
      */
     void setTaskList(TaskList taskList);

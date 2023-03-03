@@ -1,4 +1,4 @@
-package me.zeeeeeeek.backend.services;
+package me.zeeeeeeek.backend.services.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
