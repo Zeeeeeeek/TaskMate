@@ -1,5 +1,6 @@
 package me.zeeeeeeek.backend.models.tasks.elements;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -20,6 +21,7 @@ import java.util.Objects;
 public class TimeConstrainedTask extends AbstractTask{
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
     @Getter @Setter @NonNull
     private LocalDateTime dueDate;
     public TimeConstrainedTask(String name, String description,@NonNull LocalDateTime dueDate) {
