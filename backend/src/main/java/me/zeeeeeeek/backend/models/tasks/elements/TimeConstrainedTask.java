@@ -22,7 +22,7 @@ public class TimeConstrainedTask extends AbstractTask{
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @Getter @Setter @NonNull
     private LocalDateTime dueDate;
-    public TimeConstrainedTask(String name, String description, LocalDateTime dueDate) {
+    public TimeConstrainedTask(String name, String description,@NonNull LocalDateTime dueDate) {
         super(name, description);
         this.dueDate = dueDate;
     }

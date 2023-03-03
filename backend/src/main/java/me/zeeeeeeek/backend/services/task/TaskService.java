@@ -2,11 +2,13 @@ package me.zeeeeeeek.backend.services.task;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import me.zeeeeeeek.backend.models.tasks.collections.TaskList;
 import me.zeeeeeeek.backend.models.tasks.elements.AbstractTask;
 import me.zeeeeeeek.backend.models.user.User;
 import me.zeeeeeeek.backend.repositories.AbstractTaskRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -58,5 +60,11 @@ public class TaskService {
             throw new IllegalArgumentException("Task with id " + taskId + " is not owned by user " + owner);
         }
         return toBeReturned;
+    }
+
+
+    public void setTasksTaskList(List<AbstractTask> tasks, TaskList taskList) {
+        tasks.forEach(task -> task.setTaskList(taskList));
+        abstractTaskRepository.saveAll(tasks);
     }
 }

@@ -2,7 +2,6 @@ package me.zeeeeeeek.backend.controllers.task;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import me.zeeeeeeek.backend.models.tasks.collections.TaskCollection;
 import me.zeeeeeeek.backend.models.tasks.collections.TaskList;
 import me.zeeeeeeek.backend.models.tasks.collections.dtos.CreateTasksDTO;
 import me.zeeeeeeek.backend.models.user.User;
@@ -34,7 +33,7 @@ public class TaskListRestController{
      * @return the created collection
      */
     @PostMapping
-    public ResponseEntity<? extends TaskCollection> create(@RequestBody CreateTasksDTO createTasksDTO, Authentication authentication) {
+    public ResponseEntity<TaskList> create(@RequestBody CreateTasksDTO createTasksDTO, Authentication authentication) {
         User owner = getUserFromAuthentication(authentication);
         if(owner == null) {
             return ResponseEntity

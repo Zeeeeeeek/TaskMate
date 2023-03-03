@@ -56,7 +56,7 @@ public class User implements UserDetails {
      * @throws IllegalArgumentException if any of the parameters is empty
      * @throws IllegalArgumentException if the email is invalid
      */
-    public User(String username, String password, String email, String firstName, String lastName, Role role) {
+    public User(String username, String password, String email, String firstName, String lastName,@NonNull Role role) {
         requireNonEmpty(username, password, email, firstName, lastName);
         this.email = validateEmail(email);
         this.firstName = firstName;

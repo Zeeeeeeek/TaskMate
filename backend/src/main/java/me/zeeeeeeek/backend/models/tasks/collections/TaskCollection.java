@@ -5,7 +5,6 @@ import me.zeeeeeeek.backend.models.tasks.elements.AbstractTask;
 import me.zeeeeeeek.backend.models.user.User;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 /**
  * A task collection represents a group of tasks.
@@ -20,26 +19,6 @@ public interface TaskCollection {
     boolean isCompleted();
 
     /**
-     * Set the given task as completed.
-     * If the task is already completed, nothing happens.
-     * If the task is not contained in the collection, nothing happens.
-     *
-     * @param task the task to set as completed
-     * @throws NullPointerException if the task is null
-     */
-    void setCompleted(AbstractTask task);
-
-    /**
-     * Set the given task as uncompleted.
-     * If the task is already uncompleted, nothing happens.
-     * If the task is not contained in the collection, nothing happens.
-     *
-     * @param task the task to set as uncompleted
-     * @throws NullPointerException if the task is null
-     */
-    void setUncompleted(AbstractTask task);
-
-    /**
      * Controls if the given task is contained in the collection.
      *
      * @param task the task to check
@@ -52,26 +31,17 @@ public interface TaskCollection {
      * Add a task to the collection.
      *
      * @param task the task to add
-     * @return true if the task was added, false otherwise
      * @throws NullPointerException if the task is null
      */
-    boolean addTask(AbstractTask task);
+    void addTask(AbstractTask task);
 
     /**
      * Remove a task from the collection.
      *
      * @param task the task to remove
-     * @return true if the task was removed, false otherwise
      * @throws NullPointerException if the task is null
      */
-    boolean removeTask(AbstractTask task);
-
-    /**
-     * Get a stream of the tasks in the collection.
-     *
-     * @return a stream of the tasks in the collection
-     */
-    Stream<AbstractTask> stream();
+    void removeTask(AbstractTask task);
 
     /**
      * Get the number of tasks in the collection.

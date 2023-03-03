@@ -131,13 +131,6 @@ class TaskListTest {
         assertFalse(taskList.isCompleted());
     }
 
-    @Test
-    void shouldSetCompletedTask() {
-        AbstractTask task = new SimpleTask("Task 1", "Description 1");
-        TaskList taskList = new TaskList(List.of(task), OWNER);
-        taskList.setCompleted(task);
-        assertTrue(task.isCompleted());
-    }
 
     @Test
     void userShouldBeOwner() {

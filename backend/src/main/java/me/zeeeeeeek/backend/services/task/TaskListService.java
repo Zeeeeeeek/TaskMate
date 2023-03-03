@@ -6,7 +6,6 @@ import me.zeeeeeeek.backend.models.tasks.collections.TaskList;
 import me.zeeeeeeek.backend.models.tasks.collections.dtos.CreateTasksDTO;
 import me.zeeeeeeek.backend.models.tasks.elements.AbstractTask;
 import me.zeeeeeeek.backend.models.user.User;
-import me.zeeeeeeek.backend.repositories.AbstractTaskRepository;
 import me.zeeeeeeek.backend.repositories.TaskListRepository;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +17,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class TaskListService {
     private final TaskListRepository taskListRepository;
-    private final AbstractTaskRepository abstractTaskRepository;
+    private final TaskService taskService;
 
 
     public TaskList create(List<AbstractTask> tasks, User owner) {
@@ -42,8 +41,7 @@ public class TaskListService {
                 .findById(taskListId)
                 .orElseThrow(() -> new IllegalArgumentException("Task list not found"));
         List<AbstractTask> tasks = createTasksDTO.getTasksAsList();
-
-        tasks.forEach(task -> task.setTaskList(taskList));
-        abstractTaskRepository.saveAll(tasks);
+        this.taskService
+                .setTasksTaskList(tasks, taskList);
     }
 }

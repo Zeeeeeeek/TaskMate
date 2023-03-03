@@ -1,25 +1,17 @@
 package me.zeeeeeeek.backend.models.tasks.collections;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import me.zeeeeeeek.backend.models.tasks.elements.AbstractTask;
-import me.zeeeeeeek.backend.models.tasks.elements.Task;
 import me.zeeeeeeek.backend.models.user.User;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 /**
  * A list of tasks.
@@ -77,37 +69,6 @@ public class TaskList implements TaskCollection {
                 .allMatch(AbstractTask::isCompleted);
     }
 
-    /**
-     * Set the given task as completed.
-     * If multiple tasks are equal to the given task, all of them are set as completed.
-     * If the task is already completed, nothing happens.
-     * If the task is not contained in the collection, nothing happens.
-     *
-     * @param task the task to set as completed
-     * @throws NullPointerException if the task is null
-     */
-    @Override//todo: remove
-    public void setCompleted(AbstractTask task) {
-        this.tasks.stream()
-                .filter(t -> t.equals(task))
-                .forEach(Task::setCompleted);
-    }
-
-    /**
-     * Set the given task as uncompleted.
-     * If multiple tasks are equal to the given task, all of them are set as uncompleted.
-     * If the task is already uncompleted, nothing happens.
-     * If the task is not contained in the collection, nothing happens.
-     *
-     * @param task the task to set as uncompleted
-     * @throws NullPointerException if the task is null
-     */
-    @Override//todo: remove
-    public void setUncompleted(AbstractTask task) {
-        this.tasks.stream()
-                .filter(t -> t.equals(task))
-                .forEach(Task::setUncompleted);
-    }
 
     /**
      * Controls if the given task is contained in the collection.
@@ -126,36 +87,25 @@ public class TaskList implements TaskCollection {
      * Add a task to the collection.
      *
      * @param task the task to add
-     * @return true if the task was added, false otherwise
      * @throws NullPointerException if the task is null
      */
     @Override
-    public boolean addTask(@NonNull AbstractTask task) {
-        return this.tasks.add(task);
+    public void addTask(@NonNull AbstractTask task) {
+        this.tasks.add(task);
     }
 
     /**
      * Remove a task from the collection.
      *
      * @param task the task to remove
-     * @return true if the task was removed, false otherwise
      * @throws NullPointerException if the task is null
      */
     @Override
-    public boolean removeTask(@NonNull AbstractTask task) {
-        return this.tasks
+    public void removeTask(@NonNull AbstractTask task) {
+        this.tasks
                 .remove(task);
     }
 
-    /**
-     * Get a stream of the tasks in the collection.
-     *
-     * @return a stream of the tasks in the collection
-     */
-    @Override
-    public Stream<AbstractTask> stream() {
-        return this.tasks.stream();
-    }
 
     /**
      * Get the number of tasks in the collection.
@@ -198,10 +148,5 @@ public class TaskList implements TaskCollection {
         return this.tasks;
     }
 
-    public void addTasks(@NonNull List<AbstractTask> tasks) {
-        //tasks.forEach(task -> task.setTaskList(this));
-        this.tasks
-                .addAll(tasks);
-    }
 
 }

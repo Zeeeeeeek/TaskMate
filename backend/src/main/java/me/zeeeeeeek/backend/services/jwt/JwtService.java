@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.security.Key;
 import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 
 @Service
@@ -74,13 +75,14 @@ public class JwtService {
      * If the user is authenticated, will not be authenticated again.
      * @param jwtToken the token to be checked
      * @param userDetails the user details
-     * @return true if the token is valid, false otherwise
+     * @return true, if the token is valid, false otherwise
      */
     public boolean isTokenValid(String jwtToken, UserDetails userDetails) {
         final String username = extractUsername(jwtToken);
         if(username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             return true;
         }
+        Objects.requireNonNull(username);
         return username.equals(userDetails.getUsername()) && !isTokenExpired(jwtToken);
     }
 
