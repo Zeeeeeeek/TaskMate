@@ -3,7 +3,7 @@ package me.zeeeeeeek.backend.controllers.task;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.zeeeeeeek.backend.models.tasks.collections.TaskList;
-import me.zeeeeeeek.backend.models.tasks.collections.dtos.CreateTasksDTO;
+import me.zeeeeeeek.backend.models.tasks.collections.dtos.CreateTaskListDTO;
 import me.zeeeeeeek.backend.models.user.User;
 import me.zeeeeeeek.backend.services.task.TaskListService;
 import org.springframework.http.ResponseEntity;
@@ -29,11 +29,11 @@ public class TaskListRestController{
     /**
      * Creates a new task collection, with the given owner and tasks.
      *
-     * @param createTasksDTO the data transfer object for the task list
+     * @param createTaskListDTO the data transfer object for the task list
      * @return the created collection
      */
     @PostMapping
-    public ResponseEntity<TaskList> create(@RequestBody CreateTasksDTO createTasksDTO, Authentication authentication) {
+    public ResponseEntity<TaskList> create(@RequestBody CreateTaskListDTO createTaskListDTO, Authentication authentication) {
         User owner = getUserFromAuthentication(authentication);
         if(owner == null) {
             return ResponseEntity
@@ -43,8 +43,9 @@ public class TaskListRestController{
         return ResponseEntity
                 .ok(this.taskListService
                         .createAndSave(
-                                createTasksDTO.getTasksAsList(),
-                                owner
+                                createTaskListDTO.getTasksAsList(),
+                                owner,
+                                createTaskListDTO.name()
                         ));
     }
 
@@ -59,9 +60,9 @@ public class TaskListRestController{
 
 
     @PostMapping("{taskListId}/tasks")
-    public void addTasksToTaskList(@PathVariable UUID taskListId, @RequestBody CreateTasksDTO createTasksDTO) {
+    public void addTasksToTaskList(@PathVariable UUID taskListId, @RequestBody CreateTaskListDTO createTaskListDTO) {
         this.taskListService
-                .addTasksToTaskList(taskListId, createTasksDTO);
+                .addTasksToTaskList(taskListId, createTaskListDTO);
     }
 
 }

@@ -9,8 +9,9 @@ import java.util.List;
 /**
  * This class represents the data transfer object for a task list.
  * @param tasks the tasks to add to the collection
+ * @param name the name of the collection
  */
-public record CreateTasksDTO(@NonNull AbstractTask... tasks) {
+public record CreateTaskListDTO(@NonNull String name, @NonNull AbstractTask... tasks) {
     public List<AbstractTask> getTasksAsList() {
         return Arrays.asList(tasks);
     }

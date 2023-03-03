@@ -1,7 +1,13 @@
 package me.zeeeeeeek.backend.models.tasks.collections;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -36,26 +42,30 @@ public class TaskList implements TaskCollection {
     @JsonIgnoreProperties("taskLists")
     private User owner;
 
+    private String name;
+
     /**
      * Create a new task list from a list of tasks.
      *
      * @param tasks the list of tasks
      * @throws NullPointerException if the list of tasks is null
      */
-    public TaskList(@NonNull List<AbstractTask> tasks, @NonNull User owner) {
+    public TaskList(@NonNull List<AbstractTask> tasks, @NonNull User owner, @NonNull String name) {
         tasks.forEach(task -> {
             Objects.requireNonNull(task);
             task.setTaskList(this);
         });
         this.owner = owner;
         this.tasks = new ArrayList<>(tasks);
+        this.name = name;
     }
 
     /**
      * Create a new task list with an empty list of tasks.
      */
-    public TaskList(@NonNull User owner) {
+    public TaskList(@NonNull User owner, @NonNull String name) {
         this.owner = owner;
+        this.name = name;
         this.tasks = new ArrayList<>();
     }
     /**

@@ -57,9 +57,6 @@ public interface TaskCollection {
      */
     boolean isEmpty();
 
-
-
-
     /**
      * Return the collection owner uuid.
      * @return the collection owner uuid
@@ -72,5 +69,17 @@ public interface TaskCollection {
      * @return the list of tasks in the collection
      */
     List<AbstractTask> getTasks();
+
+    /**
+     * Gets the collection name.
+     * @return the collection name
+     */
+    String getName();
+
+    /**
+     * Sets the collection name.
+     * @param name the new collection name
+     */
+    void setName(String name);
 }
 
