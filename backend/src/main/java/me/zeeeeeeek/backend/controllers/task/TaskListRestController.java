@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.zeeeeeeek.backend.models.tasks.collections.TaskList;
 import me.zeeeeeeek.backend.models.tasks.collections.dtos.CreateTaskListDTO;
+import me.zeeeeeeek.backend.models.tasks.collections.dtos.TasksDTO;
 import me.zeeeeeeek.backend.models.user.User;
 import me.zeeeeeeek.backend.services.task.TaskListService;
 import org.springframework.http.ResponseEntity;
@@ -60,9 +61,9 @@ public class TaskListRestController{
 
 
     @PostMapping("{taskListId}/tasks")
-    public void addTasksToTaskList(@PathVariable UUID taskListId, @RequestBody CreateTaskListDTO createTaskListDTO) {
+    public void addTasksToTaskList(@PathVariable UUID taskListId, @RequestBody TasksDTO tasksDTO) {
         this.taskListService
-                .addTasksToTaskList(taskListId, createTaskListDTO);
+                .addTasksToTaskList(taskListId, tasksDTO);
     }
 
 }

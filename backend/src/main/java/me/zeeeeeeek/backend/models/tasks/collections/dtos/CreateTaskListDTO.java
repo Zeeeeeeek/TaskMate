@@ -3,7 +3,6 @@ package me.zeeeeeeek.backend.models.tasks.collections.dtos;
 import lombok.NonNull;
 import me.zeeeeeeek.backend.models.tasks.elements.AbstractTask;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -11,8 +10,8 @@ import java.util.List;
  * @param tasks the tasks to add to the collection
  * @param name the name of the collection
  */
-public record CreateTaskListDTO(@NonNull String name, @NonNull AbstractTask... tasks) {
+public record CreateTaskListDTO(@NonNull String name, @NonNull TasksDTO tasksDTO) {
     public List<AbstractTask> getTasksAsList() {
-        return Arrays.asList(tasks);
+        return tasksDTO.getTasksAsList();
     }
 }
