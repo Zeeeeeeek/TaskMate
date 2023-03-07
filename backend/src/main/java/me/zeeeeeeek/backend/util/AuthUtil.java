@@ -1,15 +1,23 @@
 package me.zeeeeeeek.backend.util;
 
 import me.zeeeeeeek.backend.models.user.User;
+import me.zeeeeeeek.backend.services.user.UserService;
 import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Component;
 
-
+@Component
 public class AuthUtil {
 
-    private AuthUtil() {
+    final UserService userService;
+
+    private AuthUtil(UserService userService) {
+        this.userService = userService;
     }
 
-    public static User getUserFromAuthentication(Authentication authentication) {
-        return (User) authentication.getPrincipal();
+    public User getUserFromAuthentication(Authentication authentication) {
+        User temp = (User) authentication.getPrincipal();
+
+        return userService
+                .getUserByUsername(temp.getUsername());
     }
 }

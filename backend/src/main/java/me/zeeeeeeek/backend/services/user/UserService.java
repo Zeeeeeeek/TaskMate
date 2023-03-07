@@ -2,6 +2,7 @@ package me.zeeeeeeek.backend.services.user;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import me.zeeeeeeek.backend.models.user.User;
 import me.zeeeeeeek.backend.repositories.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -32,6 +33,12 @@ public class UserService implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return this.userRepository
+                .findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User with username " + username + " does not exist"));
+    }
+
+    public User getUserByUsername(String username) {
         return this.userRepository
                 .findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User with username " + username + " does not exist"));

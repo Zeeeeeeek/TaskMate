@@ -64,7 +64,6 @@ public class User implements UserDetails {
         this.username = username;
         this.password = password;
         this.role = role;
-        log.info("Created user {}", this);
     }
     private void requireNonEmpty(String... args) {
         Arrays.stream(args)

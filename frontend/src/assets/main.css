@@ -1,35 +1,61 @@
 @import './base.css';
 
 #app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 2rem;
 
-  font-weight: normal;
-}
-
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-}
-
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
+    font-weight: normal;
 }
 
 @media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
+    body {
+        display: flex;
+        place-items: center;
+        background-color: #9b9b9b;
+        font-family: 'Noto Sans', sans-serif;
+    }
 
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  }
+    @font-face {
+        font-family: 'Noto Sans';
+        font-style: normal;
+        font-weight: 300;
+        src: url('fonts/NotoSans-Light.ttf') format('truetype');
+    }
+    @font-face {
+        font-family: 'Noto Sans';
+        font-style: normal;
+        font-weight: 400;
+        src: url('/fonts/NotoSans-Medium.ttf') format('truetype');
+    }
+    @font-face {
+        font-family: 'Noto Sans';
+        font-style: normal;
+        font-weight: 200;
+        src: url('/fonts/NotoSans-ExtraLight.ttf') format('truetype');
+    }
+    #app {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        padding: 0 2rem;
+    }
 }
+
+h2 {
+    font-size: 1.5rem; /* 24px */
+    font-weight: 200; /* Extra Light */
+    color: #242424;
+}
+
+
+
+.text {
+    font-size: 1.125rem; /* 18px */
+    line-height: 1.5;
+}
+
+.subtitle {
+    font-size: 1.25rem; /* 20px */
+    font-weight: 300; /* Light */
+}
+

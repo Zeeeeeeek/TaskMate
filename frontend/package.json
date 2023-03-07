@@ -12,6 +12,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.0.0",
+    "google-fonts-webpack-plugin": "^0.4.4",
     "vite": "^4.0.0"
   }
 }

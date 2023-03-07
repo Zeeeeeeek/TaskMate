@@ -7,6 +7,7 @@ import me.zeeeeeeek.backend.models.tasks.collections.dtos.CreateTaskListDTO;
 import me.zeeeeeeek.backend.models.tasks.collections.dtos.TasksDTO;
 import me.zeeeeeeek.backend.models.user.User;
 import me.zeeeeeeek.backend.services.task.TaskListService;
+import me.zeeeeeeek.backend.util.AuthUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
-import static me.zeeeeeeek.backend.util.AuthUtil.getUserFromAuthentication;
 
 /**
  * Controller used to manage a list of tasks using a REST API.
@@ -26,6 +26,7 @@ import static me.zeeeeeeek.backend.util.AuthUtil.getUserFromAuthentication;
 public class TaskListRestController{
 
     private final TaskListService taskListService;
+    private final AuthUtil authUtil;
 
     /**
      * Creates a new task collection, with the given owner and tasks.
@@ -35,7 +36,7 @@ public class TaskListRestController{
      */
     @PostMapping
     public ResponseEntity<TaskList> create(@RequestBody CreateTaskListDTO createTaskListDTO, Authentication authentication) {
-        User owner = getUserFromAuthentication(authentication);
+        User owner = authUtil.getUserFromAuthentication(authentication);
         if(owner == null) {
             return ResponseEntity
                     .badRequest()
@@ -53,7 +54,7 @@ public class TaskListRestController{
 
     @GetMapping
     public List<TaskList> getTaskListsOwnedBy(Authentication authentication) {
-        User owner = getUserFromAuthentication(authentication);
+        User owner = authUtil.getUserFromAuthentication(authentication);
         return this.taskListService
                 .getAllOwnedBy(owner);
     }

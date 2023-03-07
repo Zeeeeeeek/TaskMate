@@ -3,6 +3,7 @@ package me.zeeeeeeek.backend.controllers.task;
 import lombok.RequiredArgsConstructor;
 import me.zeeeeeeek.backend.models.user.User;
 import me.zeeeeeeek.backend.services.task.TaskService;
+import me.zeeeeeeek.backend.util.AuthUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
 
-import static me.zeeeeeeek.backend.util.AuthUtil.getUserFromAuthentication;
 
 @RequiredArgsConstructor
 @RestController
@@ -22,9 +22,11 @@ import static me.zeeeeeeek.backend.util.AuthUtil.getUserFromAuthentication;
 public class TaskRestController {
     private final TaskService taskService;
 
+    private final AuthUtil authUtil;
+
     @PutMapping("tasks/{taskId}")
     public ResponseEntity<String> setTaskIsCompleted(@PathVariable UUID taskId, @RequestParam boolean completed, Authentication authentication) {
-        User owner = getUserFromAuthentication(authentication);
+        User owner = authUtil.getUserFromAuthentication(authentication);
         try {
             this.taskService
                     .setIsCompleted(taskId, completed, owner);
@@ -37,7 +39,7 @@ public class TaskRestController {
 
     @DeleteMapping("tasks/{taskId}")
     public ResponseEntity<String> deleteTask(@PathVariable UUID taskId, Authentication authentication) {
-        User owner = getUserFromAuthentication(authentication);
+        User owner = authUtil.getUserFromAuthentication(authentication);
         try {
             this.taskService
                     .deleteTask(taskId, owner);

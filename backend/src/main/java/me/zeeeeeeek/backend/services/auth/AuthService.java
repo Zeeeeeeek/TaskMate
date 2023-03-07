@@ -14,6 +14,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -39,8 +41,15 @@ public class AuthService {
                 Role.USER
         );
         userRepository.save(user);
-        String jwtToken = jwtService.generateJwtTokenWithoutExtraClaims(user);
-        return new AuthenticationResponse(jwtToken);
+        String token = jwtService.generateJwtTokenWithCustomClaims(
+                Map.of(
+                        "firstName", user.getFirstName(),
+                        "lastName", user.getLastName(),
+                        "email", user.getEmail()
+                ),
+                user
+        );
+        return new AuthenticationResponse(token);
 
     }
 

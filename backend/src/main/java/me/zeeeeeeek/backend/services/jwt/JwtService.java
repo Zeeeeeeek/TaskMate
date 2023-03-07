@@ -6,25 +6,45 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.NonNull;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
 import java.util.Date;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Function;
 
 @Service
 public class JwtService {
     @NonNull
     private static final String SECRETKEY = System.getenv("SECRET");
+    private static final Integer EXPIRATION = 1000 * 60 * 10; // 10 minutes
 
     public String extractUsername(String jwtToken) {
         return extractClaim(
                 jwtToken,
                 Claims::getSubject
+        );
+    }
+
+    public String extractFirstName(String jwtToken) {
+        return extractClaim(
+                jwtToken,
+                claims -> (String) claims.get("firstName")
+        );
+    }
+
+    public String extractLastName(String jwtToken) {
+        return extractClaim(
+                jwtToken,
+                claims -> (String) claims.get("lastName")
+        );
+    }
+
+    public String extractEmail(String jwtToken) {
+        return extractClaim(
+                jwtToken,
+                claims -> (String) claims.get("email")
         );
     }
 
@@ -58,7 +78,7 @@ public class JwtService {
                 .setClaims(claims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -74,16 +94,11 @@ public class JwtService {
      * If the token is valid, then the user is authenticated.
      * If the user is authenticated, will not be authenticated again.
      * @param jwtToken the token to be checked
-     * @param userDetails the user details
      * @return true, if the token is valid, false otherwise
      */
-    public boolean isTokenValid(String jwtToken, UserDetails userDetails) {
+    public boolean isTokenValid(String jwtToken) {
         final String username = extractUsername(jwtToken);
-        if(username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            return true;
-        }
-        Objects.requireNonNull(username);
-        return username.equals(userDetails.getUsername()) && !isTokenExpired(jwtToken);
+        return username!= null && !isTokenExpired(jwtToken);
     }
 
     private boolean isTokenExpired(String jwtToken) {
