@@ -15,6 +15,9 @@ import AddIcon from "@/components/icons/AddIcon.vue";
 export default {
   name: "AddTaskButton",
   components: {AddIcon},
+  emits: {
+    addTask : null
+  },
   methods: {
     addTask: function() {
       this.$emit('addTask')

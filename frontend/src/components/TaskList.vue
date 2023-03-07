@@ -4,8 +4,8 @@
         <input v-model="name" placeholder="List name" class="task-list-name subtitle" @blur="setName">
         <TrashCanIcon class="trash-can"/>
       </div>
-      <TaskContainer/>
-      <AddTaskButton class="button"/>
+      <TaskContainer :taskList="tasks"/>
+      <AddTaskButton class="button" @add-task="addTask()"/>
   </div>
 
 
@@ -15,20 +15,35 @@
 import AddTaskButton from "@/components/buttons/AddTaskButton.vue";
 import TaskContainer from "@/components/TaskContainer.vue";
 import TrashCanIcon from "@/components/icons/TrashCanIcon.vue";
+import Task from "@/components/Task.vue";
 
 export default {
   name: "TaskList",
   components: {TaskContainer, AddTaskButton, TrashCanIcon},
+  props: {
+    id: {
+      type:String
+    },
+    name: {
+      type:String
+    },
+    tasks: {
+      type:Array
+    }
+  },
   data() {
     return {
-      tasks : [],
       name : "",
-      id : ""
+      id : "",
+      tasks : []
     }
   },
   methods: {
     setName: function(e) {
       this.name = e.target.value
+    },
+    addTask: function() {
+      this.tasks.push("task")
     }
   }
 }

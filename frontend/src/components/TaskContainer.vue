@@ -1,14 +1,25 @@
 <template>
   <div class="task-container scroll">
-    <p v-for="a in 20">
-      task
+    <p v-for="task in taskList">
+      {{ task }}
     </p>
   </div>
 </template>
 
 <script>
 export default {
-  name: "TaskContainer"
+  name: "TaskContainer",
+  props: {
+    taskList: {
+      type: Array,
+      required: true
+    }
+  },
+  data() {
+    return {
+      tasks: []
+    }
+  }
 }
 </script>
 
@@ -25,7 +36,6 @@ export default {
 
 .scroll::-webkit-scrollbar {
   width: 0.313rem;
-  color: #000;
 }
 
 .scroll::-webkit-scrollbar-track {
