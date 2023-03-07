@@ -44,6 +44,7 @@ export default {
     },
     addTask: function() {
       this.tasks.push("task")
+      console.log(this.tasks)
     }
   }
 }
