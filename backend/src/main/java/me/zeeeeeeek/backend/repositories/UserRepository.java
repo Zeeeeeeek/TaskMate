@@ -12,4 +12,5 @@ public interface UserRepository extends CrudRepository<User, UUID> {
     Optional<User> findByUsername(@NonNull String username);
 
     Optional<User> findByEmail(@NonNull String email);
+    boolean existsByUsernameOrEmail(@NonNull String username, @NonNull String email);
 }

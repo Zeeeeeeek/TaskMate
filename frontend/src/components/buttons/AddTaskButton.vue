@@ -1,11 +1,11 @@
 <template>
 
-  <button class="add-task-button" @click="addTask">
+  <div class="add-task-button" @click="addTask">
 
     <AddIcon class="add-icon"/>
     <p class="add-task-text subtitle">AddTask</p>
 
-  </button>
+  </div>
 
 </template>
 
@@ -15,11 +15,9 @@ import AddIcon from "@/components/icons/AddIcon.vue";
 export default {
   name: "AddTaskButton",
   components: {AddIcon},
-  emits: {
-    addTask : null
-  },
+  emits: ["addTask"],
   methods: {
-    addTask: function() {
+    addTask() {
       this.$emit('addTask')
     }
   }
@@ -29,6 +27,7 @@ export default {
 <style scoped>
 .add-task-button {
   display: flex;
+  flex-direction: row;
   background-color: rgba(255, 255, 255, 0.01);
   border-top: 0.141rem solid #134074;
   border-bottom-width: 0;
@@ -49,7 +48,7 @@ export default {
 }
 
 .add-task-text {
-  display: flex;
-  margin-top: 0.3rem;
+  font-weight: 400;
+  margin-top: 0.1rem;
 }
 </style>

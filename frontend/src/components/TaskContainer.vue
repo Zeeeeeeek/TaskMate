@@ -1,23 +1,21 @@
 <template>
   <div class="task-container scroll">
-    <p v-for="task in taskList">
-      {{ task }}
-    </p>
+    <Task v-for="task in taskList" :ref="task.id">
+      <div>{{ task }}</div>
+    </Task>
   </div>
 </template>
 
 <script>
+import Task from "@/components/Task.vue";
+
 export default {
   name: "TaskContainer",
+  components: {Task},
   props: {
     taskList: {
       type: Array,
       required: true
-    }
-  },
-  data() {
-    return {
-      tasks: []
     }
   }
 }
@@ -25,8 +23,10 @@ export default {
 
 <style scoped>
 .task-container {
+  display: flex;
+  flex-direction: column;
   flex: 1;
-  width: 16rem;
+  width: 100%;
   left: -0.15rem;
 }
 

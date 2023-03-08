@@ -14,8 +14,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
-
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -30,6 +28,7 @@ public class AuthService {
      * Registers a new user from the given data transfer object.
      * @param userCreationDTO the data transfer object for the user registration
      * @return the authentication response containing the JWT token
+     * @throws IllegalArgumentException if the username or email already exists
      */
     public AuthenticationResponse register(UserCreationDTO userCreationDTO) {
         User user = new User(
@@ -40,15 +39,10 @@ public class AuthService {
                 userCreationDTO.lastName(),
                 Role.USER
         );
+        if(userRepository.existsByUsernameOrEmail(user.getUsername(), user.getEmail()))
+            throw new IllegalArgumentException("Username or email already exists");
         userRepository.save(user);
-        String token = jwtService.generateJwtTokenWithCustomClaims(
-                Map.of(
-                        "firstName", user.getFirstName(),
-                        "lastName", user.getLastName(),
-                        "email", user.getEmail()
-                ),
-                user
-        );
+        String token = jwtService.generateJwtTokenWithoutExtraClaims(user);
         return new AuthenticationResponse(token);
 
     }

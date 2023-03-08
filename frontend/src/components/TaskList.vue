@@ -1,11 +1,14 @@
 <template>
   <div class="task-list">
       <div class="header">
-        <input v-model="name" placeholder="List name" class="task-list-name subtitle" @blur="setName">
-        <TrashCanIcon class="trash-can"/>
+        <input placeholder="List name" class="task-list-name subtitle" @blur="setName">
+        <TrashCanIcon class="button"/>
+        <div>
+          <Save @click="saveTasks" class="button"/>
+        </div>
       </div>
       <TaskContainer :taskList="tasks"/>
-      <AddTaskButton class="button" @add-task="addTask()"/>
+      <AddTaskButton @addTask="addTask"/>
   </div>
 
 
@@ -15,37 +18,48 @@
 import AddTaskButton from "@/components/buttons/AddTaskButton.vue";
 import TaskContainer from "@/components/TaskContainer.vue";
 import TrashCanIcon from "@/components/icons/TrashCanIcon.vue";
-import Task from "@/components/Task.vue";
+import Save from "@/components/icons/Save.vue";
+import addTaskButton from "@/components/buttons/AddTaskButton.vue";
 
 export default {
   name: "TaskList",
-  components: {TaskContainer, AddTaskButton, TrashCanIcon},
-  props: {
-    id: {
-      type:String
-    },
-    name: {
-      type:String
-    },
-    tasks: {
-      type:Array
+  computed: {
+    addTaskButton() {
+      return addTaskButton
     }
   },
-  data() {
-    return {
-      name : "",
-      id : "",
-      tasks : []
+  components: {Save, TaskContainer, AddTaskButton, TrashCanIcon},
+  props: {
+    id: {
+      type:String,
+      required: true
+    },
+    name: {
+      type:String,
+      required: true
+    },
+    tasks: {
+      type:Array,
+      required: true
     }
   },
   methods: {
     setName: function(e) {
-      this.name = e.target.value
+      this.$emit('set-name', e.target.value)
     },
-    addTask: function() {
-      this.tasks.push("task")
-      console.log(this.tasks)
+    saveTasks() {
+      this.$emit('save-tasks', this.id, this.tasks)
+    },
+    addTask() {
+      this.tasks.push({
+        id: this.tasks.length,
+        name: '',
+        description: '',
+        dueDate: null,
+        completed: false
+      })
     }
+
   }
 }
 </script>
@@ -78,7 +92,7 @@ export default {
   align-items: center;
 }
 
-.trash-can {
+.button {
   cursor: pointer;
 }
 </style>

@@ -1,18 +1,33 @@
 <template>
   <div class="task">
-    <input type="text" class="task-name" placeholder="Task name" v-model="name" @blur="setName('name, $event')">
-    <p><input type="text" class="task-description" placeholder="Description" v-model="description"
-              @blur="setDescription('description, $event')"></p>
-    <p>{{ this.dueDate }}</p>
-    <p>{{ this.completed }}</p>
-    <button @click="completed = !completed">Complete</button>
-
+    <div class="header">
+      <input type="text" class="task-input" ref="name" placeholder="Task name" @blur="setName(this.$refs.name.value)">
+      <div @click="invertCompleted" class="button">
+        <TaskUncompleted v-if="!this.completed" class="task-complete-button"/>
+        <TaskCompleted v-else class="task-complete-button"/>
+      </div>
+    </div>
+    <div class="header">
+      <input type="text" class="task-input" placeholder="Description">
+      <div class="button">
+        <Calendar class="calendar-button" @click="setOpenedDatePicker(true)"/>
+        <div v-if="openDatePicker" class="date-picker">
+          <input type="datetime-local" ref="dateInput">
+          <div @click="setDueDate(this.$refs.dateInput.value); setOpenedDatePicker(false)">Imposta data</div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import TaskUncompleted from "@/components/icons/TaskUncompleted.vue";
+import TaskCompleted from "@/components/icons/TaskCompleted.vue";
+import Calendar from "@/components/icons/Calendar.vue";
+
 export default {
   name: "Task",
+  components: {Calendar, TaskCompleted, TaskUncompleted},
   props: {
     id: {
       type: String
@@ -32,23 +47,29 @@ export default {
   },
   data() {
     return {
-      name: "",
-      description: "",
-      dueDate: null,
-      completed: false
+      openDatePicker: false
     }
   },
   methods: {
     setName(name) {
       this.name = name
+      console.log('name: ' + this.name)
     },
     setDescription(description) {
       this.description = description
     },
     setDueDate(dueDate) {
-      if (!dueDate.match(/^(0[1-9]|[12]\d|3[01])\/(0[1-9]|1[012])\/(19|20)\d\d (0\d|1\d|2[0-3]):([0-5]\d)$/))
-        throw new Error("Invalid date format")
+      // parse date in this format: 2023-12-31T23:38
+      if (!dueDate.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})$/))
+        throw new Error("Invalid date format: " + dueDate)
       this.dueDate = dueDate
+      console.log(this.dueDate)
+    },
+    invertCompleted() {
+      this.completed = !this.completed
+    },
+    setOpenedDatePicker(opened) {
+      this.openDatePicker = opened
     }
   },
   computed: {
@@ -61,22 +82,65 @@ export default {
 
 <style scoped>
 .task {
+  position: relative;
   display: flex;
-  height: 0.625rem;
-  padding: 0.625rem;
-  border-bottom: 1px solid #808080;
+  flex-direction: column;
+  height: 5rem;
+  background-color: transparent;
+  border-bottom: 2px solid rgba(110, 110, 110, 0.97);
+  width: calc(100% - 0.3rem);
 }
 
-.task input[type="text"] {
+.task-input {
+  flex: 1;
   border: none;
   border-bottom: 1px solid rgba(73, 78, 83, 0.19);
   background: transparent;
-  padding: 5px;
   font-size: 16px;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  margin-right: auto;
 }
 
-.task input[type="text"]:focus {
+.task-input:focus {
   outline: none;
   border-bottom: 1px solid #134074;
+}
+
+.task-complete-button {
+  margin-left: auto;
+  margin-bottom: 0.5rem;
+}
+
+.calendar-button {
+  margin-left: auto;
+  margin-bottom: 0.5rem;
+}
+
+.header {
+  display: flex;
+}
+
+.button {
+  cursor: pointer;
+  border: none;
+  outline: none;
+  margin-top: 0.5rem;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+}
+
+.date-picker {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffffff;
+  z-index: 1;
 }
 </style>

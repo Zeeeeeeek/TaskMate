@@ -53,10 +53,16 @@ public class TaskListRestController{
 
 
     @GetMapping
-    public List<TaskList> getTaskListsOwnedBy(Authentication authentication) {
+    public ResponseEntity<List<TaskList>> getTaskListsOwnedBy(Authentication authentication) {
         User owner = authUtil.getUserFromAuthentication(authentication);
-        return this.taskListService
-                .getAllOwnedBy(owner);
+        if(owner == null) {
+            return ResponseEntity
+                    .badRequest()
+                    .build();
+        }
+        return ResponseEntity
+                .ok(this.taskListService
+                        .getAllOwnedBy(owner));
     }
 
 

@@ -52,9 +52,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         String authHeader = request.getHeader("Authorization");
         String jwtToken;
         String username;
-        String email;
-        String firstName;
-        String lastName;
         if(authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);// continue the filter chain
             return;
@@ -62,9 +59,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         jwtToken = authHeader.substring(7);// 7 is the length of "Bearer "
         try {
             username = jwtService.extractUsername(jwtToken);
-            email = jwtService.extractEmail(jwtToken);
-            firstName = jwtService.extractFirstName(jwtToken);
-            lastName = jwtService.extractLastName(jwtToken);
         } catch (MalformedJwtException | ExpiredJwtException | SignatureException e ) {
             log.error("Unable to get JWT Token or JWT Token has expired");
             log.error(e.toString());
@@ -73,8 +67,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             response.flushBuffer();
             return;
         }
+
         if(username != null && SecurityContextHolder.getContext().getAuthentication() == null && (jwtService.isTokenValid(jwtToken))) {
-            UserDetails details = new User(username, "pass", email, firstName, lastName, Role.USER);
+            UserDetails details = new User(username, "pass", "a@a", "firstName", "lastName", Role.USER);
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         details,
                         null,
