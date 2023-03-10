@@ -1,7 +1,6 @@
 <script>
 import TaskList from "@/components/TaskList.vue";
 import AuthForm from "@/components/AuthForm.vue";
-import axios from "axios";
 import Button from "@/components/buttons/Button.vue";
 import ApiService from "@/services/ApiService";
 import Task from "@/components/Task.vue";
@@ -19,36 +18,15 @@ export default {
 
     },
     addTaskList() {
-      const data = {
-        "name": "",
-        "tasksDTO": {
-          "tasks": []
-        }
-      }
-      const token = localStorage.getItem('token')
-      const config = {
-        headers: {Authorization: `Bearer ${token}`}
-      };
 
-      axios
-          .post("http://localhost:8080/api/taskLists/",
-              data,
-              config
-          )
-          .then(response => {
-            this.taskLists.push(response.data)
-          })
-          .catch(error => {
-            console.log(error);
-          });
     },
-    async register(username, password, email, firstName, lastName) {
-      this.hasValidToken = await ApiService.register(username, password, email, firstName, lastName)
-      this.updateTasklists()
+    register(username, password, email, firstName, lastName) {
+      this.hasValidToken = ApiService.register(username, password, email, firstName, lastName)
+      console.log(`hasValidToken after register: ${this.hasValidToken}`)
     },
-    login(username, password) {
-      this.hasValidToken = ApiService.login(username, password)
-      this.updateTasklists()
+    async login(username, password) {
+      this.hasValidToken = await ApiService.login(username, password)
+      console.log(`hasValidToken after login: ${this.hasValidToken}`)
     },
     logToken() {
       console.log(localStorage.getItem('token'))
@@ -59,18 +37,10 @@ export default {
       this.taskLists.splice(index, 1)
     },
     updateTasklists() {
-      ApiService.getTaskLists()
-          .then(response => {
-            this.taskLists = response.data
-            this.hasValidToken = true
-          })
-          .catch(error => {
-            this.hasValidToken = false;
-          });
+      console.log(`tasklistssssss:     ` + JSON.stringify(ApiService.getTaskLists()))
     }
   },
   beforeMount() {
-    this.updateTasklists()
   }
 }
 </script>

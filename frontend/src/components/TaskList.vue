@@ -1,8 +1,7 @@
 <template>
   <div class="task-list">
       <div class="header">
-        <input placeholder="List name" ref="nameField" class="task-list-name subtitle" @blur="setName(this.$refs.nameField.value)"
-               v-model="name">
+        <input placeholder="List name" ref="nameField" class="task-list-name subtitle" @blur="setName(this.$refs.nameField.value)">
         <TrashCanIcon class="button" @click="deleteTasklist()"/>
       </div>
       <TaskContainer :taskList="tasks" ref="container"/>
