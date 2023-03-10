@@ -3,9 +3,11 @@ import TaskList from "@/components/TaskList.vue";
 import AuthForm from "@/components/AuthForm.vue";
 import axios from "axios";
 import Button from "@/components/buttons/Button.vue";
+import ApiService from "@/services/ApiService";
+import Task from "@/components/Task.vue";
 
 export default {
-  components: {Button, AuthForm, TaskList},
+  components: {Task, Button, AuthForm, TaskList},
   data() {
     return {
       hasValidToken: false,
@@ -20,9 +22,7 @@ export default {
       const data = {
         "name": "",
         "tasksDTO": {
-          "tasks": [
-
-          ]
+          "tasks": []
         }
       }
       const token = localStorage.getItem('token')
@@ -37,105 +37,55 @@ export default {
           )
           .then(response => {
             this.taskLists.push(response.data)
-            console.log(this.taskLists)
           })
           .catch(error => {
             console.log(error);
           });
     },
-    register(username, password, email, firstName, lastName) {
-
-      const data = {
-        username: username,
-        password: password,
-        email: email,
-        firstName: firstName,
-        lastName: lastName
-      }
-      axios
-          .post('http://localhost:8080/api/auth/register', data, {
-                headers: {
-                  'Content-Type': 'application/json'
-                }
-              }
-          )
-          .then(response => {
-            const token = response.data.jwtToken;
-            console.log(token);
-            if (token) {
-              localStorage.setItem('token', token)
-              this.hasValidToken = true;
-            }
-          })
-          .catch(error => {
-            console.log(error);
-          });
+    async register(username, password, email, firstName, lastName) {
+      this.hasValidToken = await ApiService.register(username, password, email, firstName, lastName)
+      this.updateTasklists()
     },
     login(username, password) {
-      const data = {
-        username: username,
-        password: password
-      }
-      axios
-          .post('http://localhost:8080/api/auth/login', data, {
-                headers: {
-                  'Content-Type': 'application/json'
-                }
-              }
-          )
-          .then(response => {
-            const token = response.data.jwtToken;
-            console.log(token);
-            if (token) {
-              localStorage.setItem('token', token)
-              this.invertHasValidToken()
-            }
-          })
-          .catch(error => {
-            console.log(error);
-          });
+      this.hasValidToken = ApiService.login(username, password)
+      this.updateTasklists()
     },
     logToken() {
       console.log(localStorage.getItem('token'))
       console.log(this.hasValidToken)
     },
-    invertHasValidToken() {
-      this.hasValidToken = !this.hasValidToken
+    deleteTaskList(id) {
+      const index = this.taskLists.findIndex(taskList => taskList.id === id)
+      this.taskLists.splice(index, 1)
     },
-    saveTasks(id, tasks) {
-
+    updateTasklists() {
+      ApiService.getTaskLists()
+          .then(response => {
+            this.taskLists = response.data
+            this.hasValidToken = true
+          })
+          .catch(error => {
+            this.hasValidToken = false;
+          });
     }
-//<TaskList @set-name="setListName" @add-task="addTask()" :tasks="[ ]"/>
   },
   beforeMount() {
-    const token = localStorage.getItem('token')
-    const config = {
-      headers: {Authorization: `Bearer ${token}`}
-    };
-
-    axios
-        .get('http://localhost:8080/api/taskLists/', config)
-        .then(
-            response => {
-              this.taskLists = response.data
-              this.hasValidToken = true;
-            }
-        )
-        .catch(error => {
-          this.hasValidToken = false;
-        })
+    this.updateTasklists()
   }
 }
 </script>
 
 <template>
   <main>
-    <AuthForm v-if="hasValidToken === false" @register="register" @login="login"/>
-    <div v-else>
-      <TaskList v-for="taskList in taskLists" :key="taskList.id"  :id="taskList.id"  :name="taskList.name" :tasks="taskList.tasks" @save-tasks="saveTasks"/>
+    <div v-cloak>
+      <AuthForm v-if="hasValidToken === false" @register="register" @login="login" v-cloak/>
+      <div v-else class="task-grid">
+        <TaskList v-for="taskList in taskLists" :key="taskList.id" :id="taskList.id" :name="taskList.name"
+                  :tasks="taskList.tasks" @delete-tasklist="deleteTaskList(id)" v-cloak/>
+      </div>
+      <Button text="log token" @click="logToken" v-cloak/>
+      <Button text="Create new list" @click="addTaskList" v-cloak/>
     </div>
-    <Button text="log token" @click="logToken"/>
-    <Button text="Create new list" @click="addTaskList"/>
   </main>
 </template>
 
@@ -143,6 +93,22 @@ export default {
 header {
   line-height: 1.5;
 }
+
+[v-cloak] {
+  display: none !important;
+}
+
+.task-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  grid-template-rows: minmax(10rem, auto);
+  grid-gap: 1rem;
+  padding: 1rem;
+  max-width: 80vw;
+  margin: 1rem auto;
+  text-align: justify-all;
+}
+
 
 @media (min-width: 1024px) {
   header {

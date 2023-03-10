@@ -45,4 +45,24 @@ public class TaskListService {
                 .setTasksTaskList(tasks, taskList);
     }
 
+    public void deleteTaskList(UUID taskListId, User owner) {
+        TaskList taskList = this.taskListRepository
+                .findById(taskListId)
+                .orElseThrow(() -> new IllegalArgumentException("Task list not found"));
+        if(!taskList.getOwner().equals(owner)) {
+            throw new IllegalArgumentException("User is not the owner of the task list");
+        }
+        this.taskListRepository.delete(taskList);
+    }
+
+    public void updateTaskListName(UUID taskListId, String name, User owner) {
+        TaskList taskList = this.taskListRepository
+                .findById(taskListId)
+                .orElseThrow(() -> new IllegalArgumentException("Task list not found"));
+        if(!taskList.getOwner().equals(owner)) {
+            throw new IllegalArgumentException("User is not the owner of the task list");
+        }
+        taskList.setName(name);
+        this.taskListRepository.save(taskList);
+    }
 }

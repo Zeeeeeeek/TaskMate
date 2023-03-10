@@ -60,8 +60,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         try {
             username = jwtService.extractUsername(jwtToken);
         } catch (MalformedJwtException | ExpiredJwtException | SignatureException e ) {
-            log.error("Unable to get JWT Token or JWT Token has expired");
-            log.error(e.toString());
+            log.warn("Invalid JWT token: " + e.getMessage());
             response.resetBuffer();
             response.setStatus(498);
             response.flushBuffer();

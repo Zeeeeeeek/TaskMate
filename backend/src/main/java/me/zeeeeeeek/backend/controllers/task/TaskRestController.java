@@ -24,7 +24,7 @@ public class TaskRestController {
 
     private final AuthUtil authUtil;
 
-    @PutMapping("tasks/{taskId}")
+    @PutMapping("{taskId}")
     public ResponseEntity<String> setTaskIsCompleted(@PathVariable UUID taskId, @RequestParam boolean completed, Authentication authentication) {
         User owner = authUtil.getUserFromAuthentication(authentication);
         try {

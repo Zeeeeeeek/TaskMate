@@ -1,13 +1,13 @@
 <template>
   <div class="task-container scroll">
-    <Task v-for="task in taskList" :ref="task.id">
+    <Task v-for="task in tasks" :id="task.id" :name="task.name" :description="task.description" :is-completed="task.completed" :due-date="task.dueDate">
       <div>{{ task }}</div>
     </Task>
   </div>
 </template>
 
-<script>
-import Task from "@/components/Task.vue";
+<script lang="ts">
+import Task from "./Task.vue";
 
 export default {
   name: "TaskContainer",
@@ -16,6 +16,26 @@ export default {
     taskList: {
       type: Array,
       required: true
+    }
+  },
+  data() {
+    return {
+      tasks: this.taskList,
+      stagedTasks: [],
+      stagedCounter: 0
+    }
+  },
+  methods: {
+    log() {
+      console.log(this.stagedTasks)
+    },
+    updateName(name, id) {
+      console.log(name, id)
+      //this.stagedTasks.forEach(task => {
+      //  if (task.id === id) {
+      //    task.name = name
+      //  }
+      //})
     }
   }
 }

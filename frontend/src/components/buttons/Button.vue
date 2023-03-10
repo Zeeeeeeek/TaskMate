@@ -36,4 +36,7 @@ export default {
   box-shadow: 6px 4px 5px rgba(0, 0, 0, 0.2);
   font-weight: 600;
 }
+.button:active {
+  transform: scale(0.95);
+}
 </style>

@@ -73,4 +73,18 @@ public class TaskListRestController{
                 .addTasksToTaskList(taskListId, tasksDTO);
     }
 
+    @DeleteMapping("{taskListId}")
+    public void deleteTaskList(@PathVariable UUID taskListId, Authentication authentication) {
+        User owner = authUtil.getUserFromAuthentication(authentication);
+        this.taskListService
+                .deleteTaskList(taskListId, owner);
+    }
+
+    @PutMapping("{taskListId}")
+    public void updateTaskListName(@PathVariable UUID taskListId, @RequestBody String name, Authentication authentication) {
+        User owner = authUtil.getUserFromAuthentication(authentication);
+        System.out.println("name = " + name);
+        this.taskListService
+                .updateTaskListName(taskListId, name, owner);
+    }
 }

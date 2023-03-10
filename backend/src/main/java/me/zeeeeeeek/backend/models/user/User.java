@@ -2,6 +2,7 @@ package me.zeeeeeeek.backend.models.user;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -38,6 +39,7 @@ public class User implements UserDetails {
     private String lastName;
 
     @OneToMany(mappedBy = "owner")
+    @JsonIgnoreProperties("taskLists")
     private List<TaskList> taskLists;
 
     @Enumerated(EnumType.STRING) @JsonIgnore @NonNull

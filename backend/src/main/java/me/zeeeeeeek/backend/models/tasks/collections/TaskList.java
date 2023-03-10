@@ -1,5 +1,6 @@
 package me.zeeeeeeek.backend.models.tasks.collections;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -33,7 +34,6 @@ public class TaskList implements TaskCollection {
     private List<AbstractTask> tasks;
 
     @ManyToOne
-    @JsonIgnoreProperties("taskLists")
     private User owner;
 
     private String name;
@@ -138,6 +138,7 @@ public class TaskList implements TaskCollection {
      * @return the collection owner uuid
      */
     @Override
+    @JsonIgnore
     public User getOwner() {
         return this.owner;
     }

@@ -1,13 +1,11 @@
 <template>
   <div class="task-list">
       <div class="header">
-        <input placeholder="List name" class="task-list-name subtitle" @blur="setName">
-        <TrashCanIcon class="button"/>
-        <div>
-          <Save @click="saveTasks" class="button"/>
-        </div>
+        <input placeholder="List name" ref="nameField" class="task-list-name subtitle" @blur="setName(this.$refs.nameField.value)"
+               v-model="name">
+        <TrashCanIcon class="button" @click="deleteTasklist()"/>
       </div>
-      <TaskContainer :taskList="tasks"/>
+      <TaskContainer :taskList="tasks" ref="container"/>
       <AddTaskButton @addTask="addTask"/>
   </div>
 
@@ -18,17 +16,11 @@
 import AddTaskButton from "@/components/buttons/AddTaskButton.vue";
 import TaskContainer from "@/components/TaskContainer.vue";
 import TrashCanIcon from "@/components/icons/TrashCanIcon.vue";
-import Save from "@/components/icons/Save.vue";
-import addTaskButton from "@/components/buttons/AddTaskButton.vue";
+import ApiService from "@/services/ApiService";
 
 export default {
   name: "TaskList",
-  computed: {
-    addTaskButton() {
-      return addTaskButton
-    }
-  },
-  components: {Save, TaskContainer, AddTaskButton, TrashCanIcon},
+  components: {TaskContainer, AddTaskButton, TrashCanIcon},
   props: {
     id: {
       type:String,
@@ -44,20 +36,16 @@ export default {
     }
   },
   methods: {
-    setName: function(e) {
-      this.$emit('set-name', e.target.value)
-    },
-    saveTasks() {
-      this.$emit('save-tasks', this.id, this.tasks)
+    setName(name) {
+      console.log('name: ' + name)
+      ApiService.updateTasklistName(this.id, name)
     },
     addTask() {
-      this.tasks.push({
-        id: this.tasks.length,
-        name: '',
-        description: '',
-        dueDate: null,
-        completed: false
-      })
+      this.$refs.container.addTask()
+    },
+    deleteTasklist() {
+      ApiService.deleteTasklist(this.id)
+      this.$emit('delete-tasklist', this.id)
     }
 
   }
