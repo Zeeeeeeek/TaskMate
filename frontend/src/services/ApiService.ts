@@ -5,9 +5,7 @@ class ApiService {
 
     private static instance: ApiService;
 
-    private constructor() {
-
-    }
+    private constructor() {}
 
     public static getInstance(): ApiService {
         if (this.instance === undefined) {
@@ -20,26 +18,22 @@ class ApiService {
      * Get all tasklists
      * @returns {TaskList[]} Array of TaskList objects
      */
-    public getTaskLists(): TaskList[] {
+    public async getTaskLists(): Promise<TaskList[]> {
         const headers = this.getAuthConfig();
         let taskLists: Array<TaskList> = [];
-        fetch(`${this.API_URL}/taskLists/`, {
-            method: 'GET', headers
-        }).then(response => {
-            response.json().then(data => {
-                for (let i = 0; i < data.length; i++) {
-                    let taskList = new TaskList(data[i].id, data[i].name, data[i].tasks, data[i].empty, data[i].completed)
-                    console.log(`taskList` + JSON.stringify(taskList))
-                    taskLists.push(taskList)
-                }
-            }).catch(error => {
-                console.log(error)
-            });
-        })
+        let data
+        try {
+            data = await fetch(`${this.API_URL}/taskLists/`, {
+                method: 'GET', headers
+            }).then(response => response.json());
+        } catch (error) {
+            console.log(error)
+        }
+        console.log(data)
         return taskLists;
     }
 
-    public async login(username: String, password: String): Promise<boolean> {
+    public async login(username: string, password: string): Promise<boolean> {
         try {
             const data = await fetch(`${this.API_URL}/auth/login`, {
                 method: 'POST',
@@ -72,14 +66,15 @@ class ApiService {
      * @param firstName
      * @param lastName
      */
-    public register(
-        username: String,
-        password: String,
-        email: String,
-        firstName: String,
-        lastName: String
-    ): boolean {
-        fetch(`${this.API_URL}/auth/register`, {
+    public async register(
+        username: string,
+        password: string,
+        email: string,
+        firstName: string,
+        lastName: string
+    ): Promise<boolean> {
+        try {
+            const data = await fetch(`${this.API_URL}/auth/register`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -91,17 +86,14 @@ class ApiService {
                     firstName: firstName,
                     lastName: lastName
                 })
-            }
-        ).then(response => {
-            response.json().then(data => {
-                localStorage.setItem("token", data.jwtToken);
-                return true;
-            })
-        })
-            .catch(error => {
-                console.log(error)
-            });
-        return false;
+            }).then(response => response.json());
+            console.log(data.jwtToken)
+            localStorage.setItem("token", data.jwtToken);
+            return true;
+        } catch (error) {
+            console.log(error)
+            return false;
+        }
     }
 
     public static pushTasks(taskListId: number, tasks: any) {
@@ -118,7 +110,8 @@ class ApiService {
                 headers
             }
         )
-            .then(response => {})
+            .then(response => {
+            })
             .catch(error => {
                 console.log(error)
             })
@@ -131,7 +124,8 @@ class ApiService {
                 headers
             }
         )
-            .then(response => {})
+            .then(response => {
+            })
             .catch(error => {
                 console.log(error)
             })
@@ -151,12 +145,12 @@ class ApiService {
     public updateTasklistName(id: number, name) {
         const headers = this.getAuthConfig();
         fetch(`${this.API_URL}/taskLists/${id}`, {
-                method: 'PUT',
-                headers,
+            method: 'PUT',
+            headers,
             body: name
         }).catch(error => {
-                console.log(error)
-            })
+            console.log(error)
+        })
     }
 }
 

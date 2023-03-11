@@ -20,8 +20,8 @@ export default {
     addTaskList() {
 
     },
-    register(username, password, email, firstName, lastName) {
-      this.hasValidToken = ApiService.register(username, password, email, firstName, lastName)
+    async register(username, password, email, firstName, lastName) {
+      this.hasValidToken = await ApiService.register(username, password, email, firstName, lastName)
       console.log(`hasValidToken after register: ${this.hasValidToken}`)
     },
     async login(username, password) {
@@ -36,11 +36,12 @@ export default {
       const index = this.taskLists.findIndex(taskList => taskList.id === id)
       this.taskLists.splice(index, 1)
     },
-    updateTasklists() {
-      console.log(`tasklistssssss:     ` + JSON.stringify(ApiService.getTaskLists()))
+    async updateTasklists() {
+      this.taskLists = await ApiService.getTaskLists()
     }
   },
-  beforeMount() {
+  async beforeMount() {
+    await this.updateTasklists()
   }
 }
 </script>
