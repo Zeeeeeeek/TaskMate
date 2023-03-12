@@ -22,11 +22,11 @@ export default {
     },
     async register(username, password, email, firstName, lastName) {
       this.hasValidToken = await ApiService.register(username, password, email, firstName, lastName)
-      console.log(`hasValidToken after register: ${this.hasValidToken}`)
+      await this.updateTasklists()
     },
     async login(username, password) {
       this.hasValidToken = await ApiService.login(username, password)
-      console.log(`hasValidToken after login: ${this.hasValidToken}`)
+      await this.updateTasklists()
     },
     logToken() {
       console.log(localStorage.getItem('token'))
@@ -39,34 +39,17 @@ export default {
     async updateTasklists() {
       this.taskLists = await ApiService.getTaskLists()
     }
-  },
-  async beforeMount() {
-    await this.updateTasklists()
   }
 }
 </script>
 
 <template>
-  <main>
-    <div v-cloak>
-      <AuthForm v-if="hasValidToken === false" @register="register" @login="login" v-cloak/>
-      <div v-else class="task-grid">
-        <TaskList v-for="taskList in taskLists" :key="taskList.id" :id="taskList.id" :name="taskList.name"
-                  :tasks="taskList.tasks" @delete-tasklist="deleteTaskList(id)" v-cloak/>
-      </div>
-      <Button text="log token" @click="logToken" v-cloak/>
-      <Button text="Create new list" @click="addTaskList" v-cloak/>
-    </div>
-  </main>
+  <RouterView/>
 </template>
 
 <style scoped>
 header {
   line-height: 1.5;
-}
-
-[v-cloak] {
-  display: none !important;
 }
 
 .task-grid {
@@ -78,6 +61,13 @@ header {
   max-width: 80vw;
   margin: 1rem auto;
   text-align: justify-all;
+}
+
+.box {
+  display:flex;
+  background-color: #134074;
+  height: 100vh;
+  width: 100vw;
 }
 
 

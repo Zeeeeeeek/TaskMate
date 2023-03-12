@@ -37,4 +37,13 @@ public class AuthRestController{
         return ResponseEntity.ok(authService.login(userLoginDTO));
     }
 
+    /**
+     * Verifies the authentication token of the user.
+     */
+    @GetMapping("/verify")
+    public boolean verify(
+            @RequestHeader("Authorization") String token) {
+        return authService.verify(token);
+    }
+
 }

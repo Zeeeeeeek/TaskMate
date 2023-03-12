@@ -31,11 +31,6 @@ export default {
     },
     updateName(name, id) {
       console.log(name, id)
-      //this.stagedTasks.forEach(task => {
-      //  if (task.id === id) {
-      //    task.name = name
-      //  }
-      //})
     }
   }
 }
@@ -59,7 +54,7 @@ export default {
 }
 
 .scroll::-webkit-scrollbar-track {
-  background: #d2d2d2;
+  background: transparent;
   border-radius: 0.5rem;
 }
 

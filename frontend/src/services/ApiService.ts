@@ -20,16 +20,20 @@ class ApiService {
      */
     public async getTaskLists(): Promise<TaskList[]> {
         const headers = this.getAuthConfig();
-        let taskLists: Array<TaskList> = [];
+        const taskLists: Array<TaskList> = [];
         let data
         try {
             data = await fetch(`${this.API_URL}/taskLists/`, {
                 method: 'GET', headers
             }).then(response => response.json());
+            data.forEach(taskList => {
+                taskLists.push(
+                    new TaskList(taskList.id, taskList.name, taskList.tasks, taskList.empty, taskList.completed)
+                )
+            })
         } catch (error) {
             console.log(error)
         }
-        console.log(data)
         return taskLists;
     }
 
@@ -49,7 +53,7 @@ class ApiService {
             localStorage.setItem("token", data.jwtToken);
             return true;
         } catch (error) {
-            console.log(error)
+            const mute = error;
             return false;
         }
     }
@@ -87,7 +91,6 @@ class ApiService {
                     lastName: lastName
                 })
             }).then(response => response.json());
-            console.log(data.jwtToken)
             localStorage.setItem("token", data.jwtToken);
             return true;
         } catch (error) {

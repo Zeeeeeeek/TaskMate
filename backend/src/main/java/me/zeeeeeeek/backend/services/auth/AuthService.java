@@ -65,4 +65,8 @@ public class AuthService {
         String jwtToken = jwtService.generateJwtTokenWithoutExtraClaims(user);
         return new AuthenticationResponse(jwtToken);
     }
+
+    public boolean verify(String token) {
+        return jwtService.isTokenValid(token.substring(7));
+    }
 }
