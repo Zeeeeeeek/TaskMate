@@ -1,42 +1,37 @@
 package me.zeeeeeeek.backend.models.user;
 
 import org.junit.jupiter.api.*;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class UserTest {
 
     @Test
     void userShouldBeCreated() {
-        User u = new User("username", "password", "a@a.com", "first", "last", Role.USER);
+        User u = new User("username", "password", "a@a.com", Role.USER);
         assertEquals("username", u.getUsername());
         assertEquals("password", u.getPassword());
         assertEquals("a@a.com", u.getEmail());
-        assertEquals("first", u.getFirstName());
-        assertEquals("last", u.getLastName());
     }
 
     @Test
     void userShouldNotBeCreatedWithNullParameters() {
-        assertThrows(NullPointerException.class, () -> new User(null, "password", "email", "first", "last", Role.USER));
-        assertThrows(NullPointerException.class, () -> new User("username", null, "email", "first", "last", Role.USER));
-        assertThrows(NullPointerException.class, () -> new User("username", "password", null, "first", "last", Role.USER));
-        assertThrows(NullPointerException.class, () -> new User("username", "password", "email", null, "last", Role.USER));
-        assertThrows(NullPointerException.class, () -> new User("username", "password", "email", "first", null, Role.USER));
-        assertThrows(NullPointerException.class, () -> new User("username", "password", "email", "first", "last", null));
+        assertThrows(NullPointerException.class, () -> new User(null, "password", "email@a", Role.USER));
+        assertThrows(NullPointerException.class, () -> new User("username", null, "email@a", Role.USER));
+        assertThrows(NullPointerException.class, () -> new User("username", "password", null, Role.USER));
+        assertThrows(NullPointerException.class, () -> new User("username", "password", "email@a", null));
     }
 
     @Test
     void userShouldNotBeCreatedWithEmptyParameters() {
-        assertThrows(IllegalArgumentException.class, () -> new User("", "password", "email", "first", "last", Role.USER));
-        assertThrows(IllegalArgumentException.class, () -> new User("username", "", "email", "first", "last", Role.USER));
-        assertThrows(IllegalArgumentException.class, () -> new User("username", "password", "", "first", "last", Role.USER));
-        assertThrows(IllegalArgumentException.class, () -> new User("username", "password", "email", "", "last", Role.USER));
-        assertThrows(IllegalArgumentException.class, () -> new User("username", "password", "email", "first", "", Role.USER));
+        assertThrows(IllegalArgumentException.class, () -> new User("", "password", "email@a", Role.USER));
+        assertThrows(IllegalArgumentException.class, () -> new User("username", "", "email@a", Role.USER));
+        assertThrows(IllegalArgumentException.class, () -> new User("username", "password", "", Role.USER));
     }
 
     @Test
     void userShouldNotBeCreatedWithInvalidEmail() {
-        assertThrows(IllegalArgumentException.class, () -> new User("username", "password", "email", "first", "last", Role.USER));
+        assertThrows(IllegalArgumentException.class, () -> new User("username", "password", "email", Role.USER));
     }
 
 

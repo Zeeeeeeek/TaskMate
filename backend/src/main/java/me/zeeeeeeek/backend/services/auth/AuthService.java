@@ -35,8 +35,6 @@ public class AuthService {
                 userCreationDTO.username(),
                 passwordEncoder.encode(userCreationDTO.password()),
                 userCreationDTO.email(),
-                userCreationDTO.firstName(),
-                userCreationDTO.lastName(),
                 Role.USER
         );
         if(userRepository.existsByUsernameOrEmail(user.getUsername(), user.getEmail()))

@@ -33,10 +33,6 @@ public class User implements UserDetails {
     private String password;
     @Column(unique = true) @NonNull
     private String email;
-    @Column @NonNull
-    private String firstName;
-    @Column @NonNull
-    private String lastName;
 
     @OneToMany(mappedBy = "owner")
     @JsonIgnoreProperties("taskLists")
@@ -51,18 +47,14 @@ public class User implements UserDetails {
      * @param username  the username of the user
      * @param password  the password of the user
      * @param email     the email of the user
-     * @param firstName the first name of the user
-     * @param lastName  the last name of the user
      * @param role      the role of the user
      * @throws NullPointerException     if any of the parameters is null
      * @throws IllegalArgumentException if any of the parameters is empty
      * @throws IllegalArgumentException if the email is invalid
      */
-    public User(String username, String password, String email, String firstName, String lastName,@NonNull Role role) {
-        requireNonEmpty(username, password, email, firstName, lastName);
+    public User(String username, String password, String email, @NonNull Role role) {
+        requireNonEmpty(username, password, email);
         this.email = validateEmail(email);
-        this.firstName = firstName;
-        this.lastName = lastName;
         this.username = username;
         this.password = password;
         this.role = role;
@@ -152,8 +144,6 @@ public class User implements UserDetails {
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
                 ", role=" + role +
                 '}';
     }

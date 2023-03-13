@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TaskListTest {
 
-    private static final User OWNER = new User("user", "password", "email@mm", "firstName", "lastName", Role.USER);
+    private static final User OWNER = new User("user", "password", "email@mm", Role.USER);
 
     @Test
     void taskListShouldBeCreated() {
