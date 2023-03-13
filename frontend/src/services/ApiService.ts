@@ -35,7 +35,6 @@ class ApiService {
 
     public async apiCall(url: string, method: string, body: any = null): Promise<any> {
         const headers = this.getAuthConfig();
-        console.log(`URL: ${this.API_URL}/${url}`)
         return await fetch(`${this.API_URL}/${url}`, {
             method,
             headers,
