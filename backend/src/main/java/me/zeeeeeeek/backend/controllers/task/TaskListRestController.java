@@ -20,7 +20,7 @@ import java.util.UUID;
  * Controller used to manage a list of tasks using a REST API.
  */
 @RestController
-@RequestMapping("/api/taskLists/")
+@RequestMapping("/api/task-lists")
 @Slf4j
 @RequiredArgsConstructor
 public class TaskListRestController{
@@ -67,23 +67,22 @@ public class TaskListRestController{
 
 
 
-    @PostMapping("{taskListId}/tasks")
+    @PostMapping("/{taskListId}/tasks")
     public void addTasksToTaskList(@PathVariable UUID taskListId, @RequestBody TasksDTO tasksDTO) {
         this.taskListService
                 .addTasksToTaskList(taskListId, tasksDTO);
     }
 
-    @DeleteMapping("{taskListId}")
+    @DeleteMapping("/{taskListId}")
     public void deleteTaskList(@PathVariable UUID taskListId, Authentication authentication) {
         User owner = authUtil.getUserFromAuthentication(authentication);
         this.taskListService
                 .deleteTaskList(taskListId, owner);
     }
 
-    @PutMapping("{taskListId}")
+    @PutMapping("/{taskListId}")
     public void updateTaskListName(@PathVariable UUID taskListId, @RequestBody String name, Authentication authentication) {
         User owner = authUtil.getUserFromAuthentication(authentication);
-        System.out.println("name = " + name);
         this.taskListService
                 .updateTaskListName(taskListId, name, owner);
     }

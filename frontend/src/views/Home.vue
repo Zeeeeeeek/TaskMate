@@ -17,9 +17,11 @@ export default {
     }
   },
   async beforeMount() {
-    const lists = await ApiService.getTaskLists()
-
-    console.log(`hasValidToken: ${this.hasValidToken}`)
+    try {
+      this.taskLists = await ApiService.getTaskLists()
+    } catch (e) {
+      alert(e)
+    }
   }
 }
 </script>

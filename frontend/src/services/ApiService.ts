@@ -1,11 +1,13 @@
 import {TaskList} from "../models/TaskList";
+import ResponseError from "../errors/ResponseError";
 
 class ApiService {
     private readonly API_URL: string = "http://localhost:8080/api";
 
     private static instance: ApiService;
 
-    private constructor() {}
+    private constructor() {
+    }
 
     public static getInstance(): ApiService {
         if (this.instance === undefined) {
@@ -19,28 +21,36 @@ class ApiService {
      * @returns {TaskList[]} Array of TaskList objects
      */
     public async getTaskLists(): Promise<TaskList[]> {
-        const headers = this.getAuthConfig();
-        const taskLists: Array<TaskList> = [];
-        let data
-        try {
-            data = await fetch(`${this.API_URL}/taskLists/`, {
-                method: 'GET', headers
-            }).then(response => {
-                if(response.status !== 498) {
-                    response.json();
-                }
+            return this.apiCall('task-lists', 'GET', null).then(data => {
+                return data.map(
+                    (taskList: any) => new TaskList(
+                        taskList.id,
+                        taskList.name,
+                        taskList.tasks,
+                        taskList.empty,
+                        taskList.completed)
+                );
             });
-            if(!data) return null;
-            data.forEach(taskList => {
-                taskLists.push(
-                    new TaskList(taskList.id, taskList.name, taskList.tasks, taskList.empty, taskList.completed)
-                )
-            })
+    }
 
-        } catch (error) {
-            console.log(error)
-        }
-        return taskLists;
+    public async apiCall(url: string, method: string, body: any = null): Promise<any> {
+        const headers = this.getAuthConfig();
+        console.log(`URL: ${this.API_URL}/${url}`)
+        return await fetch(`${this.API_URL}/${url}`, {
+            method,
+            headers,
+            body: body ? JSON.stringify(body) : null
+        }).then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                if (response.status === 498) {
+                    this.logout();
+                    window.location.reload();
+                }
+                throw new ResponseError(response.status);
+            }
+        });
     }
 
     public async login(username: string, password: string): Promise<boolean> {
@@ -55,10 +65,10 @@ class ApiService {
                     password: password
                 })
             }).then(response => {
-                if(response.status !== 200) return '';
+                if (response.status !== 200) return '';
                 return response.json();
             })
-            if(!data || !data.jwtToken) return false;
+            if (!data || !data.jwtToken) return false;
             localStorage.setItem("token", data.jwtToken);
             return true;
         } catch (error) {
@@ -94,10 +104,10 @@ class ApiService {
                     email: email
                 })
             }).then(response => {
-                if(response.status !== 200) return '';
+                if (response.status !== 200) return '';
                 return response.json();
             });
-            if(!data || !data.jwtToken) return false;
+            if (!data || !data.jwtToken) return false;
             localStorage.setItem("token", data.jwtToken);
             return true;
         } catch (error) {
