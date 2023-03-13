@@ -1,23 +1,20 @@
 package me.zeeeeeeek.backend.util;
 
+import lombok.RequiredArgsConstructor;
 import me.zeeeeeeek.backend.models.user.User;
 import me.zeeeeeeek.backend.services.user.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class AuthUtil {
 
-    final UserService userService;
-
-    private AuthUtil(UserService userService) {
-        this.userService = userService;
-    }
+    private final UserService userService;
 
     public User getUserFromAuthentication(Authentication authentication) {
-        User temp = (User) authentication.getPrincipal();
-
+        String username = (String) authentication.getPrincipal();
         return userService
-                .getUserByUsername(temp.getUsername());
+                .getUserByUsername(username);
     }
 }
