@@ -76,15 +76,11 @@ class ApiService {
      * @param username
      * @param password
      * @param email
-     * @param firstName
-     * @param lastName
      */
     public async register(
         username: string,
         password: string,
         email: string,
-        firstName: string,
-        lastName: string
     ): Promise<boolean> {
         try {
             const data = await fetch(`${this.API_URL}/auth/register`, {
@@ -95,11 +91,13 @@ class ApiService {
                 body: JSON.stringify({
                     username: username,
                     password: password,
-                    email: email,
-                    firstName: firstName,
-                    lastName: lastName
+                    email: email
                 })
-            }).then(response => response.json());
+            }).then(response => {
+                if(response.status !== 200) return '';
+                return response.json();
+            });
+            if(!data || !data.jwtToken) return false;
             localStorage.setItem("token", data.jwtToken);
             return true;
         } catch (error) {

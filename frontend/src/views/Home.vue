@@ -18,9 +18,7 @@ export default {
   },
   async beforeMount() {
     const lists = await ApiService.getTaskLists()
-    if(!lists) {
-      this.$router.push('/auth')
-    }
+
     console.log(`hasValidToken: ${this.hasValidToken}`)
   }
 }
