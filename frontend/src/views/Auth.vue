@@ -5,36 +5,83 @@
       <div class="auth-form">
         <div class="field">
           <label for="username" class="prevent-select">Username</label>
-          <img src="../assets/user.svg" class="username"  alt=""><input type="text" placeholder="Username" :class="{'field-error': hasError}">
+          <img src="../assets/user.svg" class="username" alt=""><input type="text" placeholder="Username"
+                                                                       :class="{'field-error': invalidUsername, 'auth-form-input': !invalidUsername}"
+                                                                       @blur="validateUsername" v-model="this.username">
         </div>
         <div class="field">
           <label for="password" class="prevent-select">Password</label>
-          <img src="../assets/lock.svg" class="lock" alt=""><input type="password" placeholder="Password" class="password">
+          <img src="../assets/lock.svg" class="lock" alt=""><input type="password" placeholder="Password"
+                                                                   class="password"
+                                                                   :class="{'field-error': invalidPassword, 'auth-form-input': !invalidPassword}"
+                                                                   @blur="validatePassword" v-model="this.password">
         </div>
       </div>
-        <div class="switch-field">
-          Not a member?<router-link to="/register"> Register</router-link>
-        </div>
+      <div class="switch-field">
+        Not a member?
+        <router-link to="/register"> Register</router-link>
+      </div>
       <div class="submit-field">
-        <div class="submitButton prevent-select">
+        <div class="submitButton prevent-select" @click="login">
           Login
         </div>
+      </div>
+      <div class="footer">
+        <div class="error-message" v-if="errorMessage !== null">{{ errorMessage }}</div>
       </div>
     </div>
   </div>
 
 </template>
 
-<script>
+<script lang="ts">
 
+
+import apiService from "../services/ApiService";
 
 export default {
   name: "Auth",
   data() {
     return {
-      hasError: true
+      invalidUsername: false,
+      invalidPassword: false,
+      password: '',
+      username: '',
+      errorMessage: null
     }
   },
+  methods: {
+    validateUsername() {
+      this.invalidUsername = this.username === '';
+      if (this.invalidUsername) this.setErrorMessage('Fill credentials')
+      else this.setErrorMessage(null)
+    },
+    validatePassword() {
+      this.invalidPassword = this.password === '';
+      if (this.invalidPassword) this.setErrorMessage('Fill credentials')
+      else this.setErrorMessage(null)
+    },
+    async login() {
+      this.validatePassword()
+      this.validateUsername()
+      if (this.invalidPassword || this.invalidUsername) {
+        this.setErrorMessage('Fill credentials')
+        return
+      }
+      try {
+        if (await apiService.login(this.username, this.password)) {
+          this.$router.push('/')
+        } else {
+          this.setErrorMessage('Invalid credentials')
+        }
+      } catch (e) {
+        this.setErrorMessage('Error')
+      }
+    },
+    setErrorMessage(message: string) {
+      this.errorMessage = message;
+    }
+  }
 }
 </script>
 
@@ -56,21 +103,20 @@ export default {
 
 .submit-field {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 2rem;
+  height: 4rem;
   width: 100%;
-  background-color: #f3f2f2;
 }
 
 .submitButton {
-  display:flex;
+  display: flex;
   justify-items: center;
   align-items: center;
   height: 2rem;
   width: 14rem;
-  background: rgb(2,0,36);
-  background: linear-gradient(36deg, rgba(2,0,36,1) 0%, rgba(19,64,116,1) 50%, rgba(0,212,255,1) 100%);
+  background: rgb(2, 0, 36);
   border-radius: 0.5rem;
   justify-content: center;
   color: #f3f2f2;
@@ -78,12 +124,13 @@ export default {
   cursor: pointer;
   transition: all 0.1s ease;
 }
+
 .submitButton:hover {
   /*invert gradient*/
-  background: rgb(2,0,36);
-  background: linear-gradient(36deg, rgba(0,212,255,1) 0%, rgba(19,64,116,1) 50%, rgba(2,0,36,1) 100%);
+  background: rgb(2, 0, 36);
   transform: translateY(-2px);
 }
+
 .submitButton:active {
   transform: scale(0.95);
 }
@@ -106,7 +153,6 @@ export default {
   height: 20rem;
 }
 
-
 .field {
   display: flex;
   margin: 0 auto;
@@ -123,10 +169,11 @@ export default {
   margin-right: 11.3rem;
 }
 
-.auth-form input {
+.auth-form-input {
   text-align: left;
   width: 16rem;
   height: 1.9rem;
+  border: none;
   border-bottom: 0.09rem solid #9f9f9f;
   background-color: transparent;
   outline: none;
@@ -135,8 +182,15 @@ export default {
 }
 
 .field-error {
-  border: 0.09rem solid #b20202;
+  text-align: left;
+  width: 16rem;
+  height: 1.9rem;
+  border: none;
+  border-bottom: 0.09rem solid #d90000;
   outline: #134074;
+  background-color: transparent;
+  padding-left: 2rem;
+  margin-top: 0.2rem;
 }
 
 .username {
@@ -170,7 +224,33 @@ export default {
   -webkit-user-select: none; /* Safari */
   -moz-user-select: none; /* Firefox */
   -ms-user-select: none; /* Internet Explorer/Edge */
-  user-select: none; /* Non-prefixed version, currently
-                        supported by Chrome and Opera */
+  user-select: none;
+  /* Non-prefixed version, currently
+                         supported by Chrome and Opera */
+}
+
+.error-message {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 1.5rem;
+  width: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  background-color: #8c1717;
+  color: #f3f2f2;
+  border-radius: 0.5rem;
+  font-size: 0.8rem;
+  margin-top: 1rem;
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+  height: 6rem;
+  width: 100%;
+  border-radius: inherit;
+  margin-top: 1rem;
 }
 </style>

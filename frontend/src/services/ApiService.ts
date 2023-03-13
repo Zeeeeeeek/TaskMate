@@ -54,8 +54,11 @@ class ApiService {
                     username: username,
                     password: password
                 })
-            }).then(response => response.json());
-            console.log(data.jwtToken)
+            }).then(response => {
+                if(response.status !== 200) return '';
+                return response.json();
+            })
+            if(!data || !data.jwtToken) return false;
             localStorage.setItem("token", data.jwtToken);
             return true;
         } catch (error) {
