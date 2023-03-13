@@ -6,22 +6,29 @@
         <div class="auth-form">
           <div class="field">
             <label for="username" class="prevent-select">Username</label>
-            <img src="../assets/user.svg" class="login-username" alt=""><input type="text" placeholder="Username"
-                                                                               :class="{'field-error': invalidUsername, 'auth-form-input': !invalidUsername}"
-                                                                               @blur="validateUsername"
-                                                                               v-model="this.username">
+            <div class="field-input" :class="{'field-error': invalidUsername}">
+              <img src="../assets/user.svg" class="login-icon" alt="">
+              <input type="text" placeholder="Username"
+                     class="auth-form-input"
+                     @blur="validateUsername"
+                     v-model="this.username">
+            </div>
           </div>
           <div class="field">
             <label for="password" class="prevent-select">Password</label>
-            <img src="../assets/lock.svg" class="login-lock" alt=""><input type="password" placeholder="Password"
-                                                                           class="password"
-                                                                           :class="{'field-error': invalidPassword, 'auth-form-input': !invalidPassword}"
-                                                                           @blur="validatePassword"
-                                                                           v-model="this.password">
+            <div class="field-input" :class="{'field-error': invalidPassword}">
+              <img src="../assets/lock.svg" class="login-icon" alt="">
+              <input type="password" placeholder="Password"
+                     class="auth-form-input"
+                     @blur="validatePassword"
+                     v-model="this.password">
+            </div>
           </div>
         </div>
-        <div class="switch-field" @click="invertShowRegister">
-          Not a member? Register
+        <div class="switch-field prevent-select">
+          <div @click="invertShowRegister">
+            Not a member? Register
+          </div>
         </div>
         <div class="submit-field">
           <div class="submitButton prevent-select" @click="login">
@@ -34,38 +41,47 @@
         <div class="auth-form">
           <div class="field">
             <label for="username" class="prevent-select">Username</label>
-            <img src="../assets/user.svg" class="register-username" alt=""><input type="text" placeholder="Username"
-                                                                                  :class="{'field-error': invalidUsername, 'auth-form-input': !invalidUsername}"
-                                                                                  @blur="validateUsername"
-                                                                                  v-model="this.username">
+            <div class="field-input" :class="{'field-error' : invalidUsername}">
+              <img src="../assets/user.svg" class="register-icon" alt="">
+              <input type="text" placeholder="Username"
+                     class="auth-form-input"
+                     @blur="validateUsername"
+                     v-model="this.username">
+            </div>
           </div>
           <div class="field">
             <label for="email" class="prevent-select">Email</label>
-            <img src="../assets/email.svg" class="register-email" alt=""><input type="email" placeholder="Email"
-                                                                                :class="{'field-error': invalidEmail, 'auth-form-input': !invalidEmail}"
-                                                                                @blur="validateEmail"
-                                                                                v-model="this.email">
+            <div class="field-input" :class="{'field-error': invalidEmail}">
+              <img src="../assets/email.svg" class="register-icon" alt="">
+              <input type="email" placeholder="Email"
+                     class="auth-form-input"
+                     @blur="validateEmail"
+                     v-model="this.email">
+            </div>
           </div>
           <div class="field">
             <label for="password" class="prevent-select">Password</label>
-            <img src="../assets/lock.svg" class="register-lock" alt=""><input type="password" placeholder="Password"
-                                                                              class="password"
-                                                                              :class="{'field-error': invalidPassword, 'auth-form-input': !invalidPassword}"
-                                                                              @blur="validatePassword"
-                                                                              v-model="this.password">
+            <div class="field-input" :class="{'field-error': invalidPassword}">
+              <img src="../assets/lock.svg" class="register-icon" alt="">
+              <input type="password" placeholder="Password"
+                     class="auth-form-input"
+                     @blur="validatePassword"
+                     v-model="this.password">
+            </div>
           </div>
           <div class="field">
             <label for="confirmPassword" class="prevent-select">Confirm password</label>
-            <img src="../assets/lock.svg" class="register-lock-confirm" alt=""><input type="password"
-                                                                                      placeholder="Confirm password"
-                                                                                      class="password"
-                                                                                      :class="{'field-error': invalidConfirmPassword, 'auth-form-input': !invalidConfirmPassword}"
-                                                                                      @blur="validateConfirmPassword"
-                                                                                      v-model="this.confirmPassword">
+            <div class="field-input" :class="{'field-error': invalidConfirmPassword}">
+              <img src="../assets/lock.svg" class="register-icon" alt="">
+              <input type="password" placeholder="Confirm password"
+                     class="auth-form-input"
+                     @blur="validateConfirmPassword"
+                     v-model="this.confirmPassword">
+            </div>
           </div>
         </div>
-        <div class="switch-field" @click="invertShowRegister">
-          Already a member? Login
+        <div class="switch-field prevent-select">
+          <div @click="invertShowRegister">Already a member? Login</div>
         </div>
         <div class="submit-field">
           <div class="submitButton prevent-select" @click="register">
@@ -120,7 +136,7 @@ export default {
       else this.setErrorMessage(null)
     },
     validateConfirmPassword() {
-      if(!this.confirmPassword) {
+      if (!this.confirmPassword) {
         this.setErrorMessage('Fill credentials')
         this.invalidConfirmPassword = true
         return
@@ -128,6 +144,7 @@ export default {
       if (this.confirmPassword !== this.password) {
         this.setErrorMessage('Passwords do not match')
         this.invalidConfirmPassword = true
+        this.invalidPassword = true
         return
       }
       this.setErrorMessage(null)
@@ -201,8 +218,6 @@ export default {
   width: 30rem;
   margin: 0 auto;
   position: relative;
-  left: 50%;
-  right: 50%;
   border-radius: 0.313rem; /*5px*/
   box-shadow: 0 0 0.625rem 0 rgba(0, 0, 0, 0.3);
 }
@@ -243,16 +258,20 @@ export default {
 
 .switch-field {
   display: flex;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
-  margin: 1rem 9.7rem 0 9.7rem;
-  /*Adapt the width to its content*/
-  width: fit-content;
+  margin: 1rem 0 1rem 0;
+  width: 100%;
   height: 1rem;
+}
+
+.switch-field > * {
   /*Set a minimal font weight, underlined*/
   font-weight: 300;
   text-decoration: underline;
   cursor: pointer;
+  margin: 0.5rem;
 }
 
 .auth-form {
@@ -275,76 +294,38 @@ export default {
   height: 6rem;
 }
 
+.field .field-input {
+  display: flex;
+  width: 18rem;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 0.09rem solid #9f9f9f;
+  gap: 0.5rem;
+  padding-left: 0.5rem;
+}
+
 .auth-form label {
-  text-align: left;
-  margin-right: auto;
-  margin-left: 6.95rem;
+  width: 18rem;
 }
 
 .auth-form-input {
   text-align: left;
-  width: 16rem;
+  flex: 1;
   height: 1.9rem;
   border: none;
-  border-bottom: 0.09rem solid #9f9f9f;
   background-color: transparent;
   outline: none;
-  padding-left: 2rem;
   margin-top: 0.2rem;
 }
 
-.field-error {
-  text-align: left;
-  width: 16rem;
-  height: 1.9rem;
-  border: none;
+.field .field-error {
   border-bottom: 0.09rem solid #d90000;
-  outline: #134074;
-  background-color: transparent;
-  padding-left: 2rem;
-  margin-top: 0.2rem;
 }
 
-.login-username {
-  position: absolute;
-  left: -14.3rem;
-  top: -12.6rem;
-  scale: 2.6%;
-}
-
-.login-lock {
-  position: absolute;
-  left: -14.3rem;
-  top: -6.6rem;
-  scale: 2.6%;
-}
-
-.register-username {
-  position: absolute;
-  left: -14.3rem;
-  top: -16.9rem;
-  scale: 2.6%;
-}
-
-.register-email {
-  position: absolute;
-  left: -14.3rem;
-  top: -8.52rem;
-  scale: 2.6%;
-}
-
-.register-lock {
-  position: absolute;
-  left: -14.3rem;
-  top: -6.9rem;
-  scale: 2.6%;
-}
-
-.register-lock-confirm {
-  position: absolute;
-  left: -14.3rem;
-  top: -1.9rem;
-  scale: 2.6%;
+.login-icon, .register-icon {
+  height: 1.2rem;
+  width: auto;
 }
 
 .header {
