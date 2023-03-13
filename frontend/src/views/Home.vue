@@ -7,8 +7,22 @@
 </template>
 
 <script>
+import ApiService from "@/services/ApiService";
+
 export default {
-  name: "Home"
+  name: "Home",
+  data() {
+    return {
+      taskLists: []
+    }
+  },
+  async beforeMount() {
+    const lists = await ApiService.getTaskLists()
+    if(!lists) {
+      this.$router.push('/auth')
+    }
+    console.log(`hasValidToken: ${this.hasValidToken}`)
+  }
 }
 </script>
 

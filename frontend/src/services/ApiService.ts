@@ -25,12 +25,18 @@ class ApiService {
         try {
             data = await fetch(`${this.API_URL}/taskLists/`, {
                 method: 'GET', headers
-            }).then(response => response.json());
+            }).then(response => {
+                if(response.status !== 498) {
+                    response.json();
+                }
+            });
+            if(!data) return null;
             data.forEach(taskList => {
                 taskLists.push(
                     new TaskList(taskList.id, taskList.name, taskList.tasks, taskList.empty, taskList.completed)
                 )
             })
+
         } catch (error) {
             console.log(error)
         }
@@ -99,41 +105,18 @@ class ApiService {
         }
     }
 
-    public static pushTasks(taskListId: number, tasks: any) {
-        let data = {
-            "tasks": []
+    public async verifyToken(): Promise<boolean> {
+        try {
+            const responseStatus = await fetch(`${this.API_URL}/auth/verify`, {
+                method: 'GET',
+                headers: this.getAuthConfig()
+            }).then(response => response.status);
+            return responseStatus !== 498;
+        } catch (error) {
+            console.log(error)
+            return false;
         }
-        console.log(tasks)
     }
-
-    public setTaskIsCompleted(taskListId: number, taskId: number, isCompleted: boolean) {
-        const headers = this.getAuthConfig();
-        fetch(`${this.API_URL}/tasks/${taskId}?` + isCompleted, {
-                method: 'PUT',
-                headers
-            }
-        )
-            .then(response => {
-            })
-            .catch(error => {
-                console.log(error)
-            })
-    }
-
-    public deleteTasklist(taskListId: number) {
-        const headers = this.getAuthConfig();
-        fetch(`${this.API_URL}/taskLists/${taskListId}`, {
-                method: 'DELETE',
-                headers
-            }
-        )
-            .then(response => {
-            })
-            .catch(error => {
-                console.log(error)
-            })
-    }
-
 
     private getToken(): String {
         return localStorage.getItem("token");
@@ -155,6 +138,7 @@ class ApiService {
             console.log(error)
         })
     }
+
 }
 
 export default ApiService.getInstance();

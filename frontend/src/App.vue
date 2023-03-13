@@ -9,7 +9,6 @@ export default {
   components: {Task, Button, AuthForm, TaskList},
   data() {
     return {
-      hasValidToken: false,
       taskLists: []
     }
   },
@@ -52,40 +51,11 @@ header {
   line-height: 1.5;
 }
 
-.task-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
-  grid-template-rows: minmax(10rem, auto);
-  grid-gap: 1rem;
-  padding: 1rem;
-  max-width: 80vw;
-  margin: 1rem auto;
-  text-align: justify-all;
-}
-
-.box {
-  display:flex;
-  background-color: #134074;
-  height: 100vh;
-  width: 100vw;
-}
-
-
 @media (min-width: 1024px) {
   header {
     display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
   }
 }
 </style>
