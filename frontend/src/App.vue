@@ -1,12 +1,11 @@
 <script>
 import TaskList from "@/components/TaskList.vue";
-import AuthForm from "@/components/AuthForm.vue";
 import Button from "@/components/buttons/Button.vue";
 import ApiService from "@/services/ApiService";
 import Task from "@/components/Task.vue";
 
 export default {
-  components: {Task, Button, AuthForm, TaskList},
+  components: {Task, Button, TaskList},
   data() {
     return {
       taskLists: []

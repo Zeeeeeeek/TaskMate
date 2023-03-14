@@ -10,7 +10,7 @@
     border-radius: 0.313rem; /*5px*/
     box-shadow: 0 0 0.625rem 0 rgba(0, 0, 0, 0.3);
 }
-
+/*
 .submit-field {
     display: flex;
     flex-direction: column;
@@ -36,14 +36,12 @@
 }
 
 .submitButton:hover {
-    /*invert gradient*/
-    background: rgb(2, 0, 36);
     transform: translateY(-2px);
 }
 
 .submitButton:active {
     transform: scale(0.95);
-}
+}*/
 
 .switch-field {
     display: flex;

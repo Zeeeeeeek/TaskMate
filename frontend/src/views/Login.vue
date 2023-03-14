@@ -28,11 +28,7 @@
         Not a member? Register
       </router-link>
     </div>
-    <div class="submit-field">
-      <div class="submitButton prevent-select" @click="login">
-        Login
-      </div>
-    </div>
+    <Button text="Login" @click="login"/>
     <div class="footer">
       <div class="error-message" v-if="errorMessage !== null">{{ errorMessage }}</div>
     </div>
@@ -41,9 +37,11 @@
 
 <script>
 import apiService from "@/services/ApiService";
+import Button from "@/components/buttons/Button.vue";
 
 export default {
   name: "Login",
+components: {Button},
   data() {
     return {
       invalidUsername: false,

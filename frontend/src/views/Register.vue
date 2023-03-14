@@ -47,11 +47,7 @@
     <div class="switch-field prevent-select">
       <router-link to="/login">Already a member? Login</router-link>
     </div>
-    <div class="submit-field">
-      <div class="submitButton prevent-select" @click="register">
-        Register
-      </div>
-    </div>
+    <Button text="Register" @click="register"/>
     <div class="footer">
       <div class="error-message" v-if="errorMessage !== null">{{ errorMessage }}</div>
     </div>
@@ -60,9 +56,11 @@
 
 <script>
 import apiService from "@/services/ApiService";
+import Button from "@/components/buttons/Button.vue";
 
 export default {
   name: "Register",
+  components: {Button},
   data() {
     return {
       invalidUsername: false,
