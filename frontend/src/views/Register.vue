@@ -4,13 +4,13 @@
     <div class="header">Register</div>
     <div class="auth-form">
       <FormField icon-path="src/assets/icons/user.svg" label="Username" type="text" placeholder="Username" icon-alt=""
-                 v-model="username" v-bind:error="invalidUsername"/>
+                 v-model="username" v-bind:error="invalidUsername" @keyup.enter="register"/>
       <FormField icon-path="src/assets/icons/email.svg" label="Email" type="text" placeholder="Email" icon-alt=""
-                 v-model="email" v-bind:error="invalidEmail"/>
+                 v-model="email" v-bind:error="invalidEmail" @keyup.enter="register"/>
       <FormField icon-path="src/assets/icons/lock.svg" label="Password" type="password" placeholder="Password" icon-alt=""
-                 v-model="password" v-bind:error="invalidPassword"/>
+                 v-model="password" v-bind:error="invalidPassword" @keyup.enter="register"/>
       <FormField icon-path="src/assets/icons/lock.svg" label="Confirm password" type="password" placeholder="Confirm password" icon-alt=""
-                 v-model="confirmPassword" v-bind:error="invalidConfirmPassword"/>
+                 v-model="confirmPassword" v-bind:error="invalidConfirmPassword" @keyup.enter="register"/>
     </div>
     <div class="switch-field prevent-select">
       <router-link to="/login">Already a member? Login</router-link>
