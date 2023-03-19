@@ -2,8 +2,10 @@
   <div class="auth-div">
     <div class="header">Login</div>
     <div class="auth-form">
-      <FormField type="text" icon-path="src/assets/icons/user.svg" label="Username" placeholder="Username" icon-alt="" @update="setUsername" @error="setErrorMessage('Fill credentials')"/>
-      <FormField @keyup.enter="login" icon-path="src/assets/icons/lock.svg" label="Password" type="password" placeholder="Password" icon-alt="" @update="setPassword" @error="setErrorMessage('Fill credentials')"/>
+      <FormField type="text" icon-path="src/assets/icons/user.svg" label="Username" placeholder="Username" icon-alt=""
+                 v-model="username" v-bind:error="invalidUsername" @keyup.enter="login"/>
+      <FormField icon-path="src/assets/icons/lock.svg" label="Password" type="password" placeholder="Password" icon-alt=""
+                 v-model="password" v-bind:error="invalidPassword" @keyup.enter="login"/>
     </div>
     <div class="switch-field prevent-select">
       <router-link to="/register">
@@ -35,29 +37,14 @@ components: {FormField, Button},
     }
   },
   methods: {
-    setUsername(username) {
-      this.username = username
-    },
-    setPassword(password) {
-      this.password = password
-    },
-    validateUsername() {
-      this.invalidUsername = this.username === '';
-      if (this.invalidUsername) this.setErrorMessage('Fill credentials')
-      else this.setErrorMessage(null)
-    },
-    validatePassword() {
+    validateForm() {
       this.invalidPassword = this.password === '';
-      if (this.invalidPassword) this.setErrorMessage('Fill credentials')
-      else this.setErrorMessage(null)
+      this.invalidUsername = this.username === '';
+      this.updateErrorMessage()
     },
     async login() {
-      this.validatePassword()
-      this.validateUsername()
-      if (this.invalidPassword || this.invalidUsername) {
-        this.setErrorMessage('Fill credentials')
-        return
-      }
+      this.validateForm()
+      if (this.invalidPassword || this.invalidUsername) return
       try {
         if (await apiService.login(this.username, this.password)) {
           this.$router.push('/')
@@ -70,6 +57,13 @@ components: {FormField, Button},
     },
     setErrorMessage(message) {
       this.errorMessage = message
+    },
+    updateErrorMessage() {
+      if(this.invalidPassword || this.invalidUsername) {
+        this.setErrorMessage('Fill credentials')
+      } else {
+        this.setErrorMessage(null)
+      }
     }
   },
   beforeMount() {

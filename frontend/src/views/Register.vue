@@ -3,10 +3,14 @@
   <div class="auth-div">
     <div class="header">Register</div>
     <div class="auth-form">
-      <FormField icon-path="src/assets/icons/user.svg" label="Username" type="text" placeholder="Username" icon-alt="" @update="setUsername" @error="setErrorMessage('Fill credentials')"/>
-      <FormField icon-path="src/assets/icons/email.svg" label="Email" type="text" placeholder="Email" icon-alt="" @update="setEmail" @error="setErrorMessage('Fill credentials')"/>
-      <FormField icon-path="src/assets/icons/lock.svg" label="Password" type="password" placeholder="Password" icon-alt="" @update="setPassword" @error="setErrorMessage('Fill credentials')"/>
-      <FormField icon-path="src/assets/icons/lock.svg" label="Confirm password" type="password" placeholder="Confirm password" icon-alt="" @update="setConfirmPassword" @error="setErrorMessage('Fill credentials')"/>
+      <FormField icon-path="src/assets/icons/user.svg" label="Username" type="text" placeholder="Username" icon-alt=""
+                 v-model="username" v-bind:error="invalidUsername"/>
+      <FormField icon-path="src/assets/icons/email.svg" label="Email" type="text" placeholder="Email" icon-alt=""
+                 v-model="email" v-bind:error="invalidEmail"/>
+      <FormField icon-path="src/assets/icons/lock.svg" label="Password" type="password" placeholder="Password" icon-alt=""
+                 v-model="password" v-bind:error="invalidPassword"/>
+      <FormField icon-path="src/assets/icons/lock.svg" label="Confirm password" type="password" placeholder="Confirm password" icon-alt=""
+                 v-model="confirmPassword" v-bind:error="invalidConfirmPassword"/>
     </div>
     <div class="switch-field prevent-select">
       <router-link to="/login">Already a member? Login</router-link>
@@ -35,62 +39,22 @@ export default {
       password: '',
       username: '',
       email: '',
-      confirmPassword: null,
+      confirmPassword: '',
       errorMessage: null,
     }
   },
   methods: {
-    setUsername(username) {
-      this.username = username
-    },
-    setPassword(password) {
-      this.password = password
-    },
-    setEmail(email) {
-      this.email = email
-    },
-    setConfirmPassword(confirmPassword) {
-      this.confirmPassword = confirmPassword
-    },
-    validateUsername() {
-      this.invalidUsername = this.username === '';
-      if (this.invalidUsername) this.setErrorMessage('Fill credentials')
-      else this.setErrorMessage(null)
-    },
-    validatePassword() {
+    validateForm() {
       this.invalidPassword = this.password === '';
-      if (this.invalidPassword) this.setErrorMessage('Fill credentials')
-      else this.setErrorMessage(null)
-    },
-    validateEmail() {
+      this.invalidUsername = this.username === '';
       this.invalidEmail = this.email === '';
-      if (this.invalidEmail) this.setErrorMessage('Fill credentials')
-      else this.setErrorMessage(null)
-    },
-    validateConfirmPassword() {
-      if (!this.confirmPassword) {
-        this.setErrorMessage('Fill credentials')
-        this.invalidConfirmPassword = true
-        return
-      }
-      if (this.confirmPassword !== this.password) {
-        this.setErrorMessage('Passwords do not match')
-        this.invalidConfirmPassword = true
-        this.invalidPassword = true
-        return
-      }
-      this.setErrorMessage(null)
-      this.invalidConfirmPassword = false
+      this.invalidConfirmPassword = this.confirmPassword === '' || this.confirmPassword !== this.password;
+      this.updateErrorMessage()
     },
     async register() {
-      this.validatePassword()
-      this.validateUsername()
-      this.validateEmail()
-      this.validateConfirmPassword()
-      if (this.invalidPassword || this.invalidUsername || this.invalidEmail || this.invalidConfirmPassword) {
-        this.setErrorMessage('Invalid credentials')
+      this.validateForm()
+      if (this.invalidPassword || this.invalidUsername || this.invalidEmail || this.invalidConfirmPassword)
         return
-      }
       try {
         if (await apiService.register(this.username, this.password, this.email)) {
           this.$router.push('/')
@@ -103,6 +67,17 @@ export default {
     },
     setErrorMessage(message) {
       this.errorMessage = message
+    },
+    updateErrorMessage() {
+      if (this.invalidPassword || this.invalidUsername || this.invalidEmail) {
+        this.setErrorMessage('Invalid credentials')
+      } else {
+        if(this.invalidConfirmPassword) {
+          this.setErrorMessage('Passwords do not match')
+          return
+        }
+        this.setErrorMessage(null)
+      }
     }
   },
   beforeMount() {

@@ -4,9 +4,7 @@
     <div class="field-input" :class="{'field-error': error}">
       <img :src="iconPath" class="icon" :alt="iconAlt">
       <input :type="type" :placeholder="placeholder"
-             class="auth-form-input"
-             @blur="validateAndUpdate"
-             v-model="value">
+             class="auth-form-input" :value="modelValue" @input="$emit('update:modelValue', $event.target.value)">
     </div>
   </div>
 </template>
@@ -15,38 +13,31 @@
 
 export default {
   name: "FormField",
-  emits: ['update', 'error'],
-  props: {
-    type: {
+  emits: ['update:modelValue', 'error'],
+  props:  {
+    'modelValue': {
+      type: String,
+    },
+    'type': {
       type: String,
       required: true
     },
-    label: {
+    'label': {
       type: String,
       required: true
     },
-    placeholder: {
+    'placeholder': {
       type: String,
     },
-    iconPath: {
+    'iconPath': {
       type: String,
       required: true
     },
-    iconAlt: {
+    'iconAlt': {
       type: String
     },
-  },
-  data() {
-    return {
-      value: '',
-      error: false
-    }
-  },
-  methods: {
-    validateAndUpdate() {
-      this.error = this.value === '';
-      if (this.error) this.$emit('error')
-      else this.$emit('update', this.value)
+    'error': {
+      type: Boolean,
     }
   }
 }
