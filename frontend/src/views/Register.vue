@@ -3,46 +3,10 @@
   <div class="auth-div">
     <div class="header">Register</div>
     <div class="auth-form">
-      <div class="field">
-        <label for="username" class="prevent-select">Username</label>
-        <div class="field-input" :class="{'field-error' : invalidUsername}">
-          <img src="../assets/icons/user.svg" class="register-icon" alt="">
-          <input type="text" placeholder="Username"
-                 class="auth-form-input"
-                 @blur="validateUsername"
-                 v-model="this.username">
-        </div>
-      </div>
-      <div class="field">
-        <label for="email" class="prevent-select">Email</label>
-        <div class="field-input" :class="{'field-error': invalidEmail}">
-          <img src="../assets/icons/email.svg" class="register-icon" alt="">
-          <input type="email" placeholder="Email"
-                 class="auth-form-input"
-                 @blur="validateEmail"
-                 v-model="this.email">
-        </div>
-      </div>
-      <div class="field">
-        <label for="password" class="prevent-select">Password</label>
-        <div class="field-input" :class="{'field-error': invalidPassword}">
-          <img src="../assets/icons/lock.svg" class="register-icon" alt="">
-          <input type="password" placeholder="Password"
-                 class="auth-form-input"
-                 @blur="validatePassword"
-                 v-model="this.password">
-        </div>
-      </div>
-      <div class="field">
-        <label for="confirmPassword" class="prevent-select">Confirm password</label>
-        <div class="field-input" :class="{'field-error': invalidConfirmPassword}">
-          <img src="../assets/icons/lock.svg" class="register-icon" alt="">
-          <input type="password" placeholder="Confirm password"
-                 class="auth-form-input"
-                 @blur="validateConfirmPassword"
-                 v-model="this.confirmPassword">
-        </div>
-      </div>
+      <FormField icon-path="src/assets/icons/user.svg" label="Username" type="text" placeholder="Username" icon-alt="" @update="setUsername" @error="setErrorMessage('Fill credentials')"/>
+      <FormField icon-path="src/assets/icons/email.svg" label="Email" type="text" placeholder="Email" icon-alt="" @update="setEmail" @error="setErrorMessage('Fill credentials')"/>
+      <FormField icon-path="src/assets/icons/lock.svg" label="Password" type="password" placeholder="Password" icon-alt="" @update="setPassword" @error="setErrorMessage('Fill credentials')"/>
+      <FormField icon-path="src/assets/icons/lock.svg" label="Confirm password" type="password" placeholder="Confirm password" icon-alt="" @update="setConfirmPassword" @error="setErrorMessage('Fill credentials')"/>
     </div>
     <div class="switch-field prevent-select">
       <router-link to="/login">Already a member? Login</router-link>
@@ -57,10 +21,11 @@
 <script>
 import apiService from "@/services/ApiService";
 import Button from "@/components/buttons/Button.vue";
+import FormField from "@/components/auth/FormField.vue";
 
 export default {
   name: "Register",
-  components: {Button},
+  components: {FormField, Button},
   data() {
     return {
       invalidUsername: false,
@@ -75,6 +40,18 @@ export default {
     }
   },
   methods: {
+    setUsername(username) {
+      this.username = username
+    },
+    setPassword(password) {
+      this.password = password
+    },
+    setEmail(email) {
+      this.email = email
+    },
+    setConfirmPassword(confirmPassword) {
+      this.confirmPassword = confirmPassword
+    },
     validateUsername() {
       this.invalidUsername = this.username === '';
       if (this.invalidUsername) this.setErrorMessage('Fill credentials')
@@ -126,6 +103,11 @@ export default {
     },
     setErrorMessage(message) {
       this.errorMessage = message
+    }
+  },
+  beforeMount() {
+    if (apiService.isLoggedIn()) {
+      this.$router.push('/')
     }
   }
 }

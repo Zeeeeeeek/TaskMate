@@ -24,7 +24,7 @@ public class BackendApplication {
                     new UserCreationDTO(
                             "admin",
                             "a",
-                            "e@e"
+                            "admin@admin"
                     )
             );
         };

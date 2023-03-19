@@ -1,6 +1,7 @@
 package me.zeeeeeeek.backend.controllers.auth;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import me.zeeeeeeek.backend.models.user.dtos.UserCreationDTO;
 import me.zeeeeeeek.backend.models.user.dtos.UserLoginDto;
 import me.zeeeeeeek.backend.services.auth.AuthService;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
+@Slf4j
 public class AuthRestController{
 
     private final AuthService authService;
@@ -36,14 +38,4 @@ public class AuthRestController{
             @RequestBody UserLoginDto userLoginDTO) {
         return ResponseEntity.ok(authService.login(userLoginDTO));
     }
-
-    /**
-     * Verifies the authentication token of the user.
-     */
-    @GetMapping("/verify")
-    public boolean verify(
-            @RequestHeader("Authorization") String token) {
-        return authService.verify(token);
-    }
-
 }

@@ -115,19 +115,6 @@ class ApiService {
         }
     }
 
-    public async verifyToken(): Promise<boolean> {
-        try {
-            const responseStatus = await fetch(`${this.API_URL}/auth/verify`, {
-                method: 'GET',
-                headers: this.getAuthConfig()
-            }).then(response => response.status);
-            return responseStatus !== 498;
-        } catch (error) {
-            console.log(error)
-            return false;
-        }
-    }
-
     private getToken(): String {
         return localStorage.getItem("token");
     }
@@ -149,6 +136,9 @@ class ApiService {
         })
     }
 
+    isLoggedIn() {
+        return this.getToken() !== null;
+    }
 }
 
 export default ApiService.getInstance();

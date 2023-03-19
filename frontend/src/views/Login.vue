@@ -2,26 +2,8 @@
   <div class="auth-div">
     <div class="header">Login</div>
     <div class="auth-form">
-      <div class="field">
-        <label for="username" class="prevent-select">Username</label>
-        <div class="field-input" :class="{'field-error': invalidUsername}">
-          <img src="../assets/icons/user.svg" class="login-icon" alt="">
-          <input type="text" placeholder="Username"
-                 class="auth-form-input"
-                 @blur="validateUsername"
-                 v-model="this.username">
-        </div>
-      </div>
-      <div class="field">
-        <label for="password" class="prevent-select">Password</label>
-        <div class="field-input" :class="{'field-error': invalidPassword}">
-          <img src="../assets/icons/lock.svg" class="login-icon" alt="">
-          <input type="password" placeholder="Password"
-                 class="auth-form-input"
-                 @blur="validatePassword"
-                 v-model="this.password">
-        </div>
-      </div>
+      <FormField type="text" icon-path="src/assets/icons/user.svg" label="Username" placeholder="Username" icon-alt="" @update="setUsername" @error="setErrorMessage('Fill credentials')"/>
+      <FormField @keyup.enter="login" icon-path="src/assets/icons/lock.svg" label="Password" type="password" placeholder="Password" icon-alt="" @update="setPassword" @error="setErrorMessage('Fill credentials')"/>
     </div>
     <div class="switch-field prevent-select">
       <router-link to="/register">
@@ -38,10 +20,11 @@
 <script>
 import apiService from "@/services/ApiService";
 import Button from "@/components/buttons/Button.vue";
+import FormField from "@/components/auth/FormField.vue";
 
 export default {
   name: "Login",
-components: {Button},
+components: {FormField, Button},
   data() {
     return {
       invalidUsername: false,
@@ -52,6 +35,12 @@ components: {Button},
     }
   },
   methods: {
+    setUsername(username) {
+      this.username = username
+    },
+    setPassword(password) {
+      this.password = password
+    },
     validateUsername() {
       this.invalidUsername = this.username === '';
       if (this.invalidUsername) this.setErrorMessage('Fill credentials')
@@ -81,6 +70,11 @@ components: {Button},
     },
     setErrorMessage(message) {
       this.errorMessage = message
+    }
+  },
+  beforeMount() {
+    if(apiService.isLoggedIn()) {
+      this.$router.push('/')
     }
   }
 }

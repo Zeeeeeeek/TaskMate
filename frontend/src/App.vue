@@ -50,7 +50,7 @@ header {
   line-height: 1.5;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 100px) {
   header {
     display: flex;
     justify-content: space-between;

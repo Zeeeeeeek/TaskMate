@@ -10,38 +10,6 @@
     border-radius: 0.313rem; /*5px*/
     box-shadow: 0 0 0.625rem 0 rgba(0, 0, 0, 0.3);
 }
-/*
-.submit-field {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 4rem;
-    width: 100%;
-}
-
-.submitButton {
-    display: flex;
-    justify-items: center;
-    align-items: center;
-    height: 2rem;
-    width: 14rem;
-    background: rgb(2, 0, 36);
-    border-radius: 0.5rem;
-    justify-content: center;
-    color: #f3f2f2;
-    box-shadow: 4px 2px 3px rgba(0, 0, 0, 0.2);
-    cursor: pointer;
-    transition: all 0.1s ease;
-}
-
-.submitButton:hover {
-    transform: translateY(-2px);
-}
-
-.submitButton:active {
-    transform: scale(0.95);
-}*/
 
 .switch-field {
     display: flex;
@@ -55,7 +23,6 @@
 }
 
 .switch-field a {
-    /*Set a minimal font weight, underlined*/
     font-weight: 300;
     text-decoration: underline;
     cursor: pointer;
@@ -73,51 +40,6 @@
     align-items: center;
     width: 100%;
     height: 20rem;
-}
-
-.field {
-    display: flex;
-    margin: 0 auto;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: left;
-    width: 100%;
-    height: 6rem;
-}
-
-.field .field-input {
-    display: flex;
-    width: 18rem;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    border-bottom: 0.09rem solid #9f9f9f;
-    gap: 0.5rem;
-    padding-left: 0.5rem;
-}
-
-.auth-form label {
-    width: 18rem;
-}
-
-.auth-form-input {
-    text-align: left;
-    flex: 1;
-    height: 1.9rem;
-    border: none;
-    background-color: transparent;
-    outline: none;
-    margin-top: 0.2rem;
-}
-
-.field .field-error {
-    border-bottom: 0.09rem solid #d90000;
-}
-
-.login-icon, .register-icon {
-    height: 1.2rem;
-    width: auto;
 }
 
 .header {

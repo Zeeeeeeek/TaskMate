@@ -42,7 +42,6 @@ public class AuthService {
         userRepository.save(user);
         String token = jwtService.generateJwtTokenWithoutExtraClaims(user);
         return new AuthenticationResponse(token);
-
     }
 
     /**
