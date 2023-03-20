@@ -7,9 +7,11 @@
                  v-model="username" v-bind:error="invalidUsername" @keyup.enter="register"/>
       <FormField icon-path="src/assets/icons/email.svg" label="Email" type="text" placeholder="Email" icon-alt=""
                  v-model="email" v-bind:error="invalidEmail" @keyup.enter="register"/>
-      <FormField icon-path="src/assets/icons/lock.svg" label="Password" type="password" placeholder="Password" icon-alt=""
+      <FormField icon-path="src/assets/icons/lock.svg" label="Password" type="password" placeholder="Password"
+                 icon-alt=""
                  v-model="password" v-bind:error="invalidPassword" @keyup.enter="register"/>
-      <FormField icon-path="src/assets/icons/lock.svg" label="Confirm password" type="password" placeholder="Confirm password" icon-alt=""
+      <FormField icon-path="src/assets/icons/lock.svg" label="Confirm password" type="password"
+                 placeholder="Confirm password" icon-alt=""
                  v-model="confirmPassword" v-bind:error="invalidConfirmPassword" @keyup.enter="register"/>
     </div>
     <div class="switch-field prevent-select">
@@ -72,7 +74,7 @@ export default {
       if (this.invalidPassword || this.invalidUsername || this.invalidEmail) {
         this.setErrorMessage('Invalid credentials')
       } else {
-        if(this.invalidConfirmPassword) {
+        if (this.invalidConfirmPassword) {
           this.setErrorMessage('Passwords do not match')
           return
         }

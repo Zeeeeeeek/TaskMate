@@ -21,20 +21,20 @@ class ApiService {
      * @returns {TaskList[]} Array of TaskList objects
      */
     public async getTaskLists(): Promise<TaskList[]> {
-            return this.apiCall('task-lists', 'GET', null).then(data => {
-                return data.map(
-                    (taskList: any) => new TaskList(
-                        taskList.id,
-                        taskList.name,
-                        taskList.tasks,
-                        taskList.empty,
-                        taskList.completed)
-                );
-            });
+        return this.apiCall('task-lists', 'GET', null).then(data => {
+            return data.map(
+                (taskList: any) => new TaskList(
+                    taskList.id,
+                    taskList.name,
+                    taskList.tasks,
+                    taskList.empty,
+                    taskList.completed)
+            );
+        });
     }
 
-    public async apiCall(url: string, method: string, body: any = null): Promise<any> {
-        const headers = this.getAuthConfig();
+    public async apiCall(url: string, method: string, body: any = null, headers: Headers = this.getAuthConfig()): Promise<any> {
+
         return await fetch(`${this.API_URL}/${url}`, {
             method,
             headers,
@@ -119,9 +119,14 @@ class ApiService {
         return localStorage.getItem("token");
     }
 
-    private getAuthConfig(): HeadersInit {
+    private getAuthConfig(): Headers {
         const headers = new Headers();
         headers.append('Authorization', `Bearer ${this.getToken()}`)
+        return headers;
+    }
+
+    private setContentTypeToJson(headers: Headers): HeadersInit {
+        headers.append('Content-Type', 'application/json')
         return headers;
     }
 
@@ -136,8 +141,29 @@ class ApiService {
         })
     }
 
-    isLoggedIn() {
+    public isLoggedIn() {
         return this.getToken() !== null;
+    }
+
+    public async addTaskList(): Promise<TaskList> {
+        const body = {
+            'name': '',
+            "tasksDTO": {
+                "tasks": []
+            }
+        }
+        let headers = this.getAuthConfig();
+        this.setContentTypeToJson(headers);
+        return this.apiCall('task-lists', 'POST', body, headers)
+            .then(data => {
+                return new TaskList(
+                    data.id,
+                    data.name,
+                    data.tasks,
+                    data.empty,
+                    data.completed
+                )
+            });
     }
 }
 

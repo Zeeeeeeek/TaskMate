@@ -4,7 +4,8 @@
     <div class="auth-form">
       <FormField type="text" icon-path="src/assets/icons/user.svg" label="Username" placeholder="Username" icon-alt=""
                  v-model="username" v-bind:error="invalidUsername" @keyup.enter="login"/>
-      <FormField icon-path="src/assets/icons/lock.svg" label="Password" type="password" placeholder="Password" icon-alt=""
+      <FormField icon-path="src/assets/icons/lock.svg" label="Password" type="password" placeholder="Password"
+                 icon-alt=""
                  v-model="password" v-bind:error="invalidPassword" @keyup.enter="login"/>
     </div>
     <div class="switch-field prevent-select">
@@ -26,7 +27,7 @@ import FormField from "@/components/auth/FormField.vue";
 
 export default {
   name: "Login",
-components: {FormField, Button},
+  components: {FormField, Button},
   data() {
     return {
       invalidUsername: false,
@@ -59,7 +60,7 @@ components: {FormField, Button},
       this.errorMessage = message
     },
     updateErrorMessage() {
-      if(this.invalidPassword || this.invalidUsername) {
+      if (this.invalidPassword || this.invalidUsername) {
         this.setErrorMessage('Fill credentials')
       } else {
         this.setErrorMessage(null)
@@ -67,7 +68,7 @@ components: {FormField, Button},
     }
   },
   beforeMount() {
-    if(apiService.isLoggedIn()) {
+    if (apiService.isLoggedIn()) {
       this.$router.push('/')
     }
   }

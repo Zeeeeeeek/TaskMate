@@ -1,33 +1,31 @@
 <template>
   <div class="home">
-    <TaskListGrid v-model="taskLists"/>
+    <TaskListGrid ref="grid"/>
   </div>
   <div class="footer">
-    <div class="add-taskList-button prevent-select">+</div>
+    <div class="button add-task-list prevent-select" @click="addTaskList">
+      <img src="../assets/icons/add.svg" alt="add list" class="icon"/>
+    </div>
+    <div class="button logout prevent-select" @click="logout">
+      <img src="../assets/icons/logout.svg" alt="logout" class="icon"/>
+    </div>
   </div>
 </template>
 
-<script>
-import apiService from "@/services/ApiService";
-import TaskListGrid from "@/components/TaskListGrid.vue";
+<script lang="ts">
+import TaskListGrid from "../components/TaskListGrid.vue";
+import apiService from "../services/ApiService";
 
 export default {
   name: "Home",
   components: {TaskListGrid},
-  data() {
-    return {
-      taskLists: []
-    }
-  },
-  async beforeMount() {
-    try {
-      if (!apiService.isLoggedIn()) {
-        this.$router.push('/login')
-        return
-      }
-      this.taskLists = await apiService.getTaskLists()
-    } catch (e) {
-      console.log(e)
+  methods: {
+    async addTaskList() {
+      await this.$refs.grid.addTaskList()
+    },
+    async logout() {
+      await apiService.logout()
+      window.location.reload()
     }
   }
 }
@@ -44,16 +42,14 @@ export default {
 }
 
 .footer {
+  display: flex;
   position: fixed;
   left: 0;
   bottom: 0;
   width: 100%;
 }
 
-.add-taskList-button {
-  flex: 1;
-  margin-left: auto;
-  margin-top: auto;
+.button {
   cursor: pointer;
   width: 50px;
   height: 50px;
@@ -67,11 +63,24 @@ export default {
   color: #000000;
 }
 
-.add-taskList-button:hover {
+.button:hover {
   transform: translateY(-2px);
 }
 
-.add-taskList-button:active {
+.button:active {
   transform: scale(0.95);
+}
+
+.icon {
+  height: 1.2rem;
+  width: auto;
+}
+
+.add-task-list {
+  margin: 0 auto 1rem 1rem;
+}
+
+.logout {
+  margin: 0 1rem 1rem auto;
 }
 </style>
