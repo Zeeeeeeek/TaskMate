@@ -178,8 +178,11 @@ class ApiService {
         const data = {
             "tasks": [task]
         }
-        console.log(JSON.stringify(data))
         return this.apiCall(`task-lists/${taskListID}/tasks`, 'POST', data, headers);
+    }
+
+    public async setTaskIsCompleted(taskID: string, completed: boolean) {
+        await this.apiCall(`tasks/${taskID}?completed=${completed}`, 'PUT');
     }
 }
 

@@ -1,65 +1,52 @@
 <template>
-  <div class="task-container scroll">
-   <Task v-for="task in tasks" :id="task.id" :name="task.name" :description="task.description" :is-completed="task.completed" :due-date="task.dueDate">
-      <div>{{ task }}</div>
-    </Task>
-  </div>
+    <div class="task-container scroll">
+        <div v-for="task in tasks" :key="task.id">
+            <Task :task="task"/>
+        </div>
+    </div>
 </template>
 
 <script lang="ts">
 import Task from "./Task.vue";
 
 export default {
-  name: "TaskContainer",
-  components: {Task},
-  props: {
-    tasksArray: {
-      type: Array,
-      required: true
-    }
-  },
-  data() {
-    return {
-      tasks: this.tasksArray,
-      stagedTasks: [],
-      stagedCounter: 0
-    }
-  },
-  methods: {
-    log() {
-      console.log(this.stagedTasks)
+    name: "TaskContainer",
+    components: {Task},
+    props: {
+        tasks: {
+            required: true
+        }
     },
-    updateName(name, id) {
-      console.log(name, id)
+    methods: {
+
     }
-  }
 }
 </script>
 
 <style scoped>
 .task-container {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  width: 100%;
-  left: -0.15rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    width: 100%;
+    left: -0.15rem;
 }
 
 .scroll {
-  overflow-y: scroll;
+    overflow-y: scroll;
 }
 
 .scroll::-webkit-scrollbar {
-  width: 0.313rem;
+    width: 0.313rem;
 }
 
 .scroll::-webkit-scrollbar-track {
-  background: transparent;
-  border-radius: 0.5rem;
+    background: transparent;
+    border-radius: 0.5rem;
 }
 
 .scroll::-webkit-scrollbar-thumb {
-  background: #9f9f9f;
-  border-radius: 0.5rem;
+    background: #9f9f9f;
+    border-radius: 0.5rem;
 }
 </style>

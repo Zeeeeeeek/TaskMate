@@ -3,6 +3,7 @@
         <div class="header">
             <input class="task-list-name subtitle" v-model="name" placeholder="List name" v-on:change="updateTitle">
         </div>
+        <TaskContainer :tasks="this.tasks" />
         <Modal  :value="active" @closeModal="toggle" @submitModal="createNewTask"/>
         <div class="footer" @click="addTask">
             <AddTaskButton/>
