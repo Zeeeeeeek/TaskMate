@@ -171,32 +171,25 @@ class ApiService {
     }
 
     public async addTask(taskListID: string, task) {
-        const headers = this.getAuthConfig();
-        this.setContentTypeToJson(headers);
-        const data = {
+        const headers = this.getAuthAndContentTypeJson();
+        const body = {
             "tasks": [task]
         }
-        return this.apiCall(`task-lists/${taskListID}/tasks`, 'POST', data, headers)
-            .then(data => {
-                const task = data[0];
-                if (task["@type"] === "simpleTask") {
-                    return new SimpleTask(
-                        task.id,
-                        task.name,
-                        task.description,
-                        task.completed
-                    )
-                } else {
-                    return new TimeConstraintTask(
-                        task.id,
-                        task.name,
-                        task.description,
-                        task.completed,
-                        task.dueDate,
-                        task.expired
-                    )
-                }
-            });
+        const response = await this.apiCall(`task-lists/${taskListID}/tasks`, 'POST', body, headers);
+        const createdTask = response[0];
+        return createdTask["@type"] === "simpleTask" ? new SimpleTask(
+            createdTask.id,
+            createdTask.name,
+            createdTask.description,
+            createdTask.completed
+        ) : new TimeConstraintTask(
+            createdTask.id,
+            createdTask.name,
+            createdTask.description,
+            createdTask.completed,
+            createdTask.dueDate,
+            createdTask.expired
+        );
     }
 
     public async setTaskIsCompleted(taskID: string, completed: boolean) {
