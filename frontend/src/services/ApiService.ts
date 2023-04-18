@@ -22,16 +22,15 @@ class ApiService {
      * @returns {TaskListModel[]} Array of TaskList objects
      */
     public async getTaskLists(): Promise<TaskListModel[]> {
-        return this.apiCall('task-lists', 'GET').then(data => {
-            return data.map(
-                (taskList: any) => new TaskListModel(
-                    taskList.id,
-                    taskList.name,
-                    taskList.tasks,
-                    taskList.empty,
-                    taskList.completed)
-            );
-        });
+        const data = await this.apiCall('task-lists', 'GET');
+        return data.map(
+            (taskList: any) => new TaskListModel(
+                taskList.id,
+                taskList.name,
+                taskList.tasks,
+                taskList.empty,
+                taskList.completed)
+        );
     }
 
     public async apiCall(url: string, method: string, body: any = null, headers: Headers = this.getAuthConfig(), params: any = null): Promise<any> {
