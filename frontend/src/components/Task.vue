@@ -1,7 +1,7 @@
 <template>
-    <div class="task">
-        <div class="header">
-            <div class="task-name ">
+    <div class="task" :class="{'task-due-date-expired':task.expired}">
+        <div class="task-header">
+            <div class="task-name">
                 {{ task.name }}
             </div>
             <div class="checkbox-wrapper">
@@ -9,15 +9,15 @@
                        @click="toggleCompleted">
             </div>
         </div>
-        <div class="header">
+        <div class="task-content">
             <div class="task-description">
                 {{ task.description }}
             </div>
-            <div class="task-due-date" :class="{'task-due-date-expired':task.expired}">
+            <div class="task-due-date">
                 {{ task.dueDate }}
             </div>
         </div>
-        <div class="footer">
+        <div class="task-footer">
             <div class="splitter">
                 <div class="splitter-line"></div>
             </div>
@@ -52,22 +52,24 @@ export default {
     flex: 1;
     flex-direction: column;
     width: 100%;
-    height: 2.5rem;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
+    padding: 0 0.2rem;
 }
 
-.header {
+.task-header {
     margin-top: 0;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    height: 2rem;
 }
 
-.footer {
+.task-content {
+    display: flex;
+    justify-content: space-between;
+}
+
+.task-footer {
     margin-bottom: 0;
     margin-top: auto;
 }
@@ -100,8 +102,17 @@ export default {
 
 .splitter-line {
     width: 60%;
-    border-bottom: 0.3rem solid rgba(159, 159, 159, 0.5);
+    border-bottom: 2px solid rgba(159, 159, 159, 0.4);
     border-radius: 1rem;
+}
+
+.task-name {
+    line-height: 0;
+}
+
+.task-description {
+    font-size: 0.8rem;
+    color: hsl(213, 5%, 45%);
 }
 
 .task-due-date {
@@ -110,7 +121,8 @@ export default {
 }
 
 .task-due-date-expired {
-    border-bottom: 1px solid rgba(178, 63, 63, 0.5);
+    background: #edc5c5;
+    border-radius: 4px;
 }
 
 </style>

@@ -32,6 +32,10 @@ export default {
     left: -0.15rem;
 }
 
+.task-container > div {
+    margin-top: 1rem;
+}
+
 .scroll {
     overflow-y: scroll;
 }

@@ -11,7 +11,7 @@
             <div class="creation-form">
                 <input type=text v-model="title" placeholder="Title">
                 <input type=text v-model="description" placeholder="Description">
-                <DatePicker v-if="showDatePicker" v-model:due-date="dueDate" v-model:time="time" @close-date-picker="showDatePicker = false"/>
+                <DatePicker v-if="showDatePicker" v-model:due-date="dueDate" v-model:time="time" @close-date-picker="showDatePicker = false; resetDatePicker"/>
                 <div v-else class="switch">
                     <div class="switch-text clickable" @click="showDatePicker = true">
                         Has a due date?
@@ -63,9 +63,12 @@ export default {
         resetModal() {
             this.title = '';
             this.description = '';
+            this.showDatePicker = false;
+            this.resetDatePicker();
+        },
+        resetDatePicker() {
             this.dueDate = null;
             this.time = null;
-            this.showDatePicker = false;
         }
     },
     data() {

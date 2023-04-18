@@ -21,9 +21,11 @@ public abstract class AbstractTask implements Task {
     @Getter @Setter
     @Id @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    @Getter @NonNull
+    @Getter
+    @Column(length = 1000)
     private String name;
-    @Getter @NonNull
+    @Getter
+    @Column(length = 1000)
     private String description;
 
     private boolean completed;
