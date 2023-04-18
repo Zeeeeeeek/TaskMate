@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import me.zeeeeeeek.backend.models.auth.RefreshToken;
 import me.zeeeeeeek.backend.models.tasks.collections.TaskList;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -27,19 +28,23 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    @Column(unique = true) @NonNull
+    @Column(unique = true)
     private String username;
-    @Column @NonNull @JsonIgnore
+    @Column  @JsonIgnore
     private String password;
-    @Column(unique = true) @NonNull
+    @Column(unique = true)
     private String email;
 
     @OneToMany(mappedBy = "owner")
     @JsonIgnoreProperties("taskLists")
     private List<TaskList> taskLists;
 
-    @Enumerated(EnumType.STRING) @JsonIgnore @NonNull
+    @Enumerated(EnumType.STRING) @JsonIgnore
     private Role role;
+
+    @Column
+    @OneToOne
+    private RefreshToken refreshToken;
 
     /**
      * Create a new user.
