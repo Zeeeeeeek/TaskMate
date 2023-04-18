@@ -51,10 +51,13 @@ class ApiService {
 
     public async rawApiCall(url: string, method: string, body: any, headers: Headers, params: any): Promise<Response> {
         const queryUrl = !params ? `${this.API_URL}/${url}` : `${this.API_URL}${url}?${Object.keys(params).map(key => `${key}=${params[key]}`).join('&')}`;
+        if (headers.get('Content-Type') === 'application/json') {
+            body = JSON.stringify(body);
+        }
         return await fetch(queryUrl, {
             method,
             headers,
-            body: body ? JSON.stringify(body) : null
+            body: body
         });
     }
 
@@ -124,6 +127,17 @@ class ApiService {
         return headers;
     }
 
+    private setConteTypeToText(headers: Headers): HeadersInit {
+        headers.append('Content-Type', 'text/plain')
+        return headers;
+    }
+
+    private getAuthAndContentTypeText(): Headers {
+        const headers = this.getAuthConfig();
+        this.setConteTypeToText(headers)
+        return headers;
+    }
+
     private getContentTypeJson(): Headers {
         const headers = new Headers();
         headers.append('Content-Type', 'application/json')
@@ -131,20 +145,7 @@ class ApiService {
     }
 
     public async updateTasklistName(id: number, name) {
-        const headers = this.getAuthConfig();
-        await fetch(`${this.API_URL}/task-lists/${id}`, {
-            method: 'PUT',
-            headers,
-            body: name
-        }).then(response => {
-            if (response.status === 498) {
-                this.logout();
-                window.location.reload();
-            }
-        })
-            .catch(error => {
-                console.log(error)
-            })
+        await this.apiCall(`task-lists/${id}`, 'PUT', name, this.getAuthAndContentTypeText());
     }
 
     public isLoggedIn() {
