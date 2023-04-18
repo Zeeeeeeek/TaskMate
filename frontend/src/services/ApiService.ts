@@ -1,6 +1,6 @@
 import {TaskListModel} from "../models/TaskListModel";
 import ResponseError from "../errors/ResponseError";
-import {Task, SimpleTask, TimeConstraintTask} from "../models/Task";
+import {SimpleTask, TimeConstraintTask} from "../models/Task";
 
 class ApiService {
     private readonly API_URL: string = "http://localhost:8080/api";
@@ -22,7 +22,7 @@ class ApiService {
      * @returns {TaskListModel[]} Array of TaskList objects
      */
     public async getTaskLists(): Promise<TaskListModel[]> {
-        return this.apiCall('task-lists', 'GET', null).then(data => {
+        return this.apiCall('task-lists', 'GET').then(data => {
             return data.map(
                 (taskList: any) => new TaskListModel(
                     taskList.id,
@@ -34,47 +34,47 @@ class ApiService {
         });
     }
 
-    public async apiCall(url: string, method: string, body: any = null, headers: Headers = this.getAuthConfig()): Promise<any> {
+    public async apiCall(url: string, method: string, body: any = null, headers: Headers = this.getAuthConfig(), params: any = null): Promise<any> {
+        const response = await this.rawApiCall(
+            url,
+            method,
+            body,
+            headers,
+            params
+        );
+        if(response.ok) {
+            return response.headers.get('Content-Length') === '0' ? null : response.json()
+        } else {
+            if (response.status === 498) this.refreshToken();
+            throw new ResponseError(response.status);
+        }
+    }
 
-        return await fetch(`${this.API_URL}/${url}`, {
+    public async rawApiCall(url: string, method: string, body: any , headers: Headers, params: any): Promise<Response> {
+        const queryUrl = !params ? `${this.API_URL}/${url}` : `${this.API_URL}${url}?${Object.keys(params).map(key => `${key}=${params[key]}`).join('&')}`;
+        return await fetch(queryUrl, {
             method,
             headers,
             body: body ? JSON.stringify(body) : null
-        }).then(response => {
-            if (response.ok) {
-                console.log();
-                return response.headers.get('Content-Length') === '0' ? null : response.json()
-            } else {
-                if (response.status === 498) {
-                    this.logout();
-                    window.location.reload();
-                }
-                throw new ResponseError(response.status);
-            }
         });
     }
 
+
+    private refreshToken() {
+        this.logout();//todo: implement refresh token
+        window.location.reload();
+    }
+
     public async login(username: string, password: string): Promise<boolean> {
-        try {
-            const data = await fetch(`${this.API_URL}/auth/login`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    username: username,
-                    password: password
-                })
-            }).then(response => {
-                if (response.status !== 200) return '';
-                return response.json();
-            })
-            if (!data || !data.jwtToken) return false;
-            localStorage.setItem("token", data.jwtToken);
+        const response = await this.apiCall('auth/login', 'POST', {
+            username: username,
+            password: password
+        }, this.getContentTypeJson())
+        if(response) {
+            localStorage.setItem("token", response.jwtToken);
             return true;
-        } catch (error) {
-            return false;
         }
+        return false;
     }
 
     public logout() {
@@ -92,28 +92,16 @@ class ApiService {
         password: string,
         email: string,
     ): Promise<boolean> {
-        try {
-            const data = await fetch(`${this.API_URL}/auth/register`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    username: username,
-                    password: password,
-                    email: email
-                })
-            }).then(response => {
-                if (response.status !== 200) return '';
-                return response.json();
-            });
-            if (!data || !data.jwtToken) return false;
-            localStorage.setItem("token", data.jwtToken);
+        const response = await this.apiCall('auth/register', 'POST', {
+            username: username,
+            password: password,
+            email: email
+        }, this.getContentTypeJson())
+        if(response) {
+            localStorage.setItem("token", response.jwtToken);
             return true;
-        } catch (error) {
-            console.log(error)
-            return false;
         }
+        return false;
     }
 
     private getToken(): String {
@@ -131,6 +119,12 @@ class ApiService {
         return headers;
     }
 
+    private getContentTypeJson(): Headers {
+        const headers = new Headers();
+        headers.append('Content-Type', 'application/json')
+        return headers;
+    }
+
     public async updateTasklistName(id: number, name) {
         const headers = this.getAuthConfig();
         await fetch(`${this.API_URL}/task-lists/${id}`, {
@@ -138,14 +132,14 @@ class ApiService {
             headers,
             body: name
         }).then(response => {
-            if(response.status === 498) {
+            if (response.status === 498) {
                 this.logout();
                 window.location.reload();
             }
         })
             .catch(error => {
-            console.log(error)
-        })
+                console.log(error)
+            })
     }
 
     public isLoggedIn() {
@@ -182,7 +176,7 @@ class ApiService {
         return this.apiCall(`task-lists/${taskListID}/tasks`, 'POST', data, headers)
             .then(data => {
                 const task = data[0];
-                if(task["@type"] === "simpleTask") {
+                if (task["@type"] === "simpleTask") {
                     return new SimpleTask(
                         task.id,
                         task.name,
