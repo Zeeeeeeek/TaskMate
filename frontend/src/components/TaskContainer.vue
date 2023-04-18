@@ -1,6 +1,6 @@
 <template>
   <div class="task-container scroll">
-    <Task v-for="task in tasks" :id="task.id" :name="task.name" :description="task.description" :is-completed="task.completed" :due-date="task.dueDate">
+   <Task v-for="task in tasks" :id="task.id" :name="task.name" :description="task.description" :is-completed="task.completed" :due-date="task.dueDate">
       <div>{{ task }}</div>
     </Task>
   </div>
@@ -13,14 +13,14 @@ export default {
   name: "TaskContainer",
   components: {Task},
   props: {
-    taskList: {
+    tasksArray: {
       type: Array,
       required: true
     }
   },
   data() {
     return {
-      tasks: this.taskList,
+      tasks: this.tasksArray,
       stagedTasks: [],
       stagedCounter: 0
     }

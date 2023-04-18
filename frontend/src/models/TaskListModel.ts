@@ -1,6 +1,6 @@
 import { Task } from './Task';
 
-export class TaskList {
+export class TaskListModel {
     id: string;
     name: string;
 

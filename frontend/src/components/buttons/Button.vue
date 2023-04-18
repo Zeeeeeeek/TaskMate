@@ -25,8 +25,7 @@ export default {
   display:flex;
   justify-content: center;
   align-items: center;
-  height: 4rem;
-  width: 100%;
+  margin: 0.625rem;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -moz-user-select: none;

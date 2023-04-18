@@ -21,8 +21,8 @@ import java.util.Objects;
 public class TimeConstrainedTask extends AbstractTask{
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
-    @Getter @Setter @NonNull
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    @Getter @Setter
     private LocalDateTime dueDate;
     public TimeConstrainedTask(String name, String description,@NonNull LocalDateTime dueDate) {
         super(name, description);

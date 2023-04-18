@@ -1,20 +1,22 @@
 <template>
   <div class="grid">
     <div v-for="list in taskLists">
-      list
+      <TaskList :taskList="list"/>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import {TaskList} from "../models/TaskList";
+import {TaskListModel} from "../models/TaskListModel";
 import apiService from "../services/ApiService";
+import TaskList from "../components/TaskList.vue";
 
 export default {
   name: "TaskListGrid",
+    components: {TaskList},
   data() {
     return {
-      taskLists: [] as TaskList[],
+      taskLists: [] as TaskListModel[],
     }
   },
   methods: {

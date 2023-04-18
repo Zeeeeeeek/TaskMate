@@ -1,4 +1,4 @@
-import {TaskList} from "../models/TaskList";
+import {TaskListModel} from "../models/TaskListModel";
 import ResponseError from "../errors/ResponseError";
 
 class ApiService {
@@ -18,12 +18,12 @@ class ApiService {
 
     /**
      * Get all tasklists
-     * @returns {TaskList[]} Array of TaskList objects
+     * @returns {TaskListModel[]} Array of TaskList objects
      */
-    public async getTaskLists(): Promise<TaskList[]> {
+    public async getTaskLists(): Promise<TaskListModel[]> {
         return this.apiCall('task-lists', 'GET', null).then(data => {
             return data.map(
-                (taskList: any) => new TaskList(
+                (taskList: any) => new TaskListModel(
                     taskList.id,
                     taskList.name,
                     taskList.tasks,
@@ -41,7 +41,8 @@ class ApiService {
             body: body ? JSON.stringify(body) : null
         }).then(response => {
             if (response.ok) {
-                return response.json();
+                console.log();
+                return response.headers.get('Content-Length') === '0' ? null : response.json()
             } else {
                 if (response.status === 498) {
                     this.logout();
@@ -71,7 +72,6 @@ class ApiService {
             localStorage.setItem("token", data.jwtToken);
             return true;
         } catch (error) {
-            const mute = error;
             return false;
         }
     }
@@ -130,13 +130,19 @@ class ApiService {
         return headers;
     }
 
-    public updateTasklistName(id: number, name) {
+    public async updateTasklistName(id: number, name) {
         const headers = this.getAuthConfig();
-        fetch(`${this.API_URL}/taskLists/${id}`, {
+        await fetch(`${this.API_URL}/task-lists/${id}`, {
             method: 'PUT',
             headers,
             body: name
-        }).catch(error => {
+        }).then(response => {
+            if(response.status === 498) {
+                this.logout();
+                window.location.reload();
+            }
+        })
+            .catch(error => {
             console.log(error)
         })
     }
@@ -145,7 +151,7 @@ class ApiService {
         return this.getToken() !== null;
     }
 
-    public async addTaskList(): Promise<TaskList> {
+    public async addTaskList(): Promise<TaskListModel> {
         const body = {
             'name': '',
             "tasksDTO": {
@@ -156,7 +162,7 @@ class ApiService {
         this.setContentTypeToJson(headers);
         return this.apiCall('task-lists', 'POST', body, headers)
             .then(data => {
-                return new TaskList(
+                return new TaskListModel(
                     data.id,
                     data.name,
                     data.tasks,
@@ -164,6 +170,16 @@ class ApiService {
                     data.completed
                 )
             });
+    }
+
+    public async addTask(taskListID: string, task) {
+        const headers = this.getAuthConfig();
+        this.setContentTypeToJson(headers);
+        const data = {
+            "tasks": [task]
+        }
+        console.log(JSON.stringify(data))
+        return this.apiCall(`task-lists/${taskListID}/tasks`, 'POST', data, headers);
     }
 }
 

@@ -22,7 +22,7 @@ public class BackendApplication {
         return (args) -> {
             authService.register(
                     new UserCreationDTO(
-                            "admin",
+                            "a",
                             "a",
                             "admin@admin"
                     )
