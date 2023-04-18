@@ -42,7 +42,7 @@ class ApiService {
             headers,
             params
         );
-        if(response.ok) {
+        if (response.ok) {
             return response.headers.get('Content-Length') === '0' ? null : response.json()
         } else {
             if (response.status === 498) this.refreshToken();
@@ -50,7 +50,7 @@ class ApiService {
         }
     }
 
-    public async rawApiCall(url: string, method: string, body: any , headers: Headers, params: any): Promise<Response> {
+    public async rawApiCall(url: string, method: string, body: any, headers: Headers, params: any): Promise<Response> {
         const queryUrl = !params ? `${this.API_URL}/${url}` : `${this.API_URL}${url}?${Object.keys(params).map(key => `${key}=${params[key]}`).join('&')}`;
         return await fetch(queryUrl, {
             method,
@@ -70,7 +70,7 @@ class ApiService {
             username: username,
             password: password
         }, this.getContentTypeJson())
-        if(response) {
+        if (response) {
             localStorage.setItem("token", response.jwtToken);
             return true;
         }
@@ -97,7 +97,7 @@ class ApiService {
             password: password,
             email: email
         }, this.getContentTypeJson())
-        if(response) {
+        if (response) {
             localStorage.setItem("token", response.jwtToken);
             return true;
         }
@@ -116,6 +116,12 @@ class ApiService {
 
     private setContentTypeToJson(headers: Headers): HeadersInit {
         headers.append('Content-Type', 'application/json')
+        return headers;
+    }
+
+    private getAuthAndContentTypeJson(): Headers {
+        const headers = this.getAuthConfig();
+        this.setContentTypeToJson(headers)
         return headers;
     }
 
@@ -148,23 +154,20 @@ class ApiService {
 
     public async addTaskList(): Promise<TaskListModel> {
         const body = {
-            'name': '',
+            "name": "",
             "tasksDTO": {
                 "tasks": []
             }
         }
-        let headers = this.getAuthConfig();
-        this.setContentTypeToJson(headers);
-        return this.apiCall('task-lists', 'POST', body, headers)
-            .then(data => {
-                return new TaskListModel(
-                    data.id,
-                    data.name,
-                    data.tasks,
-                    data.empty,
-                    data.completed
-                )
-            });
+        const headers = this.getAuthAndContentTypeJson();
+        const data = await this.apiCall('task-lists', 'POST', body, headers);
+        return new TaskListModel(
+            data.id,
+            data.name,
+            data.tasks,
+            data.empty,
+            data.completed
+        );
     }
 
     public async addTask(taskListID: string, task) {
