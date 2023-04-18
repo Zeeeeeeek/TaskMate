@@ -63,8 +63,8 @@ public class TaskService {
     }
 
 
-    public void setTasksTaskList(List<AbstractTask> tasks, TaskList taskList) {
+    public Iterable<AbstractTask> setTasksTaskList(List<AbstractTask> tasks, TaskList taskList) {
         tasks.forEach(task -> task.setTaskList(taskList));
-        abstractTaskRepository.saveAll(tasks);
+        return this.abstractTaskRepository.saveAll(tasks);
     }
 }

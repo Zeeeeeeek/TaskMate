@@ -1,5 +1,6 @@
 import {TaskListModel} from "../models/TaskListModel";
 import ResponseError from "../errors/ResponseError";
+import {Task, SimpleTask, TimeConstraintTask} from "../models/Task";
 
 class ApiService {
     private readonly API_URL: string = "http://localhost:8080/api";
@@ -178,7 +179,27 @@ class ApiService {
         const data = {
             "tasks": [task]
         }
-        return this.apiCall(`task-lists/${taskListID}/tasks`, 'POST', data, headers);
+        return this.apiCall(`task-lists/${taskListID}/tasks`, 'POST', data, headers)
+            .then(data => {
+                const task = data[0];
+                if(task["@type"] === "simpleTask") {
+                    return new SimpleTask(
+                        task.id,
+                        task.name,
+                        task.description,
+                        task.completed
+                    )
+                } else {
+                    return new TimeConstraintTask(
+                        task.id,
+                        task.name,
+                        task.description,
+                        task.completed,
+                        task.dueDate,
+                        task.expired
+                    )
+                }
+            });
     }
 
     public async setTaskIsCompleted(taskID: string, completed: boolean) {

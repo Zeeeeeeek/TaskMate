@@ -42,9 +42,6 @@ export default {
             const newState = !this.task.completed;
             await ApiService.setTaskIsCompleted(this.task.id, newState)
         }
-    },
-    mounted() {
-        console.log(this.task.id)
     }
 }
 </script>

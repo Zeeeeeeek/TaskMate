@@ -9,8 +9,7 @@ import me.zeeeeeeek.backend.models.user.User;
 import me.zeeeeeeek.backend.repositories.TaskListRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -36,20 +35,21 @@ public class TaskListService {
         return taskListRepository.findAllOwnedBy(owner);
     }
 
-    public void addTasksToTaskList(UUID taskListId, TasksDTO tasksDTO) {
+    public List<AbstractTask> addTasksToTaskList(UUID taskListId, TasksDTO tasksDTO) {
         TaskList taskList = this.taskListRepository
                 .findById(taskListId)
                 .orElseThrow(() -> new IllegalArgumentException("Task list not found"));
         List<AbstractTask> tasks = tasksDTO.getTasksAsList();
-        this.taskService
-                .setTasksTaskList(tasks, taskList);
+        List<AbstractTask> toReturn = new ArrayList<>();
+        this.taskService.setTasksTaskList(tasks, taskList).forEach(toReturn::add);
+        return toReturn;
     }
 
     public void deleteTaskList(UUID taskListId, User owner) {
         TaskList taskList = this.taskListRepository
                 .findById(taskListId)
                 .orElseThrow(() -> new IllegalArgumentException("Task list not found"));
-        if(!taskList.getOwner().equals(owner)) {
+        if (!taskList.getOwner().equals(owner)) {
             throw new IllegalArgumentException("User is not the owner of the task list");
         }
         this.taskListRepository.delete(taskList);
@@ -59,7 +59,7 @@ public class TaskListService {
         TaskList taskList = this.taskListRepository
                 .findById(taskListId)
                 .orElseThrow(() -> new IllegalArgumentException("Task list not found"));
-        if(!taskList.getOwner().equals(owner)) {
+        if (!taskList.getOwner().equals(owner)) {
             throw new IllegalArgumentException("User is not the owner of the task list");
         }
         taskList.setName(name);

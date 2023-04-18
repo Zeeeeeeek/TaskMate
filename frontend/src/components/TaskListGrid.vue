@@ -1,7 +1,7 @@
 <template>
   <div class="grid">
     <div v-for="list in taskLists">
-      <TaskList :taskList="list"/>
+      <TaskList :taskList="list" @reload-lists="loadTaskLists"/>
     </div>
   </div>
 </template>
@@ -24,26 +24,21 @@ export default {
       this.taskLists.push(
           await apiService.addTaskList()
       )
-      console.log(this.taskLists)
-    }
+    },
+      async loadTaskLists() {
+          try {
+              this.taskLists = await apiService.getTaskLists()
+          } catch (e) {
+              console.log(e)
+          }
+      }
   },
   async beforeMount() {
-    try {
       if (!apiService.isLoggedIn()) {
         this.$router.push('/login')
         return
       }
-      this.taskLists = await apiService.getTaskLists()
-    } catch (e) {
-      console.log(e)
-    }
-  },
-  async mounted() {
-    try {
-      this.taskLists = await apiService.getTaskLists()
-    } catch (e) {
-      console.log(e)
-    }
+      await this.loadTaskLists()
   }
 }
 </script>

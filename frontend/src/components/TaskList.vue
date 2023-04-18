@@ -38,8 +38,7 @@ export default {
             await ApiService.updateTasklistName(this.id, this.name)
         },
         async createNewTask(task) {
-            //Check the type of task
-            await ApiService.addTask(this.id, task)
+            this.tasks.push(await ApiService.addTask(this.taskList.id, task))
         }
     },
     data() {
