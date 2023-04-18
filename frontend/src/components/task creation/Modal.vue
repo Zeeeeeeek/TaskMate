@@ -6,7 +6,7 @@
                     <h3>Create new task</h3>
                 </div>
 
-                <img src="../assets/icons/x.svg" class="close" alt="close" @click="closeModal">
+                <img src="../../assets/icons/x.svg" class="close" alt="close" @click="closeModal">
             </div>
             <div class="creation-form">
                 <input type=text v-model="title" placeholder="Title">
@@ -28,9 +28,9 @@
     </div>
 </template>
 <script lang="ts">
-import Button from "../components/buttons/Button.vue";
-import DatePicker from "../components/DatePicker.vue";
-import Calendar from "./icons/Calendar.vue";
+import Button from "../buttons/Button.vue";
+import DatePicker from "./DatePicker.vue";
+import Calendar from "../icons/Calendar.vue";
 
 export default {
     name: "Modal",

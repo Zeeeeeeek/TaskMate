@@ -15,15 +15,14 @@ import AddTaskButton from "../components/buttons/AddTaskButton.vue";
 import ApiService from "../services/ApiService";
 import {TaskListModel} from "../models/TaskListModel";
 import TaskContainer from "./TaskContainer.vue";
-import PopUp from "./PopUp.vue";
 import {ref} from "vue";
-import Modal from './Modal.vue'
+import Modal from './task creation/Modal.vue'
 import Button from "./buttons/Button.vue";
 
 
 export default {
     name: "TaskList",
-    components: {Button, PopUp, TaskContainer, AddTaskButton, Modal},
+    components: {Button,  TaskContainer, AddTaskButton, Modal},
     props: {
         taskList: {
             type: TaskListModel,
