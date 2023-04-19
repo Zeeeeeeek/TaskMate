@@ -26,8 +26,13 @@ public class RefreshToken {
     private String token;
     @Column
     private LocalDateTime expiryDate;
-    @Column
+
     @OneToOne
     private User user;
 
+    public RefreshToken(String token, LocalDateTime expiryDate, User user) {
+        this.token = token;
+        this.expiryDate = expiryDate;
+        this.user = user;
+    }
 }

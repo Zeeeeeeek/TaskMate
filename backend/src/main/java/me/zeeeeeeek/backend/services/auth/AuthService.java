@@ -2,6 +2,7 @@ package me.zeeeeeeek.backend.services.auth;
 
 import lombok.RequiredArgsConstructor;
 import me.zeeeeeeek.backend.controllers.auth.AuthenticationResponse;
+import me.zeeeeeeek.backend.models.auth.RefreshToken;
 import me.zeeeeeeek.backend.models.user.Role;
 import me.zeeeeeeek.backend.models.user.User;
 import me.zeeeeeeek.backend.models.user.dtos.UserCreationDTO;
@@ -21,6 +22,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
 
     private final JwtService jwtService;
+    private final RefreshTokenService refreshTokenService;
 
     private final AuthenticationManager authenticationManager;
 
@@ -40,8 +42,9 @@ public class AuthService {
         if(userRepository.existsByUsernameOrEmail(user.getUsername(), user.getEmail()))
             throw new IllegalArgumentException("Username or email already exists");
         userRepository.save(user);
-        String token = jwtService.generateJwtTokenWithoutExtraClaims(user);
-        return new AuthenticationResponse(token);
+        String jwtToken = jwtService.generateJwtTokenWithoutExtraClaims(user);
+        RefreshToken refreshToken = refreshTokenService.createAndSaveRefreshToken(user);
+        return new AuthenticationResponse(jwtToken, refreshToken.getToken());
     }
 
     /**
@@ -60,10 +63,17 @@ public class AuthService {
         User user = userRepository.findByUsername(userLoginDTO.username())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         String jwtToken = jwtService.generateJwtTokenWithoutExtraClaims(user);
-        return new AuthenticationResponse(jwtToken);
+        RefreshToken refreshToken = refreshTokenService.createAndSaveRefreshToken(user);
+        return new AuthenticationResponse(jwtToken, refreshToken.getToken());
     }
 
-    public boolean verify(String token) {
-        return jwtService.isTokenValid(token.substring(7));
+    public AuthenticationResponse refresh(String token) {
+        System.out.println(token);
+        if(!refreshTokenService.isValidToken(token))
+            throw new IllegalArgumentException("Invalid refresh token");
+        User user = refreshTokenService.getUserByToken(token);
+        String jwtToken = jwtService.generateJwtTokenWithoutExtraClaims(user);
+        RefreshToken refreshToken = refreshTokenService.createAndSaveRefreshToken(user);
+        return new AuthenticationResponse(jwtToken, refreshToken.getToken());
     }
 }

@@ -5,8 +5,12 @@ import lombok.extern.slf4j.Slf4j;
 import me.zeeeeeeek.backend.models.user.dtos.UserCreationDTO;
 import me.zeeeeeeek.backend.models.user.dtos.UserLoginDto;
 import me.zeeeeeeek.backend.services.auth.AuthService;
+import me.zeeeeeeek.backend.services.auth.RefreshTokenService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -15,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthRestController{
 
     private final AuthService authService;
+    private final RefreshTokenService refreshTokenService;
 
 
     /**
@@ -37,5 +42,10 @@ public class AuthRestController{
     public ResponseEntity<AuthenticationResponse> login(
             @RequestBody UserLoginDto userLoginDTO) {
         return ResponseEntity.ok(authService.login(userLoginDTO));
+    }
+
+    @PostMapping("/refresh")
+    public AuthenticationResponse refresh(@RequestBody String refreshToken) {
+        return authService.refresh(refreshToken);
     }
 }

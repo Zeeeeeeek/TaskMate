@@ -42,7 +42,7 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING) @JsonIgnore
     private Role role;
 
-    @Column
+
     @OneToOne
     private RefreshToken refreshToken;
 
