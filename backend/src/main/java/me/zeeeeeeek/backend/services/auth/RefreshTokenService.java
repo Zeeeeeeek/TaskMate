@@ -1,10 +1,12 @@
 package me.zeeeeeeek.backend.services.auth;
 
 import lombok.RequiredArgsConstructor;
+
 import me.zeeeeeeek.backend.models.auth.RefreshToken;
 import me.zeeeeeeek.backend.models.user.User;
 import me.zeeeeeeek.backend.repositories.RefreshTokenRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
@@ -15,6 +17,9 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class RefreshTokenService {
     private final RefreshTokenRepository refreshTokenRepository;
+
+    @Value("${refreshTokenExpirationTime}")
+    private int REFRESH_TOKEN_LIFETIME;
 
     public RefreshToken createRefreshToken(User user) {
         return new RefreshToken(
@@ -52,18 +57,18 @@ public class RefreshTokenService {
 
     private String generateRandomStringUntilIsUnique() {
         String token = generateRandomString();
-        while(refreshTokenRepository.existsById(token))
+        while (refreshTokenRepository.existsById(token))
             token = generateRandomString();
         return token;
     }
 
     private String generateRandomString() {
-        byte[] bytes = new byte[64];
+        byte[] bytes = new byte[75];
         new SecureRandom().nextBytes(bytes);
         return Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
     }
 
     private LocalDateTime getExpiryDate() {
-        return LocalDateTime.now().plusMonths(1);
+        return LocalDateTime.now().plusMonths(REFRESH_TOKEN_LIFETIME);
     }
 }
