@@ -35,14 +35,19 @@ public class RefreshTokenService {
     }
 
     public boolean isValidToken(String token) {
-        return refreshTokenRepository.findByToken(token)
+        return refreshTokenRepository.findById(token)
                 .map(refreshToken -> refreshToken.getExpiryDate().isAfter(LocalDateTime.now()))
                 .orElse(false);
     }
 
     public User getUserByToken(String token) throws NoSuchElementException {
-        return refreshTokenRepository.findByToken(token)
-                .orElseThrow().getUser();
+        return refreshTokenRepository.findById(token)
+                .orElseThrow()
+                .getUser();
+    }
+
+    public void deleteRefreshToken(String token) {
+        refreshTokenRepository.deleteById(token);
     }
 
     private String generateRandomString() {

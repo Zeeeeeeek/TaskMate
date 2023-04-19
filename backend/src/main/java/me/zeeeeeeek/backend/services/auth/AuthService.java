@@ -68,12 +68,12 @@ public class AuthService {
     }
 
     public AuthenticationResponse refresh(String token) {
-        System.out.println(token);
         if(!refreshTokenService.isValidToken(token))
             throw new IllegalArgumentException("Invalid refresh token");
         User user = refreshTokenService.getUserByToken(token);
         String jwtToken = jwtService.generateJwtTokenWithoutExtraClaims(user);
         RefreshToken refreshToken = refreshTokenService.createAndSaveRefreshToken(user);
+        refreshTokenService.deleteRefreshToken(token);
         return new AuthenticationResponse(jwtToken, refreshToken.getToken());
     }
 }
