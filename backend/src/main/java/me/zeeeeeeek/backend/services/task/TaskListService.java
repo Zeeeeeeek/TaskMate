@@ -35,10 +35,13 @@ public class TaskListService {
         return taskListRepository.findAllOwnedBy(owner);
     }
 
-    public List<AbstractTask> addTasksToTaskList(UUID taskListId, TasksDTO tasksDTO) {
+    public List<AbstractTask> addTasksToTaskList(UUID taskListId, TasksDTO tasksDTO, User owner) {
         TaskList taskList = this.taskListRepository
                 .findById(taskListId)
                 .orElseThrow(() -> new IllegalArgumentException("Task list not found"));
+        if (!taskList.getOwner().equals(owner)) {
+            throw new IllegalArgumentException("User is not the owner of the task list");
+        }
         List<AbstractTask> tasks = tasksDTO.getTasksAsList();
         List<AbstractTask> toReturn = new ArrayList<>();
         this.taskService.setTasksTaskList(tasks, taskList).forEach(toReturn::add);

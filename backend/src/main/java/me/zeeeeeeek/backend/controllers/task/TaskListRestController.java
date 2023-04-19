@@ -76,9 +76,10 @@ public class TaskListRestController{
 
 
     @PostMapping("/{taskListId}/tasks")
-    public List<AbstractTask> addTasksToTaskList(@PathVariable UUID taskListId, @RequestBody TasksDTO tasksDTO) {
+    public List<AbstractTask> addTasksToTaskList(@PathVariable UUID taskListId, @RequestBody TasksDTO tasksDTO, Authentication authentication) {
+        User owner = authUtil.getUserFromAuthentication(authentication);
         return this.taskListService
-                .addTasksToTaskList(taskListId, tasksDTO);
+                .addTasksToTaskList(taskListId, tasksDTO, owner);
     }
 
     @DeleteMapping("/{taskListId}")
