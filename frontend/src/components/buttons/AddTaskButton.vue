@@ -3,7 +3,7 @@
     <div class="add-task-button" title="Add task">
 
         <AddIcon class="add-icon"/>
-        <p class="add-task-text subtitle">Add Task</p>
+        <p class="add-task-text subtitle">Add task</p>
 
     </div>
 
