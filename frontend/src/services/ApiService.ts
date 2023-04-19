@@ -2,6 +2,7 @@ import {TaskListModel} from "../models/TaskListModel";
 import ResponseError from "../errors/ResponseError";
 import {SimpleTask, TimeConstraintTask} from "../models/Task";
 
+
 class ApiService {
     private readonly API_URL: string = "http://localhost:8080/api";
 
@@ -34,17 +35,21 @@ class ApiService {
     }
 
     public async apiCall(url: string, method: string, body: any = null, headers: Headers = this.getAuthConfig(), params: any = null): Promise<any> {
-        const response = await this.rawApiCall(
-            url,
-            method,
-            body,
-            headers,
-            params
-        );
+        let response = await this.rawApiCall(url, method, body, headers, params);
         if (response.ok) {
             return response.headers.get('Content-Length') === '0' ? null : response.json()
         } else {
-            if (response.status === 498) this.refreshToken();
+            if (response.status === 498 && await this.refreshToken()) {
+                console.log("refreshed token");
+                this.updateAuthConfig(headers);
+                response = await this.rawApiCall(url, method, body, headers, params);
+                if (response.ok) {
+                    return response.headers.get('Content-Length') === '0' ? null : response.json()
+                }
+                if (response.status === 498) {
+                    this.logout();
+                }
+            }
             throw new ResponseError(response.status);
         }
     }
@@ -62,9 +67,21 @@ class ApiService {
     }
 
 
-    private refreshToken() {
-        this.logout();//todo: implement refresh token
-        window.location.reload();
+    private async refreshToken() {
+        const refreshToken = localStorage.getItem("refreshToken");
+        if (!refreshToken) return false;
+        try {
+            const response = await this.rawApiCall('auth/refresh', 'POST', refreshToken, this.getContentTypeText(), null);
+            if (response.ok) {
+                const data = await response.json();
+                localStorage.setItem("token", data.jwtToken);
+                localStorage.setItem("refreshToken", data.refreshToken);
+                return true;
+            }
+        } catch (e) {
+            console.log(e);
+        }
+        return false;
     }
 
     public async login(username: string, password: string): Promise<boolean> {
@@ -74,6 +91,7 @@ class ApiService {
         }, this.getContentTypeJson())
         if (response) {
             localStorage.setItem("token", response.jwtToken);
+            localStorage.setItem("refreshToken", response.refreshToken);
             return true;
         }
         return false;
@@ -81,6 +99,8 @@ class ApiService {
 
     public logout() {
         localStorage.removeItem("token");
+        localStorage.removeItem("refreshToken");
+        window.location.reload();
     }
 
     /**
@@ -101,6 +121,7 @@ class ApiService {
         }, this.getContentTypeJson())
         if (response) {
             localStorage.setItem("token", response.jwtToken);
+            localStorage.setItem("refreshToken", response.refreshToken);
             return true;
         }
         return false;
@@ -116,6 +137,11 @@ class ApiService {
         return headers;
     }
 
+    private updateAuthConfig(headers: Headers) {
+        headers.delete('Authorization');
+        headers.append('Authorization', `Bearer ${this.getToken()}`)
+    }
+
     private setContentTypeToJson(headers: Headers): HeadersInit {
         headers.append('Content-Type', 'application/json')
         return headers;
@@ -127,20 +153,26 @@ class ApiService {
         return headers;
     }
 
-    private setConteTypeToText(headers: Headers): HeadersInit {
+    private setConteTypeText(headers: Headers): HeadersInit {
         headers.append('Content-Type', 'text/plain')
         return headers;
     }
 
     private getAuthAndContentTypeText(): Headers {
         const headers = this.getAuthConfig();
-        this.setConteTypeToText(headers)
+        this.setConteTypeText(headers)
         return headers;
     }
 
     private getContentTypeJson(): Headers {
         const headers = new Headers();
         headers.append('Content-Type', 'application/json')
+        return headers;
+    }
+
+    private getContentTypeText(): Headers {
+        const headers = new Headers();
+        headers.append('Content-Type', 'text/plain')
         return headers;
     }
 
