@@ -5,7 +5,6 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import lombok.NonNull;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +15,6 @@ import java.util.function.Function;
 
 @Service
 public class JwtService {
-    @NonNull
     private static final String SECRETKEY = System.getenv("SECRET");
     private static final Integer EXPIRATION = 1000 * 60 * 10; // 10 minutes
 
