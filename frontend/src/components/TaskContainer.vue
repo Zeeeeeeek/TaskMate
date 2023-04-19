@@ -1,7 +1,7 @@
 <template>
     <div class="task-container scroll">
         <div v-for="task in tasks" :key="task.id">
-            <Task :task="task"/>
+            <Task :task="task" @deleteTask="this.$emit('deleteTask', task.id)"/>
         </div>
     </div>
 </template>
@@ -17,9 +17,7 @@ export default {
             required: true
         }
     },
-    methods: {
 
-    }
 }
 </script>
 

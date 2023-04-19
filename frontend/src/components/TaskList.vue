@@ -4,7 +4,7 @@
             <input class="task-list-name subtitle" v-model="name" placeholder="List name" v-on:change="updateTitle">
             <TrashCan class="trash-can" @click="deleteTaskList"/>
         </div>
-        <TaskContainer :tasks="this.tasks" />
+        <TaskContainer :tasks="this.tasks" @deleteTask="deleteTask"/>
         <Modal  :value="active" @closeModal="toggle" @submitModal="createNewTask"/>
         <div class="footer" @click="addTask">
             <AddTaskButton/>
@@ -44,14 +44,17 @@ export default {
         },
         deleteTaskList() {
             this.$emit('deleteTaskList', this.taskList.id)
+        },
+        async deleteTask(taskId) {
+            await ApiService.deleteTask(taskId)
+            this.tasks = this.tasks.filter(task => task.id !== taskId)
         }
     },
     data() {
         return {
             id: this.taskList.id,
             name: this.taskList.name,
-            tasks: this.taskList.tasks,
-            taskCreationTitle: "Create new task",
+            tasks: this.taskList.tasks
         }
     },
     setup() {

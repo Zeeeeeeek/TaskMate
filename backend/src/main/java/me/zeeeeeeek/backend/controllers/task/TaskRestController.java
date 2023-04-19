@@ -37,7 +37,7 @@ public class TaskRestController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("tasks/{taskId}")
+    @DeleteMapping("{taskId}")
     public ResponseEntity<String> deleteTask(@PathVariable UUID taskId, Authentication authentication) {
         User owner = authUtil.getUserFromAuthentication(authentication);
         try {

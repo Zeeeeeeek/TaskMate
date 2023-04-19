@@ -4,6 +4,9 @@
             <div class="task-name">
                 {{ task.name }}
             </div>
+            <div class="task-delete-wrapper" title="Delete task">
+                <TrashCan @click="this.$emit('deleteTask')" class="task-delete"/>
+            </div>
             <div class="checkbox-wrapper">
                 <input type="checkbox" name="checkbox" v-model="task.completed" class="checkbox-field"
                        @click="toggleCompleted">
@@ -29,9 +32,11 @@
 
 
 import ApiService from "../services/ApiService";
+import TrashCan from "./icons/TrashCan.vue";
 
 export default {
     name: "Task",
+    components: {TrashCan},
     props: {
         task: {
             required: true
@@ -75,7 +80,6 @@ export default {
 }
 
 .checkbox-wrapper {
-    margin-left: auto;
     margin-right: 0;
 }
 
@@ -123,6 +127,24 @@ export default {
 .task-due-date-expired {
     background: #edc5c5;
     border-radius: 4px;
+}
+
+.task-delete-wrapper {
+    margin-left: auto;
+    margin-right: 1rem;
+    margin-bottom: 0.3rem;
+    height: 1rem;
+    width: 1rem;
+    cursor: pointer;
+}
+
+.task-delete {
+    opacity: 0.9;
+}
+
+.task-delete:hover {
+    opacity: 1;
+    transform: translateY(-1px);
 }
 
 </style>

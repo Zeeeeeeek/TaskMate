@@ -230,6 +230,10 @@ class ApiService {
     public async deleteTaskList(taskListID: string) {
         await this.apiCall(`task-lists/${taskListID}`, 'DELETE');
     }
+
+    async deleteTask(taskId: string) {
+        await this.apiCall(`tasks/${taskId}`, 'DELETE');
+    }
 }
 
 export default ApiService.getInstance();
