@@ -226,6 +226,10 @@ class ApiService {
     public async setTaskIsCompleted(taskID: string, completed: boolean) {
         await this.apiCall(`tasks/${taskID}?completed=${completed}`, 'PUT');
     }
+
+    public async deleteTaskList(taskListID: string) {
+        await this.apiCall(`task-lists/${taskListID}`, 'DELETE');
+    }
 }
 
 export default ApiService.getInstance();

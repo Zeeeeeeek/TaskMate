@@ -2,6 +2,7 @@
     <div class="task-list">
         <div class="header">
             <input class="task-list-name subtitle" v-model="name" placeholder="List name" v-on:change="updateTitle">
+            <TrashCan class="trash-can" @click="deleteTaskList"/>
         </div>
         <TaskContainer :tasks="this.tasks" />
         <Modal  :value="active" @closeModal="toggle" @submitModal="createNewTask"/>
@@ -19,11 +20,12 @@ import TaskContainer from "./TaskContainer.vue";
 import {ref} from "vue";
 import Modal from './task creation/Modal.vue'
 import Button from "./buttons/Button.vue";
+import TrashCan from "./icons/TrashCan.vue";
 
 
 export default {
     name: "TaskList",
-    components: {Button,  TaskContainer, AddTaskButton, Modal},
+    components: {TrashCan, Button,  TaskContainer, AddTaskButton, Modal},
     props: {
         taskList: {
             type: TaskListModel,
@@ -39,6 +41,9 @@ export default {
         },
         async createNewTask(task) {
             this.tasks.push(await ApiService.addTask(this.taskList.id, task))
+        },
+        deleteTaskList() {
+            this.$emit('deleteTaskList', this.taskList.id)
         }
     },
     data() {
@@ -98,5 +103,10 @@ export default {
     border-bottom: 1px solid #134074;
 }
 
-
+.trash-can {
+    padding-left: 1rem;
+    margin-top: 0.1rem;
+    cursor: pointer;
+    height: 1.6rem;
+}
 </style>

@@ -1,7 +1,7 @@
 <template>
     <div class="grid">
-        <div v-if="taskLists.length" v-for="list in taskLists">
-            <TaskList :taskList="list" @reload-lists="loadTaskLists"/>
+        <div v-if="taskLists.length" v-for="list in taskLists" :key="list.id">
+            <TaskList :taskList="list"  @deleteTaskList="deleteTaskList"/>
         </div>
         <div v-else>
             Aggiungi una nuova lista cliccando il pulsante!
@@ -34,6 +34,10 @@ export default {
             } catch (e) {
                 console.log(e)
             }
+        },
+        async deleteTaskList(id: string) {
+            await apiService.deleteTaskList(id)
+            this.taskLists = this.taskLists.filter(list => list.id !== id)
         }
     },
     async beforeMount() {
