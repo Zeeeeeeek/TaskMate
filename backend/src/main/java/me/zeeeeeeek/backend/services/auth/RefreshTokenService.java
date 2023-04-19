@@ -18,7 +18,7 @@ public class RefreshTokenService {
 
     public RefreshToken createRefreshToken(User user) {
         return new RefreshToken(
-                generateRandomString(),
+                generateRandomStringUntilIsUnique(),
                 getExpiryDate(),
                 user
         );
@@ -48,6 +48,13 @@ public class RefreshTokenService {
 
     public void deleteRefreshToken(String token) {
         refreshTokenRepository.deleteById(token);
+    }
+
+    private String generateRandomStringUntilIsUnique() {
+        String token = generateRandomString();
+        while(refreshTokenRepository.existsById(token))
+            token = generateRandomString();
+        return token;
     }
 
     private String generateRandomString() {
