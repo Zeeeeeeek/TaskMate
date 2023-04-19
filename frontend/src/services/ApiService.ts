@@ -40,7 +40,6 @@ class ApiService {
             return response.headers.get('Content-Length') === '0' ? null : response.json()
         } else {
             if (response.status === 498 && await this.refreshToken()) {
-                console.log("refreshed token");
                 this.updateAuthConfig(headers);
                 response = await this.rawApiCall(url, method, body, headers, params);
                 if (response.ok) {
