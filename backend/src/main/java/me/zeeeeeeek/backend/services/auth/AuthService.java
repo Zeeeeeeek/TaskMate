@@ -76,4 +76,8 @@ public class AuthService {
         refreshTokenService.deleteRefreshToken(token);
         return new AuthenticationResponse(jwtToken, refreshToken.getToken());
     }
+
+    public void logout(String refreshToken) {
+        refreshTokenService.deleteRefreshToken(refreshToken);
+    }
 }

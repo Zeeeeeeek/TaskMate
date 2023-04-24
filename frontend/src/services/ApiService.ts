@@ -96,8 +96,9 @@ class ApiService {
         return false;
     }
 
-    public logout() {
+    public async logout() {
         localStorage.removeItem("token");
+        await this.rawApiCall('auth/logout', 'POST', localStorage.getItem("refreshToken"),  this.getContentTypeText(),null);
         localStorage.removeItem("refreshToken");
         window.location.reload();
     }
