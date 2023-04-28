@@ -15,7 +15,8 @@ import java.util.function.Function;
 
 @Service
 public class JwtService {
-    private static final String SECRETKEY = System.getenv("SECRET");
+    //todo use env variables
+    private static final String SECRETKEY = "YnR2cHgxczFnbWpza205ZGxnbHppajd0MDlkNTM4YmlrZ3c3anhoZDhmemg1azNxenQyeHdvZHhybmk5aWJtYmlieTZmeWJrN3Fna2FpcWgxeGdkNXNsOTI0ejA5OWN1N3c5cGpmdjR6bG5qaWE4dHo5dDFid2Uwb2VvbzNveHI=";
     private static final Integer EXPIRATION = 1000 * 60 * 10; // 10 minutes
 
     public String extractUsername(String jwtToken) {

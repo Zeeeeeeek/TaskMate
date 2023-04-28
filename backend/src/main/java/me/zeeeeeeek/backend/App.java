@@ -10,6 +10,6 @@ public class App {
 
     public static void main(String[] args) {
         SpringApplication.run(App.class, args);
-        log.info("Application is running on http://localhost:8080");
+        log.info("Demo application started.");
     }
 }

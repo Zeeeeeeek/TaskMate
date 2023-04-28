@@ -11,3 +11,23 @@ services:
       MYSQL_DATABASE: db
       MYSQL_USER: admin
       MYSQL_PASSWORD: admin
+    networks:
+      default:
+        aliases:
+          - db
+  web:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+        db:
+            condition: service_started
+    environment:
+      DATABASE_URL: jdbc:mysql://db:3306/db?autoReconnect=false
+    networks:
+      default:
+        aliases:
+          - web
+
+networks:
+  default:

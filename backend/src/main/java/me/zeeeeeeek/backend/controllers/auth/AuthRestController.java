@@ -6,6 +6,7 @@ import me.zeeeeeeek.backend.models.user.dtos.UserCreationDTO;
 import me.zeeeeeeek.backend.models.user.dtos.UserLoginDto;
 import me.zeeeeeeek.backend.services.auth.AuthService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -79,5 +80,10 @@ public class AuthRestController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
         }
+    }
+
+    @GetMapping
+    public String hello() {
+        return "Hello World!";
     }
 }
