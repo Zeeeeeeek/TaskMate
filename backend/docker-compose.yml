@@ -23,7 +23,7 @@ services:
         db:
             condition: service_started
     environment:
-      DATABASE_URL: jdbc:mysql://db:3306/db?autoReconnect=false
+      SECRETKEY: YnR2cHgxczFnbWpza205ZGxnbHppajd0MDlkNTM4YmlrZ3c3anhoZDhmemg1azNxenQyeHdvZHhybmk5aWJtYmlieTZmeWJrN3Fna2FpcWgxeGdkNXNsOTI0ejA5OWN1N3c5cGpmdjR6bG5qaWE4dHo5dDFid2Uwb2VvbzNveHI
     networks:
       default:
         aliases:
