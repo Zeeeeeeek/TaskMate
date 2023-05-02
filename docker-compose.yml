@@ -30,6 +30,20 @@ services:
       default:
         aliases:
           - web
+  frontend:
+    build: frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+        web:
+            condition: service_started
+    networks:
+        default:
+            aliases:
+            - frontend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
 
 networks:
   default:
