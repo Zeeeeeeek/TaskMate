@@ -31,7 +31,7 @@ public class AuthRestController {
             @RequestBody UserCreationDTO userCreationDTO) {
         try {
             return ResponseEntity.ok(authService.register(userCreationDTO));
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
     }
@@ -58,7 +58,7 @@ public class AuthRestController {
     public ResponseEntity<AuthenticationResponse> refresh(@RequestBody String refreshToken) {
         try {
             return ResponseEntity.ok((authService.refresh(refreshToken)));
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
     }
@@ -75,7 +75,7 @@ public class AuthRestController {
         try {
             authService.logout(refreshToken);
             return ResponseEntity.ok().build();
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
     }
