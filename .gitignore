@@ -64,3 +64,5 @@ fabric.properties
 *.iml
 
 db
+
+.env
