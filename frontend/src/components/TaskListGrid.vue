@@ -4,7 +4,7 @@
             <TaskList :taskList="list"  @deleteTaskList="deleteTaskList"/>
         </div>
         <div v-else>
-            Aggiungi una nuova lista cliccando il pulsante!
+            Add a new list using the button on bottom left!
         </div>
     </div>
 </template>
