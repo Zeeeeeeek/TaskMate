@@ -7,9 +7,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 @Slf4j
 public class App {
-
     public static void main(String[] args) {
         SpringApplication.run(App.class, args);
-        log.info("Demo application started.");
+        log.info("TaskMate is running!");
     }
 }
