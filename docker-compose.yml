@@ -26,6 +26,7 @@ services:
             condition: service_started
     environment:
       SECRETKEY: ${SECRETKEY}
+      SEED: ${SEED}
     networks:
       default:
         aliases:

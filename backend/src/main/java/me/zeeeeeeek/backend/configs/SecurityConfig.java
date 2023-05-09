@@ -20,6 +20,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.security.SecureRandom;
 import java.util.List;
 
 @Configuration
@@ -29,6 +30,7 @@ public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
     private final UserDetailsService userDetailsService;
+    private static final String SEED = System.getenv("SEED");
 
     /**
      * Configures the security filter chain for the application. It disables CSRF protection, allows requests to the
@@ -59,7 +61,7 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder(10, new SecureRandom(SEED.getBytes()));
     }
 
     /**
