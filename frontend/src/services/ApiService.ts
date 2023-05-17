@@ -4,7 +4,7 @@ import {SimpleTask, TimeConstraintTask} from "../models/Task";
 
 
 class ApiService {
-    private readonly API_URL: string = "http://localhost:8080/api";
+    private readonly API_URL: string = "http://localhost:8080/api/v1";
 
     private static instance: ApiService;
 

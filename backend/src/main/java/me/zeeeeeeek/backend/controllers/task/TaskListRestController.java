@@ -28,7 +28,7 @@ import java.util.UUID;
  * Controller used to manage a list of tasks using a REST API.
  */
 @RestController
-@RequestMapping("/api/task-lists")
+@RequestMapping("/api/v1/task-lists")
 @Slf4j
 @RequiredArgsConstructor
 public class TaskListRestController{
