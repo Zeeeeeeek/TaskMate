@@ -100,7 +100,7 @@ class ApiService {
 
     public async logout() {
         localStorage.removeItem("token");
-        await this.rawApiCall('auth/logout', 'DELETE', null, this.getRefreshTokenHeader(), null);
+        await this.rawApiCall('auth/refresh', 'DELETE', null, this.getRefreshTokenHeader(), null);
         localStorage.removeItem("refreshToken");
         window.location.reload();
     }

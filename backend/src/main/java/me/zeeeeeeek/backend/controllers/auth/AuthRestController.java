@@ -67,7 +67,7 @@ public class AuthRestController {
      * @return returns a 200-OK response if the refresh token was invalidated successfully or a 400-BAD REQUEST
      *          if the refresh token was invalid
      */
-    @DeleteMapping("/logout")
+    @DeleteMapping("/refresh")
     public ResponseEntity<Void> logout(@RequestHeader("X-Refresh-Token") String refreshToken) {
         try {
             authService.logout(refreshToken);
