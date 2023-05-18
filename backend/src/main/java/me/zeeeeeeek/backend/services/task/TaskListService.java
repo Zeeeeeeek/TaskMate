@@ -9,15 +9,17 @@ import me.zeeeeeeek.backend.models.user.User;
 import me.zeeeeeeek.backend.repositories.TaskListRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class TaskListService {
+
     private final TaskListRepository taskListRepository;
     private final TaskService taskService;
-
 
     public TaskList create(List<AbstractTask> tasks, User owner, String name) {
         return new TaskList(tasks, owner, name);
@@ -36,12 +38,8 @@ public class TaskListService {
     }
 
     public List<AbstractTask> addTasksToTaskList(UUID taskListId, TasksDTO tasksDTO, User owner) {
-        TaskList taskList = this.taskListRepository
-                .findById(taskListId)
-                .orElseThrow(() -> new IllegalArgumentException("Task list not found"));
-        if (!taskList.getOwner().equals(owner)) {
-            throw new IllegalArgumentException("User is not the owner of the task list");
-        }
+        TaskList taskList = getTaskListById(taskListId);
+        throwIfTaskListNotOwnedByUser(taskList, owner);
         List<AbstractTask> tasks = tasksDTO.getTasksAsList();
         List<AbstractTask> toReturn = new ArrayList<>();
         this.taskService.setTasksTaskList(tasks, taskList).forEach(toReturn::add);
@@ -49,23 +47,27 @@ public class TaskListService {
     }
 
     public void deleteTaskList(UUID taskListId, User owner) {
-        TaskList taskList = this.taskListRepository
-                .findById(taskListId)
-                .orElseThrow(() -> new IllegalArgumentException("Task list not found"));
-        if (!taskList.getOwner().equals(owner)) {
-            throw new IllegalArgumentException("User is not the owner of the task list");
-        }
+        TaskList taskList = getTaskListById(taskListId);
+        throwIfTaskListNotOwnedByUser(taskList, owner);
         this.taskListRepository.delete(taskList);
     }
 
     public void updateTaskListName(UUID taskListId, String name, User owner) {
-        TaskList taskList = this.taskListRepository
-                .findById(taskListId)
-                .orElseThrow(() -> new IllegalArgumentException("Task list not found"));
-        if (!taskList.getOwner().equals(owner)) {
-            throw new IllegalArgumentException("User is not the owner of the task list");
-        }
+        TaskList taskList = getTaskListById(taskListId);
+        throwIfTaskListNotOwnedByUser(taskList, owner);
         taskList.setName(name);
         this.taskListRepository.save(taskList);
+    }
+
+    private TaskList getTaskListById(UUID taskListId) {
+        return this.taskListRepository
+                .findById(taskListId)
+                .orElseThrow(() -> new IllegalArgumentException("Task list not found"));
+    }
+
+    private void throwIfTaskListNotOwnedByUser(TaskList taskList, User owner) {
+        if (!taskList.getOwner().equals(owner)) {
+            throw new IllegalArgumentException("Task list is not owned by user");
+        }
     }
 }
