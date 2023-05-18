@@ -1,5 +1,6 @@
 package me.zeeeeeeek.backend.services.auth;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 import me.zeeeeeeek.backend.models.auth.RefreshToken;
@@ -70,5 +71,10 @@ public class RefreshTokenService {
 
     private LocalDateTime getExpiryDate() {
         return LocalDateTime.now().plusMonths(REFRESH_TOKEN_LIFETIME);
+    }
+
+    @Transactional
+    public void deleteByUser(User user) {
+        refreshTokenRepository.deleteByUser(user);
     }
 }

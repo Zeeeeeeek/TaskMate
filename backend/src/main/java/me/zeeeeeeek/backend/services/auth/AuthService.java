@@ -11,7 +11,7 @@ import me.zeeeeeeek.backend.repositories.UserRepository;
 import me.zeeeeeeek.backend.services.jwt.JwtService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -63,6 +63,7 @@ public class AuthService {
         User user = userRepository.findByUsername(userLoginDTO.username())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         String jwtToken = jwtService.generateJwtTokenWithoutExtraClaims(user);
+        refreshTokenService.deleteByUser(user);
         RefreshToken refreshToken = refreshTokenService.createAndSaveRefreshToken(user);
         return new AuthenticationResponse(jwtToken, refreshToken.getToken());
     }
