@@ -54,7 +54,7 @@ class ApiService {
     }
 
     public async rawApiCall(url: string, method: string, body: any, headers: Headers, params: any): Promise<Response> {
-        const queryUrl = !params ? `${this.API_URL}/${url}` : `${this.API_URL}${url}?${Object.keys(params).map(key => `${key}=${params[key]}`).join('&')}`;
+        const queryUrl = !params ? `${this.API_URL}/${url}` : `${this.API_URL}/${url}?${Object.keys(params).map(key => `${key}=${params[key]}`).join('&')}`;
         if (headers.get('Content-Type') === 'application/json') {
             body = JSON.stringify(body);
         }
@@ -67,10 +67,12 @@ class ApiService {
 
 
     private async refreshToken() {
-        const refreshToken = localStorage.getItem("refreshToken");
+        const refreshToken = {
+            refreshToken: localStorage.getItem("refreshToken")
+        };
         if (!refreshToken) return false;
         try {
-            const response = await this.rawApiCall('auth/refresh', 'POST', refreshToken, this.getContentTypeText(), null);
+            const response = await this.rawApiCall('auth/refresh', 'GET', null, this.getRefreshTokenHeader(), null);
             if (response.ok) {
                 const data = await response.json();
                 localStorage.setItem("token", data.jwtToken);
@@ -98,7 +100,7 @@ class ApiService {
 
     public async logout() {
         localStorage.removeItem("token");
-        await this.rawApiCall('auth/logout', 'POST', localStorage.getItem("refreshToken"),  this.getContentTypeText(),null);
+        await this.rawApiCall('auth/logout', 'DELETE', null, this.getRefreshTokenHeader(), null);
         localStorage.removeItem("refreshToken");
         window.location.reload();
     }
@@ -173,6 +175,12 @@ class ApiService {
     private getContentTypeText(): Headers {
         const headers = new Headers();
         headers.append('Content-Type', 'text/plain')
+        return headers;
+    }
+
+    private getRefreshTokenHeader(): Headers {
+        const headers = new Headers();
+        headers.append('X-Refresh-Token', localStorage.getItem("refreshToken"))
         return headers;
     }
 

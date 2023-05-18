@@ -54,8 +54,8 @@ public class AuthRestController {
      * @param refreshToken the refresh token
      * @return the authentication response containing the JWT and a new refresh token
      */
-    @PostMapping("/refresh")
-    public ResponseEntity<AuthenticationResponse> refresh(@RequestBody String refreshToken) {
+    @GetMapping("/refresh")
+    public ResponseEntity<AuthenticationResponse> refresh(@RequestHeader("X-Refresh-Token") String refreshToken) {
         try {
             return ResponseEntity.ok((authService.refresh(refreshToken)));
         } catch (Exception e) {
@@ -70,8 +70,8 @@ public class AuthRestController {
      * @return returns a 200-OK response if the refresh token was invalidated successfully or a 400-BAD REQUEST
      *          if the refresh token was invalid
      */
-    @PostMapping("/logout")
-    public ResponseEntity<Void> logout(@RequestBody String refreshToken) {
+    @DeleteMapping("/logout")
+    public ResponseEntity<Void> logout(@RequestHeader("X-Refresh-Token") String refreshToken) {
         try {
             authService.logout(refreshToken);
             return ResponseEntity.ok().build();
