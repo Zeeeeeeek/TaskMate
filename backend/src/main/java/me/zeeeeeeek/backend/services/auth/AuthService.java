@@ -53,15 +53,13 @@ public class AuthService {
      * @return the authentication response containing the JWT token
      */
     public AuthenticationResponse login(UserLoginDto userLoginDTO) {
-        authenticationManager.authenticate(
+        Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         userLoginDTO.username(),
                         userLoginDTO.password()
                 )
         );
-        //At this point, the user is authenticated
-        User user = userRepository.findByUsername(userLoginDTO.username())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        User user = (User) authentication.getPrincipal();
         String jwtToken = jwtService.generateJwtTokenWithoutExtraClaims(user);
         refreshTokenService.deleteByUser(user);
         RefreshToken refreshToken = refreshTokenService.createAndSaveRefreshToken(user);
