@@ -17,26 +17,26 @@ services:
       default:
         aliases:
           - db
-  web:
-    build: backend
+  backend:
+    image: backend:latest
     ports:
       - "8080:8080"
     depends_on:
         db:
             condition: service_started
     environment:
-      SECRETKEY: ${SECRETKEY}
-      SEED: ${SEED}
+        SECRETKEY: ${SECRETKEY}
+        SEED: ${SEED}
     networks:
-      default:
-        aliases:
-          - web
+        default:
+            aliases:
+            - web
   frontend:
     build: frontend
     ports:
       - "80:5173"
     depends_on:
-        web:
+        backend:
             condition: service_started
     networks:
         default:
