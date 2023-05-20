@@ -33,9 +33,7 @@ public class UserService implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return this.userRepository
-                .findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User with username " + username + " does not exist"));
+        return this.getUserByUsername(username);
     }
 
     public User getUserByUsername(String username) {
