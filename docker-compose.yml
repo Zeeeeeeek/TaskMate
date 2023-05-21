@@ -47,6 +47,3 @@ services:
 
 networks:
   default:
-
-volumes:
-    db:
