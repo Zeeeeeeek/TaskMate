@@ -14,6 +14,4 @@ public interface TaskListRepository extends CrudRepository<TaskList, UUID> {
 
     @Query("SELECT tl FROM taskLists tl WHERE tl.owner = :user")
     List<TaskList> findAllOwnedBy(@Param("user") @NonNull User owner);
-
-    TaskList findByOwner(@Param("owner") @NonNull User owner);
 }
