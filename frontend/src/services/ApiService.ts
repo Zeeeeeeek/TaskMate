@@ -22,6 +22,7 @@ class ApiService {
      * Get all tasklists
      * @returns {TaskListModel[]} Array of TaskList objects
      */
+    // @ts-ignore
     public async getTaskLists(): Promise<TaskListModel[]> {
         const data = await this.apiCall('task-lists', 'GET');
         return data.map(
@@ -33,7 +34,7 @@ class ApiService {
                 taskList.completed)
         );
     }
-
+    // @ts-ignore
     public async apiCall(url: string, method: string, body: any = null, headers: Headers = this.getAuthConfig(), params: any = null): Promise<any> {
         let response = await this.rawApiCall(url, method, body, headers, params);
         if (response.ok) {
@@ -52,7 +53,7 @@ class ApiService {
             throw new ResponseError(response.status);
         }
     }
-
+    // @ts-ignore
     public async rawApiCall(url: string, method: string, body: any, headers: Headers, params: any): Promise<Response> {
         const queryUrl = !params ? `${this.API_URL}/${url}` : `${this.API_URL}/${url}?${Object.keys(params).map(key => `${key}=${params[key]}`).join('&')}`;
         if (headers.get('Content-Type') === 'application/json') {
@@ -84,7 +85,7 @@ class ApiService {
         }
         return false;
     }
-
+    // @ts-ignore
     public async login(username: string, password: string): Promise<boolean> {
         const response = await this.apiCall('auth/login', 'POST', {
             username: username,
@@ -97,7 +98,7 @@ class ApiService {
         }
         return false;
     }
-
+    // @ts-ignore
     public async logout() {
         localStorage.removeItem("token");
         await this.rawApiCall('auth/refresh', 'DELETE', null, this.getRefreshTokenHeader(), null);
@@ -111,11 +112,8 @@ class ApiService {
      * @param password
      * @param email
      */
-    public async register(
-        username: string,
-        password: string,
-        email: string,
-    ): Promise<boolean> {
+    // @ts-ignore
+    public async register( username: string, password: string, email: string): Promise<boolean> {
         const response = await this.apiCall('auth/register', 'POST', {
             username: username,
             password: password,
@@ -191,7 +189,7 @@ class ApiService {
     public isLoggedIn() {
         return this.getToken() !== null;
     }
-
+    // @ts-ignore
     public async addTaskList(): Promise<TaskListModel> {
         const body = {
             "name": "",
