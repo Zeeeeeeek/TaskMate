@@ -1,4 +1,4 @@
-package me.zeeeeeeek.backend.util;
+package me.zeeeeeeek.backend.utils;
 
 import lombok.RequiredArgsConstructor;
 import me.zeeeeeeek.backend.models.user.User;
