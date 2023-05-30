@@ -8,7 +8,7 @@ import me.zeeeeeeek.backend.models.tasks.collections.dtos.TasksDTO;
 import me.zeeeeeeek.backend.models.tasks.elements.AbstractTask;
 import me.zeeeeeeek.backend.models.user.User;
 import me.zeeeeeeek.backend.services.task.TaskListService;
-import me.zeeeeeeek.backend.util.AuthUtil;
+import me.zeeeeeeek.backend.utils.AuthUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
