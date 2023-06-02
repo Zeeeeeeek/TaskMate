@@ -1,5 +1,6 @@
 package me.zeeeeeeek.backend.controllers.auth;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.zeeeeeeek.backend.models.user.dtos.UserCreationDTO;
@@ -31,7 +32,7 @@ public class AuthRestController {
      */
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(
-            @RequestBody UserCreationDTO userCreationDTO) {
+            @Valid @RequestBody UserCreationDTO userCreationDTO) {
         try {
             return ResponseEntity.ok(authService.register(userCreationDTO));
         } catch (Exception e) {

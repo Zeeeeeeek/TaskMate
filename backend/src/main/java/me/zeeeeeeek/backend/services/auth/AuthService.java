@@ -2,6 +2,7 @@ package me.zeeeeeeek.backend.services.auth;
 
 import lombok.RequiredArgsConstructor;
 import me.zeeeeeeek.backend.controllers.auth.AuthenticationResponse;
+import me.zeeeeeeek.backend.exceptions.users.CredentialsAlreadyUsed;
 import me.zeeeeeeek.backend.models.auth.RefreshToken;
 import me.zeeeeeeek.backend.models.user.Role;
 import me.zeeeeeeek.backend.models.user.User;
@@ -40,7 +41,7 @@ public class AuthService {
                 Role.USER
         );
         if(userRepository.existsByUsernameOrEmail(user.getUsername(), user.getEmail()))
-            throw new IllegalArgumentException("Username or email already exists");
+            throw new CredentialsAlreadyUsed("Credentials already used");
         userRepository.save(user);
         String jwtToken = jwtService.generateJwtTokenWithoutExtraClaims(user);
         RefreshToken refreshToken = refreshTokenService.createAndSaveRefreshToken(user);

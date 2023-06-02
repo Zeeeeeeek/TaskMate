@@ -1,5 +1,6 @@
 package me.zeeeeeeek.backend.models.user.dtos;
 
+import jakarta.validation.constraints.Email;
 import lombok.NonNull;
 
 /**
@@ -11,5 +12,5 @@ import lombok.NonNull;
  */
 public record UserCreationDTO(@NonNull String username,
                               @NonNull String password,
-                              @NonNull String email) {
+                              @Email @NonNull String email) {
 }
